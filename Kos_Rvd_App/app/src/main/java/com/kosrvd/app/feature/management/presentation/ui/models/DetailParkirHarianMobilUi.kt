@@ -1,0 +1,58 @@
+package com.kosrvd.app.feature.management.presentation.ui.models
+
+import com.google.firebase.Timestamp
+import com.kosrvd.app.feature.management.domain.model.ParkirHarianMobil
+import com.kosrvd.app.feature.management.presentation.designsystem.utils.toDayMonthAndYear
+import com.kosrvd.app.feature.management.presentation.designsystem.utils.toRupiahFormat
+
+data class DetailParkirHarianMobilUi(
+    val idParkirHarianMobil: String,
+    val idZonaParkir: String,
+    val userName: String,
+    val zoneName: String,
+    val numberPlate: String,
+    val carBrand: String,
+    val carName: String,
+    val notes: String,
+    val startDate: String,
+    val completionDate: String,
+    val proofOfPayment: String?,
+    val paymentStatus: String,
+    val totalCost: String,
+    val statusParkir: String,
+    val isCancelled: Boolean
+)
+
+fun ParkirHarianMobil.toDetailParkirHarianMobilUi(): DetailParkirHarianMobilUi {
+    return DetailParkirHarianMobilUi(
+        idParkirHarianMobil = this.idParkirHarianMobil,
+        idZonaParkir = this.idZonaParkir,
+        userName = this.userName,
+        zoneName = this.zoneName,
+        numberPlate = this.numberPlate,
+        carBrand = this.carBrand,
+        carName = this.carName,
+        notes = this.notes ?: "Tidak ada catatan",
+        startDate = this.startDate.toDayMonthAndYear(),
+        completionDate = this.completionDate.toDayMonthAndYear(),
+        proofOfPayment = this.proofOfPayment,
+        paymentStatus = this.paymentStatus,
+        totalCost = this.totalCost.toRupiahFormat(),
+        statusParkir = determineStatus(
+            isCancelled = this.isCancelled,
+            startDate = this.startDate,
+            completionDate = this.completionDate
+        ),
+        isCancelled = this.isCancelled
+    )
+}
+
+private fun determineStatus(isCancelled: Boolean, startDate: Timestamp, completionDate: Timestamp): String {
+    val now = Timestamp.now()
+    return when {
+        isCancelled -> "Dibatalkan"
+        now < startDate -> "Dipesan"
+        now <= completionDate -> "Dipakai"
+        else -> "Selesai"
+    }
+}

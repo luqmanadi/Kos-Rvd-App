@@ -1,0 +1,25 @@
+package com.kosrvd.app.feature.management.domain.model
+
+import com.google.firebase.Timestamp
+
+data class Tagihan(
+    val idTagihan: String,
+    val idPenyewa: String,
+    val numberRoom: Int,
+    val residentAccountIdList: List<String>,
+    val residentNameList: List<String>,
+    val billingMonth: Timestamp,
+    val dueDate: Timestamp,
+    val roomRentalFee: Long,
+    val carParkingRentalFeeMonthly: Long,
+    val highPowerElectronicEquipmentUsageCostsMonthly: List<AlatElektronik>,
+    val adminFees: Boolean,
+    val billAmount: Long,
+    val paymentStatus: String,
+    val proofOfPayment: String? = null,
+    val rejectionStatement: String? = null,
+    val dateUploadProof: Timestamp? = null,
+    val verificationDate: Timestamp? = null,
+    val datePaidOff: Timestamp? = null,
+    val dateCreated: Timestamp,
+)

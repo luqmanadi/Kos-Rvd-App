@@ -1,0 +1,57 @@
+package com.kosrvd.app
+
+import android.app.Application
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.os.Build
+import android.util.Log
+import com.google.firebase.FirebaseApp
+import com.google.firebase.appcheck.FirebaseAppCheck
+import com.google.firebase.appcheck.debug.DebugAppCheckProviderFactory
+import com.google.firebase.appcheck.playintegrity.PlayIntegrityAppCheckProviderFactory
+import dagger.hilt.android.HiltAndroidApp
+
+@HiltAndroidApp
+class KosRvdApp: Application() {
+    override fun onCreate() {
+        super.onCreate()
+        // Inisialisasi Firebase (mungkin sudah Anda lakukan)
+        FirebaseApp.initializeApp(this)
+
+        // --- TARUH KODE APP CHECK DI SINI ---
+
+        val firebaseAppCheck = FirebaseAppCheck.getInstance()
+
+        // Cek apakah ini build DEBUG atau RELEASE
+        if (BuildConfig.DEBUG) {
+            // Gunakan DEBUG provider untuk emulator/development
+            firebaseAppCheck.installAppCheckProviderFactory(
+                DebugAppCheckProviderFactory.getInstance()
+            )
+        } else {
+            // Gunakan Play Integrity untuk rilis
+            firebaseAppCheck.installAppCheckProviderFactory(
+                PlayIntegrityAppCheckProviderFactory.getInstance()
+            )
+        }
+
+        createNotificationChannel()
+    }
+
+    private fun createNotificationChannel(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channelId = getString(R.string.kos_rvd_channel_id)
+            val channelName = getString(R.string.kos_rvd_channel_name)
+            val channelDescription = getString(R.string.kos_rvd_channel_description)
+            val importance = NotificationManager.IMPORTANCE_HIGH
+
+            val channel = NotificationChannel(channelId, channelName, importance).apply {
+                description = channelDescription
+                enableLights(true)
+            }
+
+            val notificationManager = getSystemService(NotificationManager::class.java)
+            notificationManager.createNotificationChannel(channel)
+        }
+    }
+}
