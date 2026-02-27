@@ -1,5 +1,6 @@
 package com.kosrvd.app.feature.management.presentation.ui.screen.zona_parkiran_mobil.list_zona_parkiran_mobil
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kosrvd.app.R
@@ -42,7 +43,7 @@ class ListZonaParkiranMobilViewModel @Inject constructor(
         .onStart { loadListZonaParkiranMobil() }
         .stateIn(
             viewModelScope,
-            SharingStarted.WhileSubscribed(5000),
+            SharingStarted.WhileSubscribed(1000L),
             ListZonaParkiranMobilUiState()
         )
 

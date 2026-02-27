@@ -24,12 +24,14 @@ fun BackgroundInfoText(
     fontWeight: FontWeight = FontWeight.Normal,
     maxLines: Int = Int.MAX_VALUE,
     overflow: TextOverflow = TextOverflow.Clip,
-    textColor: Color = Color.Unspecified
+    textColor: Color = Color.Unspecified,
+    border: BorderStroke? = null
 ) {
     Surface(
         shape = RoundedCornerShape(10.dp),
         color = colorBg,
-        modifier = modifier
+        modifier = modifier,
+        border = border
     ) {
         Text(
             text = text,
@@ -177,6 +179,54 @@ fun StatusBackgroundText (
                 colorBg = MaterialTheme.colorScheme.error,
                 fontWeight = FontWeight.Bold,
                 style = MaterialTheme.typography.bodySmall
+            )
+        }
+    }
+}
+
+@Composable
+fun StatusTagihanBackgroundText (
+    status: String,
+    modifier: Modifier = Modifier
+) {
+    when (status) {
+        Constant.MENUNGGU_VERIFIKASI -> {
+            BackgroundInfoText(
+                text = status,
+                modifier = modifier,
+                colorBg = MaterialTheme.colorScheme.tertiaryContainer,
+                fontWeight = FontWeight.Bold,
+                style = MaterialTheme.typography.bodyMedium,
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.onTertiaryContainer.copy(alpha = 0.1f))
+            )
+        }
+        Constant.BELUM_LUNAS -> {
+            BackgroundInfoText(
+                text = status,
+                modifier = modifier,
+                colorBg = MaterialTheme.colorScheme.errorContainer,
+                fontWeight = FontWeight.Bold,
+                style = MaterialTheme.typography.bodyMedium,
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.onErrorContainer.copy(alpha = 0.1f))
+            )
+        }
+        Constant.LUNAS -> {
+            BackgroundInfoText(
+                text = status,
+                modifier = modifier,
+                colorBg = MaterialTheme.colorScheme.secondaryContainer,
+                fontWeight = FontWeight.Bold,
+                style = MaterialTheme.typography.bodyMedium,
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.1f))
+            )
+        }
+        else -> {
+            BackgroundInfoText(
+                text = "ono lek rapodo",
+                modifier = modifier,
+                colorBg = MaterialTheme.colorScheme.error,
+                fontWeight = FontWeight.Bold,
+                style = MaterialTheme.typography.bodyMedium
             )
         }
     }

@@ -69,8 +69,9 @@ fun DetailKamarScreen(
     Scaffold(
         topBar = {
             TopBarLeftTitle(
-                title = stringResource(R.string.detail_room)
-            ) { detailKamarActions(DetailKamarActions.NavigateBack) }
+                title = stringResource(R.string.detail_room),
+                onBackClick = { detailKamarActions(DetailKamarActions.NavigateBack) }
+            )
         }
     ) { innerPadding ->
         Box(

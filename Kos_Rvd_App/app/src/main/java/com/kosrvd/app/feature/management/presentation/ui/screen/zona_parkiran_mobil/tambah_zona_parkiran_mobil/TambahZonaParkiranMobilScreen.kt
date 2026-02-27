@@ -130,10 +130,12 @@ fun TambahZonaParkiranMobilScreen (
     Scaffold(
         topBar = {
             TopBarLeftTitle(
-                title = stringResource(R.string.add_zone_parking)
-            ) {
-                tambahZonaParkiranMobilActions(TambahZonaParkiranMobilActions.NavigateBack)
-            }
+                title = stringResource(R.string.add_zone_parking),
+                onBackClick = {
+                    keyboardController?.hide()
+                    tambahZonaParkiranMobilActions(TambahZonaParkiranMobilActions.NavigateBack)
+                }
+            )
         }
     ) { innerPadding ->
         Box(
@@ -175,7 +177,7 @@ fun TambahZonaParkiranMobilScreen (
                     shakeTrigger = tambahZonaParkiranMobilUiState.shakeTriggerZoneNameError,
                     keyboardOptions = KeyboardOptions.Default.copy(
                         imeAction = ImeAction.Next,
-                        keyboardType = KeyboardType.Text,
+                        keyboardType = KeyboardType.Text
                     ),
                     lineLimits = TextFieldLineLimits.SingleLine,
                     focusRequester = namaZonaFocus,

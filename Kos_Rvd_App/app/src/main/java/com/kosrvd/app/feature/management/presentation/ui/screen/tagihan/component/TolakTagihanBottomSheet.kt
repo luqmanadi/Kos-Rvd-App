@@ -11,7 +11,10 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.input.TextFieldLineLimits
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.rememberTextFieldState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.Send
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
@@ -88,7 +91,6 @@ fun TolakTagihanBottomSheet(
                 shape = RoundedCornerShape(12.dp),
                 height = 43.dp,
                 enabled = !isButtonSendLoading,
-                strokeWidth = 1.dp
             )
             ActionDangerButton(
                 modifier = Modifier.weight(1f),
@@ -97,7 +99,13 @@ fun TolakTagihanBottomSheet(
                 text = stringResource(R.string.send),
                 shape = RoundedCornerShape(12.dp),
                 isLoading = isButtonSendLoading,
-                enabled = !isButtonSendLoading
+                enabled = !isButtonSendLoading,
+                leadingIcon = {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Outlined.Send,
+                        contentDescription = null
+                    )
+                }
             )
         }
     }

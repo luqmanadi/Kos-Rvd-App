@@ -50,10 +50,9 @@ fun ResetPasswordScreen(
     Scaffold(
         topBar = {
             TopBarLeftTitle(
-                title = stringResource(R.string.choose_reset_password)
-            ) {
-                resetPasswordActions(ResetPasswordActions.NavigateBack)
-            }
+                title = stringResource(R.string.choose_reset_password),
+                onBackClick = { resetPasswordActions(ResetPasswordActions.NavigateBack) }
+            )
         }
     ) { innerPadding ->
         Box(

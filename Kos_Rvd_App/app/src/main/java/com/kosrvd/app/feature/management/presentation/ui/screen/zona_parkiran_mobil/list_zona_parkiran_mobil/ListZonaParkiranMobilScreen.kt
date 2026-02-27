@@ -38,6 +38,7 @@ import com.kosrvd.app.core.presentation.designsystem.component.card.ErrorCard
 import com.kosrvd.app.core.presentation.designsystem.component.text.CustomToastHost
 import com.kosrvd.app.core.presentation.utils.shimmerEffect
 import com.kosrvd.app.feature.management.presentation.designsystem.component.card.InfoTotalAndCreateSection
+import com.kosrvd.app.feature.management.presentation.designsystem.utils.ZonaParkirFormatter
 import com.kosrvd.app.feature.management.presentation.ui.models.ListZonaParkiranMobilUi
 import com.kosrvd.app.feature.management.presentation.ui.screen.zona_parkiran_mobil.component.ItemZonaParkirCard
 
@@ -52,7 +53,7 @@ fun ListZonaParkiranMobilScreen(
     Scaffold(
         topBar = {
             TopBarLeftTitle(
-                title = stringResource(R.string.list_of_account),
+                title = stringResource(R.string.list_zone_parking_car),
                 actionsRow = {
                     IconButton(
                         onClick = {
@@ -166,7 +167,7 @@ private fun ListZonaParkiranMobilContent(
                 onClick = {
                     listZonaParkiranMobilActions(ListZonaParkiranMobilActions.NavigateToDetailZonaParkiranMobil(zona.idZonaParkir))
                 },
-                nameZone = zona.zoneName,
+                nameZone = ZonaParkirFormatter.format(zona.zoneName),
                 zoneStatus = zona.status
             )
         }

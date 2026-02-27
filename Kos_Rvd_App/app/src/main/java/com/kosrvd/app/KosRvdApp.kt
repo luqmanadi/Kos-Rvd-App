@@ -3,9 +3,7 @@ package com.kosrvd.app
 import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.net.Uri
 import android.os.Build
-import android.util.Log
 import com.google.firebase.FirebaseApp
 import com.google.firebase.appcheck.FirebaseAppCheck
 import com.google.firebase.appcheck.debug.DebugAppCheckProviderFactory
@@ -46,7 +44,7 @@ class KosRvdApp: Application() {
             val channelName = getString(R.string.kos_rvd_channel_name)
             val channelDescription = getString(R.string.kos_rvd_channel_description)
             val importance = NotificationManager.IMPORTANCE_HIGH
-            val soundUri = "android.resource://${packageName}/${R.raw.kos_rvd_app_notification_song}".toUri()
+            val soundUri = "android.resource://${packageName}/${R.raw.notification_default}".toUri()
 
             val channel = NotificationChannel(channelId, channelName, importance).apply {
                 description = channelDescription

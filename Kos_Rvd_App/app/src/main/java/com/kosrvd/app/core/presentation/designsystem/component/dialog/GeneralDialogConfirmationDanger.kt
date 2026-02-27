@@ -74,7 +74,6 @@ fun GeneralDialogConfirmationDanger(
                     ActionOutlineButton(
                         text = stringResource(R.string.no),
                         onClick = onDismiss,
-                        strokeWidth = 1.dp,
                         shape = RoundedCornerShape(12.dp),
                         modifier = Modifier.weight(1f),
                         enabled = buttonCancelEnabled

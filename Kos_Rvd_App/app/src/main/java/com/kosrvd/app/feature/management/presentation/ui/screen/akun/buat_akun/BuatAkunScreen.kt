@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.relocation.BringIntoViewRequester
 import androidx.compose.foundation.relocation.bringIntoViewRequester
@@ -69,10 +70,9 @@ fun BuatAkunScreen(
     Scaffold(
         topBar = {
             TopBarLeftTitle(
-                title = stringResource(R.string.create_account)
-            ) {
-                buatAkunActions(BuatAkunActions.NavigateBack)
-            }
+                title = stringResource(R.string.create_account),
+                onBackClick = { buatAkunActions(BuatAkunActions.NavigateBack) }
+            )
         },
     ) { innerPadding ->
         Box(
@@ -217,6 +217,7 @@ fun ContentBuatAkun(
 
     BoxWithConstraints(
         Modifier.fillMaxSize()
+            .imePadding()
     ) {
         val screenHeight = maxHeight
 
@@ -390,12 +391,12 @@ fun ContentBuatAkun(
                 GeneralTextField(
                     modifier = Modifier
                         .fillMaxWidth()
+                        .bringIntoViewRequester(nomorHpRequester)
                         .constrainAs(fillPhoneNumber) {
                             top.linkTo(textAddAnotherData.bottom, margin = 10.dp)
                             start.linkTo(parent.start)
                             end.linkTo(parent.end)
                         }
-                        .bringIntoViewRequester(nomorHpRequester)
                         .onFocusEvent { focusState ->
                             if (focusState.isFocused) {
                                 coroutineScope.launch {
@@ -422,12 +423,12 @@ fun ContentBuatAkun(
                 GeneralTextField(
                     modifier = Modifier
                         .fillMaxWidth()
+                        .bringIntoViewRequester(alamatRequester)
                         .constrainAs(fillAddress) {
                             top.linkTo(fillPhoneNumber.bottom, margin = 10.dp)
                             start.linkTo(parent.start)
                             end.linkTo(parent.end)
                         }
-                        .bringIntoViewRequester(alamatRequester)
                         .onFocusEvent { focusState ->
                             if (focusState.isFocused) {
                                 coroutineScope.launch {

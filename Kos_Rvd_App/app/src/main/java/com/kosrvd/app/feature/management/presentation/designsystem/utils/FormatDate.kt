@@ -9,6 +9,7 @@ import java.util.Locale
 
 val INDONESIAN_LOCALE: Locale = Locale.forLanguageTag("id-ID")
 private val JAKARTA_ZONE_ID = ZoneId.of("Asia/Jakarta")
+val UTC_ZONE_ID: ZoneId = ZoneId.of("UTC")
 
 // Contoh output: "15 Juli 2025, 23:59 WIB"
 fun Timestamp.toFullIndonesianDateTime(): String {
@@ -74,6 +75,16 @@ fun Timestamp.toFormattedIndonesianDate(): String {
     return formatter.format(instant)
 }
 
+// Contoh Output: "16 Feb 2026"
+fun Timestamp.toDayMonthShortAndYear(): String {
+    val instant: Instant = this.toDate().toInstant()
+    val pattern = "dd MMM yyyy"
+    val formatter = DateTimeFormatter
+        .ofPattern(pattern, INDONESIAN_LOCALE)
+        .withZone(JAKARTA_ZONE_ID)
+    return formatter.format(instant)
+}
+
 
 fun getDueDateAsFifteenthOfMonth(originalTimestamp: Timestamp): Timestamp {
     // 1. Konversi Timestamp Firebase ke java.util.Date
@@ -103,4 +114,14 @@ fun getDueDateAsFifteenthOfMonth(): Timestamp {
     // Ambil waktu saat ini
     val now = Timestamp.now()
     return getDueDateAsFifteenthOfMonth(now)
+}
+
+// Contoh Output: "15 Jul 2025"
+fun Long.toDayMonthShortAndYear(zoneId: ZoneId = JAKARTA_ZONE_ID): String {
+    val instant: Instant = Instant.ofEpochMilli(this)
+    val pattern = "dd MMM yyyy"
+    val formatter = DateTimeFormatter
+        .ofPattern(pattern, INDONESIAN_LOCALE)
+        .withZone(zoneId)
+    return formatter.format(instant)
 }

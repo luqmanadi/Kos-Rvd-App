@@ -45,6 +45,7 @@ data class TagihanTerakhir(
     val idPenyewa: String,
     val total: Long,
     val paymentStatus: String,
-    val billingMonth: Timestamp? = null,
-    val dueDate: Timestamp? = null
+    val periodStart: Timestamp,
+    val periodEnd: Timestamp,
+    val dueDate: Timestamp
 )

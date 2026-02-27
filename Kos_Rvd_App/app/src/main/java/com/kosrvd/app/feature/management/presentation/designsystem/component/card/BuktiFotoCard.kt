@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
+import coil3.toUri
 import com.kosrvd.app.R
 import com.kosrvd.app.core.presentation.designsystem.component.button.ActionButton
 import com.kosrvd.app.core.presentation.designsystem.component.button.ActionOutlineButton
@@ -62,13 +63,16 @@ fun BuktiFotoCard(
         modifier = modifier.fillMaxWidth()
     ) {
         Card(
-            modifier = Modifier.fillMaxWidth().dashedBorder(
-                color = MaterialTheme.colorScheme.primary,
-                shape = RoundedCornerShape(20.dp),
-                strokeWidth = 1.dp,
-                dashLength = 10.dp,
-                gapLength = 10.dp
-            ).padding(1.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .dashedBorder(
+                    color = MaterialTheme.colorScheme.primary,
+                    shape = RoundedCornerShape(20.dp),
+                    strokeWidth = 1.dp,
+                    dashLength = 10.dp,
+                    gapLength = 10.dp
+                )
+                .padding(1.dp),
             shape = RoundedCornerShape(20.dp),
             colors = CardDefaults.outlinedCardColors(
                 containerColor = MaterialTheme.colorScheme.surface
@@ -88,7 +92,9 @@ fun BuktiFotoCard(
                         text = text,
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurface,
-                        modifier = Modifier.align(Alignment.CenterHorizontally).padding(16.dp)
+                        modifier = Modifier
+                            .align(Alignment.CenterHorizontally)
+                            .padding(16.dp)
                     )
                 }
 
@@ -100,7 +106,9 @@ fun BuktiFotoCard(
                         .build(),
                     contentDescription = stringResource(R.string.proof_of_complain),
                     contentScale = ContentScale.Crop,
-                    modifier = Modifier.height(height = 230.dp).fillMaxWidth(),
+                    modifier = Modifier
+                        .height(height = 230.dp)
+                        .fillMaxWidth(),
                     placeholder = painterResource(R.drawable.loading_img),
                     error = painterResource(R.drawable.ic_broken_image),
                     clipToBounds = true,
@@ -127,7 +135,9 @@ fun StarterTitleAndDescription(
     onChooseImage: () -> Unit
 ) {
     Column(
-        modifier = modifier.padding(horizontal = 25.dp, vertical = 40.dp).fillMaxWidth(),
+        modifier = modifier
+            .padding(horizontal = 25.dp, vertical = 40.dp)
+            .fillMaxWidth(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -172,7 +182,6 @@ fun ActionRowButton(
                 text = stringResource(R.string.change_photo),
                 onClick = onChooseImage,
                 shape = androidx.compose.foundation.shape.RoundedCornerShape(12.dp),
-                strokeWidth = 1.dp,
                 leadingIcon = {
                     Icon(
                         imageVector = Icons.Default.Edit,
@@ -197,18 +206,25 @@ fun ActionRowButton(
     }
 }
 
+@Composable
+fun BuktiFotoCardV2(
+    modifier: Modifier = Modifier
+) {
+
+}
+
 @Preview(showBackground = true)
 @Composable
 private fun BuktiFotoCardPreview() {
     KosRvdAppTheme {
         BuktiFotoCard(
             modifier = Modifier.padding(16.dp),
-            previewOnly = true,
+            previewOnly = false,
             title = "Belum ada bukti foto laporan",
             description = "Silahkan unggah bukti laporan.",
-            imageUri = Uri.EMPTY,
+            imageUri = Uri.parse("efefefefefef"),
             isCanChooseImage = false,
-            isBuktiLaporan = true,
+            isBuktiLaporan = false,
             onChooseImage = {},
             onPreviewImage = {}
         )

@@ -48,6 +48,7 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.kosrvd.app.R
@@ -216,10 +217,9 @@ fun EditKamarScreen(
     Scaffold(
         topBar = {
             TopBarLeftTitle(
-                title = titleTopBar
-            ) {
-                editKamarActions(EditKamarActions.NavigateBack)
-            }
+                title = titleTopBar,
+                onBackClick = { editKamarActions(EditKamarActions.NavigateBack) }
+            )
         }
     ) { innerPadding ->
         Box(
@@ -396,7 +396,7 @@ private fun EditFasilitasKamarContent(
         )
         Spacer(Modifier.height(15.dp))
     }
-    Column(Modifier.bringIntoViewRequester(fasilitasKamarRequester)) {
+    Column {
         GeneralTextField(
             modifier = Modifier.fillMaxWidth()
                 .onFocusEvent { focusState ->
@@ -414,12 +414,15 @@ private fun EditFasilitasKamarContent(
             keyboardOptions = KeyboardOptions.Default.copy(
                 imeAction = ImeAction.Done,
                 keyboardType = KeyboardType.Text,
+                capitalization = KeyboardCapitalization.Words
             ),
             lineLimits = TextFieldLineLimits.SingleLine
         )
         Spacer(Modifier.height(15.dp))
         ActionOutlineButton(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .bringIntoViewRequester(fasilitasKamarRequester),
             onClick = {
                 editKamarActions(EditKamarActions.AddFasilitasKamar)
                 namaFasilitasState.clearText()
@@ -428,7 +431,6 @@ private fun EditFasilitasKamarContent(
             shape = RoundedCornerShape(12.dp),
             height = 43.dp,
             enabled = editKamarUiState.namaFasilitas.isNotEmpty(),
-            strokeWidth = 1.dp,
             leadingIcon = {
                 Icon(
                     imageVector = Icons.Filled.Add,
@@ -477,7 +479,7 @@ private fun EditLayananAlatElektronikGratisContent(
         )
         Spacer(Modifier.height(15.dp))
     }
-    Column(Modifier.bringIntoViewRequester(editPemakaianAlatElektronikRequester)) {
+    Column{
         GeneralTextField(
             modifier = Modifier.fillMaxWidth()
                 .onFocusEvent { focusState ->
@@ -495,12 +497,14 @@ private fun EditLayananAlatElektronikGratisContent(
             keyboardOptions = KeyboardOptions.Default.copy(
                 imeAction = ImeAction.Done,
                 keyboardType = KeyboardType.Text,
+                capitalization = KeyboardCapitalization.Words
             ),
             lineLimits = TextFieldLineLimits.SingleLine
         )
         Spacer(Modifier.height(15.dp))
         ActionOutlineButton(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth()
+                .bringIntoViewRequester(editPemakaianAlatElektronikRequester),
             onClick = {
                 editKamarActions(EditKamarActions.AddPemakaianAlatElektronikGratis)
                 namaAlatElektronikState.clearText()
@@ -509,7 +513,6 @@ private fun EditLayananAlatElektronikGratisContent(
             shape = RoundedCornerShape(12.dp),
             height = 43.dp,
             enabled = editKamarUiState.namaAlatElektronik.isNotEmpty(),
-            strokeWidth = 1.dp,
             leadingIcon = {
                 Icon(
                     imageVector = Icons.Filled.Add,

@@ -58,10 +58,9 @@ fun BuatPengumumanScreen(
     Scaffold(
         topBar = {
             TopBarLeftTitle(
-                title = stringResource(R.string.create_announcement)
-            ) {
-                buatPengumumanActions(BuatPengumumanActions.NavigateBack)
-            }
+                title = stringResource(R.string.create_announcement),
+                onBackClick = { buatPengumumanActions(BuatPengumumanActions.NavigateBack) }
+            )
         },
         modifier = Modifier.fillMaxSize()
     ) { innerPadding ->

@@ -101,9 +101,11 @@ fun InfoResulTagihanCard(
             Spacer(Modifier.height(15.dp))
             RowTextInfoResult(
                 icon = Icons.Default.EventAvailable,
-                titleTextInfo = stringResource(R.string.month_with_a_colon),
+                titleTextInfo = stringResource(R.string.period_with_a_color),
                 contextTextResult = {
-                    BackgroundInfoText(text = resultTagihan.bulan)
+                    BackgroundInfoText(
+                        text = "${resultTagihan.periodStart} - ${resultTagihan.periodEnd}"
+                    )
                 },
             )
             Spacer(Modifier.height(15.dp))
@@ -354,7 +356,8 @@ private fun InfoResulTagihanCardPreview() {
             resultTagihan = ResultTagihan(
                 idTagihan = "hefheifheifhwohfoiewhfowieejfiwjriofjoriwjf",
                 statusTagihan = "Belum Lunas",
-                bulan = "November",
+                periodStart = "16 Feb 2026",
+                periodEnd = "15 Mar 2026",
                 jumlahDibayar = 766000,
                 nomorKamar = 4,
             ),

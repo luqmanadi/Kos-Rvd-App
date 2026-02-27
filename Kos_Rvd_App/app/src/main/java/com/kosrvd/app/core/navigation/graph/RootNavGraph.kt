@@ -6,6 +6,7 @@ import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.relocation.BringIntoViewRequester
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -146,6 +147,7 @@ fun RootNavGraph(
 
             val scope = rememberCoroutineScope()
             val customToastHostState = rememberCustomToastHostState()
+            val uploadProofOfPaymentRequester = remember { BringIntoViewRequester() }
 
             ObserveAsEvents(detailTagihanViewModel.events) { event ->
                 when (event) {
@@ -179,6 +181,9 @@ fun RootNavGraph(
 
                     is DetailTagihanEvents.ShowSnackBarError -> {
                         scope.launch {
+                            if (event.message == "Bukti pembayaran belum ada"){
+                                uploadProofOfPaymentRequester.bringIntoView()
+                            }
                             customToastHostState.showToast(event.message)
                         }
                     }
@@ -193,7 +198,8 @@ fun RootNavGraph(
                 idTagihan = idTagihan,
                 customToastHostState = customToastHostState,
                 detailTagihanUiState = detailTagihanUiState,
-                detailTagihanActions = detailTagihanViewModel::onActions
+                detailTagihanActions = detailTagihanViewModel::onActions,
+                uploadProofOfPaymentRequester = uploadProofOfPaymentRequester
             )
         }
 

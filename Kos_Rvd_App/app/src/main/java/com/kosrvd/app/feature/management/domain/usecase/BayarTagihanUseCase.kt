@@ -18,7 +18,8 @@ class BayarTagihanUseCase @Inject constructor(
     suspend operator fun invoke(
         idTagihan: String,
         compressedResult: CompressedResult?,
-        bulan: String,
+        periodStart: String,
+        periodEnd: String,
         jumlahDibayar: Long,
         nomorKamar: Int,
         buktiPembayaranSebelumnya: String? = null
@@ -55,7 +56,8 @@ class BayarTagihanUseCase @Inject constructor(
 
         val resultTagihan = ResultTagihan(
             idTagihan = idTagihan,
-            bulan = bulan,
+            periodStart = periodStart,
+            periodEnd = periodEnd,
             jumlahDibayar = jumlahDibayar,
             nomorKamar = nomorKamar,
             statusTagihan = Constant.MENUNGGU_VERIFIKASI

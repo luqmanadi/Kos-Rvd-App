@@ -1,11 +1,9 @@
 package com.kosrvd.app.core.presentation.utils
 
-import android.app.Activity
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Context.CLIPBOARD_SERVICE
-import android.content.ContextWrapper
 import android.os.Build
 import android.widget.Toast
 import androidx.compose.animation.core.Animatable
@@ -46,9 +44,14 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.lerp
 import androidx.navigation.NavHostController
+import com.google.firebase.Timestamp
 import com.kosrvd.app.BuildConfig
-import com.kosrvd.app.core.data.constant.Constant
 import com.kosrvd.app.core.di.laptopIp
+import com.kosrvd.app.feature.management.presentation.designsystem.utils.INDONESIAN_LOCALE
+import java.time.format.DateTimeFormatter
+import java.util.Calendar
+import java.util.Date
+import java.util.TimeZone
 
 /**
  * Modifier kustom untuk menganimasikan efek "shake" (getar) pada Composable.
@@ -237,4 +240,24 @@ fun NavHostController.navigateBackWithSendKey(key: String) {
         ?.savedStateHandle
         ?.set(key, true)
     this.popBackStack()
+}
+
+fun convertMillisToDate(millis: Long): String {
+    val pattern = "dd MMM yyyy"
+    val formatter = DateTimeFormatter.ofPattern(pattern, INDONESIAN_LOCALE)
+    return formatter.format(Date(millis).toInstant())
+}
+
+fun convertMillisToTimeStamp(millis: Long): Timestamp {
+    return Timestamp(Date(millis))
+}
+
+fun getMaxEndDateMillisUTC(startMillis: Long): Long {
+    // Wajib set ke UTC agar sejajar dengan output DateRangePicker Compose
+    val calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC")).apply {
+        timeInMillis = startMillis
+        add(Calendar.MONTH, 1)         // Langkah 1: Tambah tepat 1 bulan (misal 16 Feb -> 16 Mar)
+        add(Calendar.DAY_OF_MONTH, -1) // Langkah 2: Mundur 1 hari (16 Mar -> 15 Mar)
+    }
+    return calendar.timeInMillis
 }

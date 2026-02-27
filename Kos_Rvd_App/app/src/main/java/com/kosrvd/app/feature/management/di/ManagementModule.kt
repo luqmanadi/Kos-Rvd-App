@@ -18,8 +18,10 @@ import com.kosrvd.app.feature.management.domain.repository.PenyewaanRepository
 import com.kosrvd.app.feature.management.domain.repository.RingkasanDashboardAdminRepository
 import com.kosrvd.app.feature.management.domain.repository.TagihanRepository
 import com.kosrvd.app.feature.management.domain.repository.ZonaParkiranMobilRepository
+import com.kosrvd.app.feature.management.domain.usecase.CalculateTotalBillUseCase
 import dagger.Binds
 import dagger.Module
+import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton

@@ -105,7 +105,6 @@ fun DialogInputOldPassword(
                         shape = RoundedCornerShape(12.dp),
                         height = 43.dp,
                         enabled = !isLoading,
-                        strokeWidth = 1.dp
                     )
                     ActionButton(
                         modifier = Modifier.weight(1f),

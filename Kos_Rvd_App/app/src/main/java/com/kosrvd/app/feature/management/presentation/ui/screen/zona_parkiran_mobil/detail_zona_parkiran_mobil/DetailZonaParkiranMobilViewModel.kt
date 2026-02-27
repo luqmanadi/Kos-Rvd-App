@@ -97,11 +97,13 @@ class DetailZonaParkiranMobilViewModel @Inject constructor(
         viewModelScope.launch {
             val idZonaParkir = _state.value.detailZonaParkiranMobilUi?.idZonaParkir ?: ""
             val biayaBulanan = _state.value.detailZonaParkiranMobilUi?.monthlyFee ?: 0
+            val namaZona = _state.value.detailZonaParkiranMobilUi?.zoneName ?: ""
             _events.send(
                 DetailZonaParkiranMobilEvents.NavigateToEditEditZonaParkiranMobil(
                     idZonaParkir = idZonaParkir,
                     typeEditZonaParkir = TypeEditZonaParkir.EDIT_BIAYA_BULANAN,
-                    biayaBulanan = biayaBulanan
+                    biayaBulanan = biayaBulanan,
+                    namaZona = namaZona
                 )
             )
         }
@@ -111,11 +113,13 @@ class DetailZonaParkiranMobilViewModel @Inject constructor(
         viewModelScope.launch {
             val idZonaParkir = _state.value.detailZonaParkiranMobilUi?.idZonaParkir ?: ""
             val biayaHarian = _state.value.detailZonaParkiranMobilUi?.dailyCosts ?: 0
+            val namaZona = _state.value.detailZonaParkiranMobilUi?.zoneName ?: ""
             _events.send(
                 DetailZonaParkiranMobilEvents.NavigateToEditEditZonaParkiranMobil(
                     idZonaParkir = idZonaParkir,
                     typeEditZonaParkir = TypeEditZonaParkir.EDIT_BIAYA_HARIAN,
-                    biayaHarian = biayaHarian
+                    biayaHarian = biayaHarian,
+                    namaZona = namaZona
                 )
             )
         }

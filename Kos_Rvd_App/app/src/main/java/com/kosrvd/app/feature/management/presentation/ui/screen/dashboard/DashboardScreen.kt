@@ -50,7 +50,7 @@ import com.kosrvd.app.core.presentation.designsystem.component.dialog.DialogPerm
 import com.kosrvd.app.core.presentation.designsystem.theme.KosRvdAppTheme
 import com.kosrvd.app.core.presentation.utils.shimmerEffect
 import com.kosrvd.app.feature.management.presentation.designsystem.utils.toDayMonthAndYear
-import com.kosrvd.app.feature.management.presentation.designsystem.utils.toMonth
+import com.kosrvd.app.feature.management.presentation.designsystem.utils.toDayMonthShortAndYear
 import com.kosrvd.app.feature.management.presentation.designsystem.utils.toNumberRoomFormat
 import com.kosrvd.app.feature.management.presentation.designsystem.utils.toRupiahFormat
 import com.kosrvd.app.feature.management.presentation.ui.models.AdminDashboardUi
@@ -428,7 +428,8 @@ private fun DashboardScreenPreview() {
             paymentStatus = "Menunggu Verifikasi",
             total = total.toRupiahFormat(),
             dueDate = dueDate.toDayMonthAndYear(),
-            billingMonth = dueDate.toMonth()
+            periodEnd = dueDate.toDayMonthShortAndYear(),
+            periodStart = dueDate.toDayMonthShortAndYear()
         )
         val adminDashboardUi = AdminDashboardUi(
             name = "Admin",

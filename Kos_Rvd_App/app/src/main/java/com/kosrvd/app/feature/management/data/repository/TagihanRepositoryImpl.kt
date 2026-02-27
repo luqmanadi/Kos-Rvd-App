@@ -8,6 +8,7 @@ import com.google.firebase.firestore.toObjects
 import com.kosrvd.app.core.data.constant.Constant
 import com.kosrvd.app.core.data.constant.ErrorMessages
 import com.kosrvd.app.core.data.networking.safeCall
+import com.kosrvd.app.core.data.networking.toObjectListOrThrow
 import com.kosrvd.app.core.domain.utils.DataError
 import com.kosrvd.app.core.domain.utils.Result
 import com.kosrvd.app.core.domain.utils.asCollectionFlow
@@ -92,17 +93,17 @@ class TagihanRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun checkTagihanByIdPenyewa(idPenyewa: String): Result<Timestamp?, DataError>{
+    override suspend fun checkTagihanByIdPenyewa(idPenyewa: String): Result<List<Timestamp>, DataError>{
         return safeCall {
             db.collection(Constant.TAGIHAN_COLLECTION)
                 .whereEqualTo(Constant.ID_PENYEWA_FIELD, idPenyewa)
-                .orderBy(Constant.BILLING_MONTH_FIELD, Query.Direction.DESCENDING)
-                .limit(1)
+                .orderBy(Constant.PERIOD_END_FIELD, Query.Direction.DESCENDING)
+                .limit(5)
                 .get()
                 .await()
-                .toObjects<TagihanDto>()
-                .firstOrNull()
-                ?.billingMonth
+                .toObjectListOrThrow<TagihanDto>(
+                    mappingErrorMessage = ErrorMessages.TAGIHAN_NOT_FOUND
+                ).map { it.periodEnd }
         }
     }
 

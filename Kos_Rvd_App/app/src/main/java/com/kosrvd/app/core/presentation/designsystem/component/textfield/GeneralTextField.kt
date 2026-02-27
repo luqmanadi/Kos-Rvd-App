@@ -28,6 +28,7 @@ fun GeneralTextField(
     shakeTrigger: Int = 0,
     inputTransformation: InputTransformation? = null,
     leadingIcon: @Composable (() -> Unit)? = null,
+    trailingIcon: @Composable (() -> Unit)? = null,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     lineLimits: TextFieldLineLimits = TextFieldLineLimits.Default,
 ) {
@@ -51,6 +52,7 @@ fun GeneralTextField(
         label = {
             Text(text = stringResource(label))
         },
+        trailingIcon = trailingIcon,
         keyboardOptions = keyboardOptions,
         lineLimits = lineLimits,
         supportingText = {

@@ -6,7 +6,8 @@ import kotlinx.serialization.Serializable
 data class ResultTagihan(
     val idTagihan: String = "",
     val statusTagihan: String = "",
-    val bulan: String = "",
+    val periodStart: String = "",
+    val periodEnd: String = "",
     val jumlahDibayar: Long = 0,
     val nomorKamar: Int = 0,
     val alasanPenolakan: String = ""

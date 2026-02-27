@@ -6,17 +6,22 @@ import androidx.compose.ui.text.TextRange
 
 object ZonaParkirFormatter {
 
-    // Mengubah string ke format yang diinginkan berupa "Zona ${input}"
-    private const val FORMATTER = "Zona %s"
+    // Gunakan string literal biasa sebagai prefix
+    private const val PREFIX = "Zona "
 
     fun format(input: String): String {
         if (input.isEmpty()) return ""
-        return FORMATTER.format(input)
+
+        // Pencegahan ganda: Jika entah kenapa input sudah memiliki prefix, kembalikan apa adanya
+        if (input.startsWith(PREFIX)) return input
+
+        return "$PREFIX$input"
     }
 
-    // Menghapus format yang sudah ditambahkan berupa "Zona "
+    // Menghapus format "Zona " di awal kata
     fun parseToOriginal(input: String): String {
-        return input.replace(FORMATTER.toRegex(), "")
+        // removePrefix akan menghapus "Zona " HANYA jika kata itu ada di paling depan.
+        return input.removePrefix(PREFIX)
     }
 }
 

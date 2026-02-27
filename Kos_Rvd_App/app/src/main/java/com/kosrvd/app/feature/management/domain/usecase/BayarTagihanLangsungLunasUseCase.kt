@@ -18,7 +18,8 @@ class BayarTagihanLangsungLunasUseCase @Inject constructor(
     suspend operator fun invoke(
         idTagihan: String,
         compressedResult: CompressedResult?,
-        bulan: String,
+        periodStart: String,
+        periodEnd: String,
         jumlahDibayar: Long,
         nomorKamar: Int
     ): Result<ResultTagihan, DataError> {
@@ -53,7 +54,8 @@ class BayarTagihanLangsungLunasUseCase @Inject constructor(
 
         val resultTagihan = ResultTagihan(
             idTagihan = idTagihan,
-            bulan = bulan,
+            periodStart = periodStart,
+            periodEnd = periodEnd,
             jumlahDibayar = jumlahDibayar,
             nomorKamar = nomorKamar,
             statusTagihan = Constant.LUNAS

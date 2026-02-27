@@ -62,10 +62,9 @@ fun DetailZonaParkiranMobilScreen(
     Scaffold(
         topBar = {
             TopBarLeftTitle(
-                title = stringResource(R.string.detail_zone_parking)
-            ) {
-                detailZonaParkiranMobilActions(DetailZonaParkiranMobilActions.NavigateBack)
-            }
+                title = stringResource(R.string.detail_zone_parking),
+                onBackClick = { detailZonaParkiranMobilActions(DetailZonaParkiranMobilActions.NavigateBack) }
+            )
         }
     ) { innerPadding ->
         Box(Modifier
@@ -91,17 +90,17 @@ fun DetailZonaParkiranMobilScreen(
             }
 
             CustomToastHost(
-                modifier = Modifier.align(Alignment.BottomCenter),
+                modifier = Modifier.align(Alignment.TopCenter),
                 hostState = customToastHostState,
                 color = colorToast,
                 enter = slideInVertically(
-                    // Enters by sliding in from offset fullHeight to 0.
-                    initialOffsetY = { fullHeight -> fullHeight },
+                    // Enters by sliding in from offset -fullHeight to 0.
+                    initialOffsetY = { fullHeight -> -fullHeight },
                     animationSpec = tween(durationMillis = 150, easing = LinearOutSlowInEasing)
                 ),
                 exit = slideOutVertically(
-                    // Exits by sliding out from offset 0 to fullHeight.
-                    targetOffsetY = { fullHeight -> fullHeight },
+                    // Exits by sliding out from offset 0 to -fullHeight.
+                    targetOffsetY = { fullHeight -> -fullHeight },
                     animationSpec = tween(durationMillis = 250, easing = LinearOutSlowInEasing)
                 )
             )

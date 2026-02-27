@@ -63,8 +63,9 @@ fun DetailAkunScreen(
     Scaffold(
         topBar = {
             TopBarLeftTitle(
-                title = stringResource(R.string.detail_account)
-            ) { detailAkunActions(DetailAkunActions.NavigateBack) }
+                title = stringResource(R.string.detail_account),
+                onBackClick = { detailAkunActions(DetailAkunActions.NavigateBack) }
+            )
         },
         modifier = Modifier.fillMaxSize()
     ) { innerPadding ->

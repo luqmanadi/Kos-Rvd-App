@@ -65,6 +65,7 @@ object Constant {
     const val RENTAL_STATUS_FIELD = "rentalStatus"
     const val ID_PENYEWA_FIELD = "idPenyewa"
     const val BILLING_MONTH_FIELD = "billingMonth"
+    const val PERIOD_END_FIELD = "periodEnd"
     const val RESPONSE_FIELD = "response"
     const val PHOTO_RESPONSE_FIELD = "photoResponse"
     const val START_DATE_FIELD = "startDate"

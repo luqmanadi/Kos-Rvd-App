@@ -48,7 +48,8 @@ fun TagihanTerakhirDto.toTagihanTerakhir(): TagihanTerakhir {
         idPenyewa = this.idPenyewa,
         total = this.total,
         paymentStatus = this.paymentStatus,
-        billingMonth = this.billingMonth,
+        periodStart = this.periodStart,
+        periodEnd = this.periodEnd,
         dueDate = this.dueDate
     )
 }

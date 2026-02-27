@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
@@ -28,9 +29,15 @@ fun ActionOutlineButton(
     shape: Shape = ButtonDefaults.shape,
     height: Dp = ButtonDefaults.MinHeight,
     contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
+    borderStroke: BorderStroke = BorderStroke(2.dp, MaterialTheme.colorScheme.outlineVariant),
     isLoading: Boolean = false,
     enabled: Boolean = true,
-    strokeWidth: Dp = 2.dp,
+    colorsButton: ButtonColors = ButtonDefaults.outlinedButtonColors(
+        disabledContainerColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f),
+        disabledContentColor = MaterialTheme.colorScheme.onSurface,
+        contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
+        containerColor = Color.Transparent
+    ),
     leadingIcon: @Composable (() -> Unit)? = null
 ) {
     OutlinedButton(
@@ -39,14 +46,9 @@ fun ActionOutlineButton(
             .height(height),
         shape = shape,
         enabled = enabled && !isLoading,
-        border = BorderStroke(strokeWidth, MaterialTheme.colorScheme.outlineVariant),
+        border = borderStroke,
         contentPadding = contentPadding,
-        colors = ButtonDefaults.outlinedButtonColors(
-            disabledContainerColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f),
-            disabledContentColor = MaterialTheme.colorScheme.onSurface,
-            contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
-            containerColor = Color.Transparent
-        )
+        colors = colorsButton
     ) {
         if (isLoading){
             CircularProgressIndicator(

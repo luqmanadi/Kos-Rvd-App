@@ -35,7 +35,7 @@ import com.kosrvd.app.R
 import com.kosrvd.app.core.presentation.designsystem.component.text.StatusBackgroundText
 import com.kosrvd.app.core.presentation.designsystem.theme.KosRvdAppTheme
 import com.kosrvd.app.feature.management.presentation.designsystem.utils.toDayMonthAndYear
-import com.kosrvd.app.feature.management.presentation.designsystem.utils.toMonth
+import com.kosrvd.app.feature.management.presentation.designsystem.utils.toDayMonthShortAndYear
 import com.kosrvd.app.feature.management.presentation.designsystem.utils.toNumberRoomFormat
 import com.kosrvd.app.feature.management.presentation.designsystem.utils.toRupiahFormat
 import com.kosrvd.app.feature.management.presentation.ui.models.LastBill
@@ -92,7 +92,7 @@ fun InfoLastBillCard(
                 HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outlineVariant)
                 Spacer(Modifier.height(10.dp))
                 Text(
-                    text = lastBill.billingMonth,
+                    text = "Periode: ${lastBill.periodStart} - ${lastBill.periodEnd}",
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurface
                 )
@@ -197,11 +197,12 @@ private fun InfoLastBillCardPreview() {
             paymentStatus = "Menunggu Verifikasi",
             total = amount.toRupiahFormat(),
             dueDate = dueDate.toDayMonthAndYear(),
-            billingMonth = dueDate.toMonth()
+            periodEnd = dueDate.toDayMonthShortAndYear(),
+            periodStart = dueDate.toDayMonthShortAndYear()
         )
         InfoLastBillCard(
             numberRoom = numberRoom.toNumberRoomFormat(),
-            lastBill = null,
+            lastBill = lastBill,
             navigateToDetailBill = {},
             modifier = Modifier.padding(10.dp)
         )

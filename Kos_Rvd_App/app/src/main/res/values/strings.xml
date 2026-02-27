@@ -43,7 +43,7 @@
 
     // Attribute Text Static
     <string name="welcome_onboarding">Selamat Datang di Kos RVD!</string>
-    <string name="description_welcome">Aplikasi manajemen kos untuk penghuni dan pengelola. Praktis, cepat, dan terorganisir.</string>
+    <string name="description_welcome">Aplikasi manajemen kos untuk penghuni dan pengelola. Praktis, cepat, dan terorganir.</string>
     <string name="next">Lanjut</string>
     <string name="enter">Masuk</string>
     <string name="description_enter">Masukkan email dan password untuk masuk.</string>
@@ -52,6 +52,8 @@
     <string name="forgot_password">Lupa Password?</string>
     <string name="description_forgot_password">Masukkan alamat email yang terdaftar untuk menerima tautan reset kata sandi melalui email.</string>
     <string name="send">Kirim</string>
+    <string name="confirmation_payment">Konfirmasi Pembayaran</string>
+    <string name="re_confirmation_payment">Kirim Konfirmasi Baru</string>
     <string name="welcome">Selamat Datang</string>
     <string name="title_bill_new">Tagihan Kos Terbaru</string>
     <string name="due_date">Jatuh Tempo</string>
@@ -74,7 +76,7 @@
     <string name="id_bill">ID Tagihan</string>
     <string name="id_bill_with_a_colon">ID Tagihan :</string>
     <string name="id_rental_with_a_colon">ID Penyewaan :</string>
-    <string name="id_rental">ID Penyewaan</string>
+    <string name="id_rental">ID Penyewa</string>
     <string name="resident_with_a_colon">Penghuni :</string>
     <string name="bill_status">Status Tagihan</string>
     <string name="bill_status_with_a_colon">Status Tagihan :</string>
@@ -90,18 +92,21 @@
     <string name="not_yet_paid_off">Belum Lunas</string>
     <string name="waiting_for_verification">Menunggu Verifikasi</string>
     <string name="paid_off">Lunas</string>
+    <string name="pard_off_v_2">Pembayaran Lunas</string>
     <string name="bill_information">Informasi Tagihan</string>
     <string name="month">Bulan</string>
     <string name="month_with_a_colon">Bulan :</string>
+    <string name="period_with_a_color">Periode :</string>
     <string name="residents">Penghuni</string>
     <string name="status">Status</string>
     <string name="cost_breakdown">Rincian Biaya</string>
     <string name="room_rental">Sewa Kamar</string>
     <string name="car_parking_rental">Sewa Parkir Mobil</string>
     <string name="admin_fees">Biaya Admin (penghuni baru)</string>
+    <string name="admin_fees_short">Biaya Admin</string>
     <string name="use_of_electronic_devices">Pemakaian Alat Elektronik</string>
     <string name="use_of_devices">Pemakaian Alat</string>
-    <string name="payment_method">Metode Pembayaran Transfer</string>
+    <string name="payment_method">Metode Pembayaran</string>
     <string name="name_bank">Bank Mandiri</string>
     <string name="name_mother_kos">Patricia Magdalena</string>
     <string name="sum_transfer">Jumlah Transfer</string>
@@ -122,6 +127,8 @@
     <string name="previous_proof_of_payment">Bukti Pembayaran Sebelumnya</string>
     <string name="payment_rejected">Pembayaran Ditolak</string>
     <string name="upload_proof_date">Tanggal Bukti Upload</string>
+    <string name="date_created">Tanggal Dibuat</string>
+    <string name="payment_date">Tanggal Dibayar</string>
     <string name="information">Keterangan</string>
     <string name="proof_of_payment_now">Bukti Pembayaran Sekarang</string>
     <string name="star">*</string>
@@ -230,9 +237,9 @@
     <string name="title_make_a_new_bill">Buat Tagihan Baru</string>
     <string name="complete_the_following_data_to_create_a_new_bill">Lengkapi data berikut untuk membuat tagihan baru.</string>
     <string name="choose_room">Pilih Kamar</string>
-    <string name="is_new_resident">Apakah Penghuni Baru?</string>
+    <string name="is_new_resident">Tambah Biaya Admin (Penghuni Baru) ?</string>
     <string name="iya">Iya</string>
-    <string name="select_a_tenant_first_to_view_this_information">Pilih penyewa dulu untuk melihat informasi ini</string>
+    <string name="select_a_tenant_first_to_view_this_information">Pilih penyewa dan periode dulu untuk melihat informasi ini</string>
     <string name="title_success_make_a_new_bill">Pembuatan Tagihan Berhasil!</string>
     <string name="description_success_make_a_new_bill">Tagihan baru telah dibuat dan notifikasi telah dikirim ke akun penghuni.</string>
     <string name="subtitle_success_make_a_new_bill">Tagihan Kos telah berhasil dibuat.</string>
@@ -457,6 +464,30 @@
     <string name="zone_parking">Zona Parkir</string>
     <string name="detail_usage_daily_parking">Detail Pemakai Parkir</string>
     <string name="cancel_usage">Batalkan Pemakaian</string>
+    <string name="period">Periode</string>
+    <string name="period_bill">Periode Tagihan</string>
+    <string name="enter_information_discount">Masukkan Keterangan Diskon</string>
+    <string name="choose_date_range">Pilih Rentang Tanggal</string>
+    <string name="choose_period_bill">Pilih Periode Tagihan</string>
+
+    // New Strings for RincianBiayaCard
+    <string name="biaya_bulanan_reguler">Biaya bulanan reguler</string>
+    <string name="potongan">Potongan</string>
+    <string name="promo_kamar_baru">Promo Kamar Baru</string>
+    <string name="bank_transfer">Bank Transfer</string>
+    <string name="transfer_bank">Transfer Bank</string>
+    <string name="total_transfer">Total Transfer</string>
+    <string name="transfer_bank_mandiri">Transfer Bank Mandiri</string>
+    <string name="upload_proof">Unggah Bukti</string>
+    <string name="new_upload_proof">Unggah Bukti Baru</string>
+    <string name="upload_proof_re_upload">Unggah Ulang Bukti</string>
+    <string name="description_upload_proof">Unggah foto bukti transfer Anda di sini</string>
+    <string name="description_re_upload_proof">Pastikan foto bukti transfer terlihat jelas dan tidak buram.</string>
+    <string name="proof_transfer">Bukti Transfer</string>
+    <string name="masukkan_jumlah_diskon">Masukkan Nominal Diskon</string>
+    <string name="title_is_use_discount">Apakah perlu diskon atau potongan harga?</string>
+    <string name="max_choose_date_range">Batas maksimal memilih rentang hari adalah 31 Hari</string>
+
 
 
     // Menu
@@ -514,12 +545,14 @@
     <string name="biaya_bulanan_harus_angka">Biaya bulanan harus berupa angka</string>
     <string name="biaya_harian_tidak_boleh_kosong">Biaya harian tidak boleh kosong</string>
     <string name="biaya_harian_harus_angka">Biaya harian harus berupa angka</string>
-
+    <string name="nama_zona_tidak_boleh_kosong">Nama zona tidak boleh kosong</string>
+    <string name="keterangan_tidak_boleh_kosong">Keterangan tidak boleh kosong</string>
+    <string name="nominal_persen_diskon_harus_angka">Nominal persen diskon harus angka</string>
+    <string name="nominal_persen_diskon_tidak_boleh_kosong">Nominal persen diskon tidak boleh kosong</string>
 
     // notification channel id
     <string name="kos_rvd_channel_id">kos_rvd_channel_id</string>
     <string name="kos_rvd_channel_name">Notifikasi Kos RVD</string>
     <string name="kos_rvd_channel_description">Channel untuk info tagihan, keluhan, dan pengumuman</string>
-    <string name="nama_zona_tidak_boleh_kosong">Nama zona tidak boleh kosong</string>
 
 </resources>

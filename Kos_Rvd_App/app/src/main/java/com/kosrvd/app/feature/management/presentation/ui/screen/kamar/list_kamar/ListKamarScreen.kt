@@ -46,10 +46,9 @@ fun ListKamarScreen(
     Scaffold(
         topBar = {
             TopBarLeftTitle(
-                title = stringResource(R.string.list_room)
-            ) {
-                listKamarActions(ListKamarActions.NavigateBack)
-            }
+                title = stringResource(R.string.list_room),
+                onBackClick = {  listKamarActions(ListKamarActions.NavigateBack) }
+            )
         },
         modifier = Modifier.fillMaxSize()
     ) { innerPadding ->

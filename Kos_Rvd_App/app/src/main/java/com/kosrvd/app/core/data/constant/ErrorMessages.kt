@@ -27,7 +27,7 @@ object ErrorMessages {
 
     // Tagihan Errors
     const val TAGIHAN_NOT_FOUND = "Data tagihan tidak ditemukan"
-    const val TAGIHAN_SUDAH_TERDAFTAR = "Tagihan untuk penyewa ini pada bulan yang sama sudah terdaftar. Silakan periksa daftar tagihan."
+    const val TAGIHAN_SUDAH_TERDAFTAR = "Tagihan untuk penyewa ini pada periode yang sama sudah terdaftar. Silakan periksa daftar tagihan."
 
 
     // Resident errors

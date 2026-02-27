@@ -206,11 +206,12 @@ fun EditDataProfileScreen(
     Scaffold(
         topBar = {
             TopBarLeftTitle(
-                title = titleTopBar
-            ) {
-                keyboardController?.hide()
-                editDataProfileActions(EditDataProfileActions.NavigateBack)
-            }
+                title = titleTopBar,
+                onBackClick = {
+                    keyboardController?.hide()
+                    editDataProfileActions(EditDataProfileActions.NavigateBack)
+                }
+            )
         },
         modifier = Modifier.fillMaxSize()
     ) { innerPadding ->

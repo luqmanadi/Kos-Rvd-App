@@ -27,6 +27,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.kosrvd.app.R
 import com.kosrvd.app.core.domain.utils.CustomToastHostState
+import com.kosrvd.app.core.presentation.designsystem.component.appbar.TopBarLeftTitle
 import com.kosrvd.app.core.presentation.designsystem.component.card.DataEmptyCard
 import com.kosrvd.app.core.presentation.designsystem.component.card.ErrorCard
 import com.kosrvd.app.core.presentation.designsystem.component.text.CustomToastHost
@@ -44,7 +45,10 @@ fun ListParkirHarianMobilScreen(
 ) {
     Scaffold(
         topBar = {
-
+            TopBarLeftTitle(
+                title = stringResource(R.string.title_usage_parking_daily),
+                onBackClick = { listParkirHarianMobilActions(ListParkirHarianMobilActions.NavigateBack) }
+            )
         }
     ) { innerPadding ->
         Column(

@@ -51,10 +51,9 @@ fun DetailSewaKamarScreen(
     Scaffold(
         topBar = {
             TopBarLeftTitle(
-                title = stringResource(R.string.rent)
-            ) {
-                detailsSewaKamarActions(DetailSewaKamarActions.NavigateBack)
-            }
+                title = stringResource(R.string.rent),
+                onBackClick = { detailsSewaKamarActions(DetailSewaKamarActions.NavigateBack) }
+            )
         },
         modifier = Modifier.fillMaxSize()
     ) { innerPadding ->

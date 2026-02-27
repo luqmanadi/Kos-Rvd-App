@@ -38,7 +38,7 @@ class ListParkirHarianMobilViewModel @Inject constructor(
         .onStart { loadDataListParkirHarianMobil() }
         .stateIn(
             scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000L),
+            started = SharingStarted.WhileSubscribed(1000L),
             initialValue = ListParkirHarianMobilUiState()
         )
 

@@ -14,7 +14,8 @@ class TolakTagihanUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(
         idTagihan: String,
-        bulan: String,
+        periodStart: String,
+        periodEnd: String,
         jumlahDibayar: Long,
         nomorKamar: Int,
         alasanPenolakan: String
@@ -32,7 +33,8 @@ class TolakTagihanUseCase @Inject constructor(
         val resultTagihan = ResultTagihan(
             idTagihan = idTagihan,
             statusTagihan = Constant.BELUM_LUNAS,
-            bulan = bulan,
+            periodStart = periodStart,
+            periodEnd = periodEnd,
             jumlahDibayar = jumlahDibayar,
             nomorKamar = nomorKamar,
             alasanPenolakan = alasanPenolakan

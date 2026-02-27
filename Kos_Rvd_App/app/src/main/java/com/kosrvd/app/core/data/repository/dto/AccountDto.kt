@@ -33,8 +33,9 @@ data class DetailPenghuniDto(
 data class TagihanTerakhirDto(
     val idTagihan: String = "",
     val idPenyewa: String = "",
-    val billingMonth: Timestamp? = null,
-    val dueDate: Timestamp? = null,
+    val periodStart: Timestamp = Timestamp.now(),
+    val periodEnd: Timestamp = Timestamp.now(),
+    val dueDate: Timestamp = Timestamp.now(),
     val total: Long = 0,
     val paymentStatus: String = ""
 )

@@ -17,6 +17,7 @@ import com.kosrvd.app.feature.management.domain.usecase.TolakTagihanUseCase
 import com.kosrvd.app.feature.management.domain.usecase.VerifikasiTagihanUseCase
 import com.kosrvd.app.feature.management.presentation.designsystem.utils.ImageCompressor
 import com.kosrvd.app.feature.management.presentation.designsystem.utils.TypeResult
+import com.kosrvd.app.feature.management.presentation.designsystem.utils.toDayMonthShortAndYear
 import com.kosrvd.app.feature.management.presentation.ui.models.toDetailTagihanUi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -157,13 +158,15 @@ class DetailTagihanViewModel @Inject constructor(
             _state.update { it.copy(isButtonVerifikasiLoading = true) }
 
             val idTagihan = _state.value.detailTagihanUi?.idTagihan ?: ""
-            val bulan = _state.value.detailTagihanUi?.billingMonth ?: ""
+            val periodStart = _state.value.detailTagihanUi?.periodStart?.toDayMonthShortAndYear() ?: ""
+            val periodEnd = _state.value.detailTagihanUi?.periodEnd?.toDayMonthShortAndYear() ?: ""
             val jumlahDibayar = _state.value.detailTagihanUi?.billAmount ?: 0
             val nomorKamar = _state.value.detailTagihanUi?.numberRoom ?: 0
 
             verifikasiTagihanUseCase(
                 idTagihan = idTagihan,
-                bulan = bulan,
+                periodStart = periodStart,
+                periodEnd = periodEnd,
                 jumlahDibayar = jumlahDibayar,
                 nomorKamar = nomorKamar
             ).onSuccess { resultTagihan ->
@@ -208,13 +211,15 @@ class DetailTagihanViewModel @Inject constructor(
             }
 
             val idTagihan = _state.value.detailTagihanUi?.idTagihan ?: ""
-            val bulan = _state.value.detailTagihanUi?.billingMonth ?: ""
+            val periodStart = _state.value.detailTagihanUi?.periodStart?.toDayMonthShortAndYear() ?: ""
+            val periodEnd = _state.value.detailTagihanUi?.periodEnd?.toDayMonthShortAndYear() ?: ""
             val jumlahDibayar = _state.value.detailTagihanUi?.billAmount ?: 0
             val nomorKamar = _state.value.detailTagihanUi?.numberRoom ?: 0
 
             tolakTagihanUseCase(
                 idTagihan = idTagihan,
-                bulan = bulan,
+                periodStart = periodStart,
+                periodEnd = periodEnd,
                 jumlahDibayar = jumlahDibayar,
                 nomorKamar = nomorKamar,
                 alasanPenolakan = alasanPenolakan
@@ -332,7 +337,8 @@ class DetailTagihanViewModel @Inject constructor(
                 )
             }
             val idTagihan = _state.value.detailTagihanUi?.idTagihan ?: ""
-            val bulan = _state.value.detailTagihanUi?.billingMonth ?: ""
+            val periodStart = _state.value.detailTagihanUi?.periodStart?.toDayMonthShortAndYear() ?: ""
+            val periodEnd = _state.value.detailTagihanUi?.periodEnd?.toDayMonthShortAndYear() ?: ""
             val jumlahDibayar = _state.value.detailTagihanUi?.billAmount ?: 0
             val nomorKamar = _state.value.detailTagihanUi?.numberRoom ?: 0
             val proofOfPayment = _state.value.proofOfPayment
@@ -359,7 +365,8 @@ class DetailTagihanViewModel @Inject constructor(
                 bayarTagihanUseCase(
                     idTagihan = idTagihan,
                     compressedResult = compressedResult,
-                    bulan = bulan,
+                    periodStart = periodStart,
+                    periodEnd = periodEnd,
                     jumlahDibayar = jumlahDibayar,
                     nomorKamar = nomorKamar,
                     buktiPembayaranSebelumnya = buktiPembayaranSebelumnya
@@ -384,7 +391,8 @@ class DetailTagihanViewModel @Inject constructor(
                 bayarTagihanLangsungLunasUseCase(
                     idTagihan = idTagihan,
                     compressedResult = compressedResult,
-                    bulan = bulan,
+                    periodStart = periodStart,
+                    periodEnd = periodEnd,
                     jumlahDibayar = jumlahDibayar,
                     nomorKamar = nomorKamar
                 ).onSuccess { resultTagihan ->

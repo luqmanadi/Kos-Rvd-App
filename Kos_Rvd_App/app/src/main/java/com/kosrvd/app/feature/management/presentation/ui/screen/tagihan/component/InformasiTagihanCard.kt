@@ -1,21 +1,34 @@
 package com.kosrvd.app.feature.management.presentation.ui.screen.tagihan.component
 
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Article
+import androidx.compose.material.icons.automirrored.outlined.ReceiptLong
 import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.ChangeCircle
 import androidx.compose.material.icons.filled.DoorFront
 import androidx.compose.material.icons.filled.People
+import androidx.compose.material.icons.outlined.CalendarMonth
+import androidx.compose.material.icons.outlined.CalendarToday
+import androidx.compose.material.icons.outlined.DoorFront
+import androidx.compose.material.icons.outlined.Group
+import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.stringResource
@@ -23,9 +36,17 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.firebase.Timestamp
 import com.kosrvd.app.R
+import com.kosrvd.app.core.data.constant.Constant
+import com.kosrvd.app.core.presentation.designsystem.component.text.IconTextInfo
+import com.kosrvd.app.core.presentation.designsystem.component.text.StatusTagihanBackgroundText
 import com.kosrvd.app.core.presentation.designsystem.theme.KosRvdAppTheme
 import com.kosrvd.app.feature.management.domain.model.AlatElektronik
+import com.kosrvd.app.feature.management.domain.model.Diskon
 import com.kosrvd.app.feature.management.presentation.designsystem.component.text.InfoContentColumnText
+import com.kosrvd.app.feature.management.presentation.designsystem.component.text.InfoIconTextColumnRow
+import com.kosrvd.app.feature.management.presentation.designsystem.component.text.InfoIconTextListColumnRow
+import com.kosrvd.app.feature.management.presentation.designsystem.utils.toDayMonthShortAndYear
+import com.kosrvd.app.feature.management.presentation.designsystem.utils.toMonth
 import com.kosrvd.app.feature.management.presentation.designsystem.utils.toNumber
 import com.kosrvd.app.feature.management.presentation.ui.models.DetailTagihanUi
 
@@ -95,6 +116,171 @@ fun InformasiTagihanCard(
     }
 }
 
+@Composable
+fun InfoDetailTagihanCard(
+    modifier: Modifier = Modifier,
+    detailTagihanUi: DetailTagihanUi
+) {
+    Card(
+        modifier = modifier
+            .fillMaxWidth(),
+        shape = RoundedCornerShape(24.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceContainer
+        ),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.3f))
+    ) {
+        InfoIconTextColumnRow(
+            modifier = Modifier.padding(16.dp),
+            icon = Icons.AutoMirrored.Outlined.ReceiptLong,
+            title = stringResource(R.string.id_bill),
+            description = detailTagihanUi.idTagihan
+        )
+        HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f))
+        Row(
+            Modifier
+                .fillMaxWidth()
+                .heightIn(max = 97.dp)
+        ) {
+            InfoIconTextColumnRow(
+                modifier = Modifier
+                    .padding(16.dp)
+                    .weight(1f),
+                icon = Icons.Outlined.DoorFront,
+                title = stringResource(R.string.number_room),
+                description = detailTagihanUi.numberRoom.toString()
+            )
+            VerticalDivider(
+                thickness = 1.dp,
+                color = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f)
+            )
+            InfoIconTextColumnRow(
+                modifier = Modifier
+                    .padding(16.dp)
+                    .weight(1f),
+                icon = Icons.Outlined.CalendarMonth,
+                title = stringResource(R.string.period),
+                description = "${detailTagihanUi.periodStart.toDayMonthShortAndYear()} - ${detailTagihanUi.periodEnd.toDayMonthShortAndYear()}"
+            )
+        }
+        HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f))
+        InfoIconTextListColumnRow(
+            modifier = Modifier.padding(16.dp),
+            icon = Icons.Outlined.Group,
+            title = stringResource(R.string.residents),
+            description = detailTagihanUi.residentNameList,
+        )
+        HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f))
+        InfoIconTextColumnRow(
+            modifier = Modifier.padding(16.dp),
+            icon = Icons.Outlined.CalendarToday,
+            title = stringResource(R.string.date_created),
+            description = detailTagihanUi.dateCreated
+        )
+        if (detailTagihanUi.paymentStatus == Constant.LUNAS && detailTagihanUi.datePaidOff != null){
+            HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f))
+            InfoIconTextColumnRow(
+                modifier = Modifier.padding(16.dp),
+                icon = Icons.Outlined.CalendarToday,
+                title = stringResource(R.string.payment_date),
+                description = detailTagihanUi.datePaidOff
+            )
+        }
+        HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f))
+        Row(
+            modifier = Modifier
+                .background(
+                    MaterialTheme.colorScheme.surfaceVariant,
+                    RoundedCornerShape(bottomEnd = 24.dp, bottomStart = 24.dp)
+                )
+                .padding(16.dp)
+                .fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            IconTextInfo(
+                text = stringResource(R.string.status),
+                icon = Icons.Outlined.Info,
+                colorText = MaterialTheme.colorScheme.secondary,
+                colorIcon = MaterialTheme.colorScheme.secondary,
+                spacing = 16.dp
+            )
+            Spacer(Modifier.weight(1f))
+            StatusTagihanBackgroundText(status = detailTagihanUi.paymentStatus)
+        }
+    }
+}
+
+@Composable
+fun InfoDetailBuatTagihanCard(
+    modifier: Modifier = Modifier,
+    idPenyewa: String,
+    periodStart: Timestamp,
+    periodEnd: Timestamp,
+    numberRoom: Int,
+    listResident: List<String>
+) {
+    Card(
+        modifier = modifier
+            .fillMaxWidth(),
+        shape = RoundedCornerShape(24.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceContainer
+        ),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.3f))
+    ) {
+        InfoIconTextColumnRow(
+            modifier = Modifier.padding(16.dp),
+            icon = Icons.AutoMirrored.Outlined.ReceiptLong,
+            title = stringResource(R.string.id_rental),
+            description = idPenyewa
+        )
+        HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f))
+        InfoIconTextColumnRow(
+            modifier = Modifier
+                .padding(16.dp),
+            icon = Icons.Outlined.CalendarMonth,
+            title = stringResource(R.string.period),
+            description = "${periodStart.toDayMonthShortAndYear()} - ${periodEnd.toDayMonthShortAndYear()}"
+        )
+        HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f))
+        InfoIconTextColumnRow(
+            modifier = Modifier
+                .padding(16.dp),
+            icon = Icons.Outlined.DoorFront,
+            title = stringResource(R.string.number_room),
+            description = numberRoom.toString()
+        )
+        HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f))
+        InfoIconTextListColumnRow(
+            modifier = Modifier.padding(16.dp),
+            icon = Icons.Outlined.Group,
+            title = stringResource(R.string.residents),
+            description = listResident,
+        )
+        HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f))
+        Row(
+            modifier = Modifier
+                .background(
+                    MaterialTheme.colorScheme.surfaceVariant,
+                    RoundedCornerShape(bottomEnd = 24.dp, bottomStart = 24.dp)
+                )
+                .padding(16.dp)
+                .fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            IconTextInfo(
+                text = stringResource(R.string.status),
+                icon = Icons.Outlined.Info,
+                colorText = MaterialTheme.colorScheme.secondary,
+                colorIcon = MaterialTheme.colorScheme.secondary,
+                spacing = 16.dp
+            )
+            Spacer(Modifier.weight(1f))
+            StatusTagihanBackgroundText(status = Constant.BELUM_LUNAS)
+        }
+    }
+}
+
 @Preview(showBackground = true)
 @Composable
 private fun InformasiTagihanCardPreview() {
@@ -102,19 +288,54 @@ private fun InformasiTagihanCardPreview() {
         InformasiTagihanCard(
             modifier = Modifier.padding(20.dp),
             idTagihanOrIdPenyewaan = fakeDetailTagihanUi.idTagihan,
-            numberRoom = fakeDetailTagihanUi.numberRoom?.toNumber()?:"",
-            month = fakeDetailTagihanUi.billingMonth,
+            numberRoom = fakeDetailTagihanUi.numberRoom.toNumber(),
+            month = fakeDetailTagihanUi.periodEnd.toMonth(),
             residentNameList = fakeDetailTagihanUi.residentNameList,
             paymentStatus = fakeDetailTagihanUi.paymentStatus
         )
     }
 }
 
+@Preview(showBackground = true)
+@Composable
+private fun InfoDetailTagihanCardPreview() {
+    KosRvdAppTheme {
+        Column(Modifier.padding(16.dp)) {
+            InfoDetailTagihanCard(
+                detailTagihanUi = fakeDetailTagihanUi
+            )
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun InfoDetailBuatTagihanCardPreview() {
+    KosRvdAppTheme {
+        InfoDetailBuatTagihanCard(
+            modifier = Modifier.padding(20.dp),
+            idPenyewa = "eofeofjeo20o02",
+            periodStart = Timestamp.now(),
+            periodEnd = Timestamp.now(),
+            numberRoom = 5,
+            listResident = listOf(
+                "Arjuna"
+            )
+        )
+    }
+}
+
+val diskon = Diskon(
+    percent = 10,
+    price = 20000,
+    description = "Promo Imlek"
+)
 val fakeDetailTagihanUi = DetailTagihanUi(
     adminFees = true,
     billAmount = 100000,
-    billingMonth = "November 2025",
-    carParkingRentalFeeMonthly = "Rp 0",
+    periodStart = Timestamp.now(),
+    periodEnd = Timestamp.now(),
+    carParkingRentalFeeMonthly = null,
     dateCreated = "10 Janurari 2025",
     datePaidOff = null,
     dateUploadProof = null,
@@ -126,11 +347,12 @@ val fakeDetailTagihanUi = DetailTagihanUi(
     idPenyewa = "103013901iefhiefhe",
     idTagihan = "0190190ehfiehfiefhief",
     numberRoom = 5,
-    paymentStatus = "Belum Lunas",
+    paymentStatus = Constant.MENUNGGU_VERIFIKASI,
     proofOfPayment = null,
     rejectionStatement = null,
     residentAccountIdList = listOf("wfjifjiefjiejf","inefineifniefn"),
     residentNameList = listOf("Ndiman NN", "HH Juan"),
-    roomRentalFee = "Rp 100.000",
-    verificationDate = null
+    roomRentalFee = 100000,
+    verificationDate = null,
+    diskon = null
 )

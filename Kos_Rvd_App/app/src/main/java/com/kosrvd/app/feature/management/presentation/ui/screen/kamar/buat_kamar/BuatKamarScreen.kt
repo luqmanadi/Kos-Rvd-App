@@ -128,10 +128,9 @@ fun BuatKamarScreen(
     Scaffold(
         topBar = {
             TopBarLeftTitle(
-                title = stringResource(R.string.create_room)
-            ) {
-                buatKamarActions(BuatKamarActions.NavigateBack)
-            }
+                title = stringResource(R.string.create_room),
+                onBackClick = { buatKamarActions(BuatKamarActions.NavigateBack) }
+            )
         }
     ) { innerPadding ->
         Box(
@@ -549,7 +548,6 @@ fun FasilitasKamarSection(
         GeneralTextField(
             modifier = Modifier
                 .fillMaxWidth()
-                .bringIntoViewRequester(fasilitasKamarRequester)
                 .onFocusEvent { focusState ->
                     if (focusState.isFocused) {
                         coroutineScope.launch {
@@ -570,7 +568,8 @@ fun FasilitasKamarSection(
         )
         Spacer(Modifier.height(15.dp))
         ActionOutlineButton(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth()
+                .bringIntoViewRequester(fasilitasKamarRequester),
             onClick = {
                 buatKamarActions(BuatKamarActions.AddFasilitasKamar)
                 namaFasilitasState.clearText()
@@ -579,7 +578,6 @@ fun FasilitasKamarSection(
             shape = RoundedCornerShape(12.dp),
             height = 43.dp,
             enabled = buatKamarUiState.namaFasilitas.isNotEmpty(),
-            strokeWidth = 1.dp,
             leadingIcon = {
                 Icon(
                     imageVector = Icons.Filled.Add,
@@ -663,7 +661,6 @@ fun PemakaianAlatElektronikSection(
         }
         GeneralTextField(
             modifier = Modifier.fillMaxWidth()
-                .bringIntoViewRequester(pemakaianAlatElektronikKamarRequester)
                 .onFocusEvent { focusState ->
                     if (focusState.isFocused) {
                         coroutineScope.launch {
@@ -684,7 +681,8 @@ fun PemakaianAlatElektronikSection(
         )
         Spacer(Modifier.height(15.dp))
         ActionOutlineButton(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth()
+                .bringIntoViewRequester(pemakaianAlatElektronikKamarRequester),
             onClick = {
                 buatKamarActions(BuatKamarActions.AddPemakaianAlatElektronikGratis)
                 namaAlatElektronikState.clearText()
@@ -693,7 +691,6 @@ fun PemakaianAlatElektronikSection(
             shape = RoundedCornerShape(12.dp),
             height = 43.dp,
             enabled = buatKamarUiState.namaAlatElektronik.isNotEmpty(),
-            strokeWidth = 1.dp,
             leadingIcon = {
                 Icon(
                     imageVector = Icons.Filled.Add,

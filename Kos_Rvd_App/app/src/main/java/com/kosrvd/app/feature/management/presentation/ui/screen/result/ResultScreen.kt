@@ -192,7 +192,6 @@ fun ResultCreatePenyewaanContent(
                 modifier = Modifier.fillMaxWidth(),
                 height = 45.dp,
                 shape = RoundedCornerShape(12.dp),
-                strokeWidth = 1.dp
             )
         }
         item { Spacer(Modifier.height(15.dp)) }
@@ -271,7 +270,6 @@ private fun ResultTagihanContent(
                 modifier = Modifier.fillMaxWidth(),
                 height = 45.dp,
                 shape = RoundedCornerShape(12.dp),
-                strokeWidth = 1.dp
             )
         }
         item { Spacer(Modifier.height(15.dp)) }
@@ -334,7 +332,6 @@ private fun ResultKeluhanContent(
                 modifier = Modifier.fillMaxWidth(),
                 height = 45.dp,
                 shape = RoundedCornerShape(12.dp),
-                strokeWidth = 1.dp
             )
         }
         item { Spacer(Modifier.height(15.dp)) }
@@ -365,7 +362,8 @@ private fun ResultScreePreview() {
     val resultTagihan =  ResultTagihan(
         idTagihan = "hefheifheifhwohfoiewhfowieejfiwjriofjoriwjf",
         statusTagihan = "Belum Lunas",
-        bulan = "November",
+        periodStart = "10 Jan 2026",
+        periodEnd = "10 Mar 2026",
         jumlahDibayar = 766000,
         nomorKamar = 4,
         alasanPenolakan = "Burik gambar"
@@ -380,7 +378,7 @@ private fun ResultScreePreview() {
     )
     KosRvdAppTheme {
         ResultScreen(
-            typeResult = TypeResult.LAPORAN_KELUHAN_SELESAI_DIPROSES,
+            typeResult = TypeResult.BAYAR_TAGIHAN,
             resultLaporanKeluhan = resultLaporan,
             resultTagihan = resultTagihan,
             resultCreatePenyewaan = resultCreatePenyewaan,

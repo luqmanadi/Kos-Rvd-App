@@ -46,10 +46,9 @@ fun ListAkunScreen(
     Scaffold(
         topBar = {
             TopBarLeftTitle(
-                title = stringResource(R.string.list_of_account)
-            ) {
-                listAkunActions(ListAkunActions.NavigateBack)
-            }
+                title = stringResource(R.string.list_of_account),
+                onBackClick = { listAkunActions(ListAkunActions.NavigateBack) }
+            )
         }
     ) { innerPadding ->
         Column(

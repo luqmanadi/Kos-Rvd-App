@@ -2,17 +2,21 @@ package com.kosrvd.app.feature.management.data.mappers
 
 import com.kosrvd.app.core.navigation.models.ResultTagihan
 import com.kosrvd.app.feature.management.data.repository.dto.AlatElektronikDto
+import com.kosrvd.app.feature.management.data.repository.dto.DiskonDto
 import com.kosrvd.app.feature.management.data.repository.dto.TagihanDto
 import com.kosrvd.app.feature.management.domain.model.AlatElektronik
 import com.kosrvd.app.feature.management.domain.model.BuatTagihan
+import com.kosrvd.app.feature.management.domain.model.Diskon
 import com.kosrvd.app.feature.management.domain.model.Tagihan
-import com.kosrvd.app.feature.management.presentation.designsystem.utils.toMonthAndYear
+import com.kosrvd.app.feature.management.presentation.designsystem.utils.toDayMonthShortAndYear
 
-fun TagihanDto.toTagihan(): Tagihan{
+fun TagihanDto.toTagihan(): Tagihan {
     return Tagihan(
         adminFees = this.adminFees,
         billAmount = this.billAmount,
-        billingMonth = this.billingMonth,
+        periodEnd = this.periodEnd,
+        periodStart = this.periodStart,
+        diskon = this.diskon?.toDiskon(),
         carParkingRentalFeeMonthly = this.carParkingRentalFeeMonthly,
         dateCreated = this.dateCreated,
         datePaidOff = this.datePaidOff,
@@ -32,6 +36,14 @@ fun TagihanDto.toTagihan(): Tagihan{
     )
 }
 
+fun DiskonDto.toDiskon(): Diskon {
+    return Diskon(
+        percent = this.percent,
+        price = this.price,
+        description = this.description
+    )
+}
+
 fun AlatElektronikDto.toAlatElektronik(): AlatElektronik{
     return AlatElektronik(
         cost = this.cost,
@@ -48,7 +60,9 @@ fun BuatTagihan.toTagihan(idTagihan: String): Tagihan{
         numberRoom = this.numberRoom,
         residentAccountIdList = this.residentAccountIdList,
         residentNameList = this.residentNameList,
-        billingMonth = this.billingMonth,
+        periodStart = this.periodStart,
+        periodEnd = this.periodEnd,
+        diskon = this.diskon,
         dueDate = this.dueDate,
         roomRentalFee = this.roomRentalFee,
         carParkingRentalFeeMonthly = this.carParkingRentalFeeMonthly,
@@ -69,7 +83,8 @@ fun Tagihan.toResultTagihan(): ResultTagihan{
     return ResultTagihan(
         idTagihan = this.idTagihan,
         statusTagihan = this.paymentStatus,
-        bulan = this.billingMonth.toMonthAndYear(),
+        periodStart = this.periodStart.toDayMonthShortAndYear(),
+        periodEnd = this.periodEnd.toDayMonthShortAndYear(),
         jumlahDibayar = this.billAmount,
         nomorKamar = this.numberRoom,
         alasanPenolakan = this.rejectionStatement?: ""

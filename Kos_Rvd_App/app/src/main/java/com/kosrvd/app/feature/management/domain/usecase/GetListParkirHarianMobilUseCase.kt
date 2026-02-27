@@ -1,5 +1,6 @@
 package com.kosrvd.app.feature.management.domain.usecase
 
+import android.util.Log
 import com.google.firebase.Timestamp
 import com.kosrvd.app.core.data.constant.Constant
 import com.kosrvd.app.core.domain.utils.DataError
@@ -19,16 +20,20 @@ class GetListParkirHarianMobilUseCase @Inject constructor(
         return result.map { listParkir ->
             val now = Timestamp.now()
 
-            val mappedList = listParkir.map { data ->
-                val calculatedStatus  = determineStatus(data, now)
+            val mappedList = listParkir
+                .filter { data ->
+                    data.userName.isNotBlank() && data.zoneName.isNotBlank() && data.numberPlate.isNotBlank()
+                }
+                .map { data ->
+                    val calculatedStatus = determineStatus(data, now)
 
-                ListParkirHarianMobilUi(
-                    idParkirHarianMobil = data.idParkirHarianMobil,
-                    userName = data.userName,
-                    zoneName = data.zoneName,
-                    numberPlate = data.numberPlate,
-                    status = calculatedStatus
-                )
+                    ListParkirHarianMobilUi(
+                        idParkirHarianMobil = data.idParkirHarianMobil,
+                        userName = data.userName,
+                        zoneName = data.zoneName,
+                        numberPlate = data.numberPlate,
+                        status = calculatedStatus
+                    )
             }
 
             mappedList.sortedBy { getStatusSortWeight(it.status) }

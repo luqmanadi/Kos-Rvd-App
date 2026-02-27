@@ -4,7 +4,7 @@ import com.kosrvd.app.core.domain.models.Account
 import com.kosrvd.app.core.domain.models.TagihanTerakhir
 import com.kosrvd.app.feature.management.domain.model.DataDashboardAdmin
 import com.kosrvd.app.feature.management.presentation.designsystem.utils.toDayMonthAndYear
-import com.kosrvd.app.feature.management.presentation.designsystem.utils.toMonth
+import com.kosrvd.app.feature.management.presentation.designsystem.utils.toDayMonthShortAndYear
 import com.kosrvd.app.feature.management.presentation.designsystem.utils.toNumberRoomFormat
 import com.kosrvd.app.feature.management.presentation.designsystem.utils.toRupiahFormat
 
@@ -29,7 +29,8 @@ data class CombineDataDashboardUi(
 
 data class LastBill(
     val idTagihan: String,
-    val billingMonth: String,
+    val periodStart: String,
+    val periodEnd: String,
     val total: String,
     val paymentStatus: String,
     val dueDate: String
@@ -52,9 +53,10 @@ fun Account.toPenghuniDashboardUi() = PenghuniDashboardUi(
 fun TagihanTerakhir.toLastBill(): LastBill{
     return LastBill(
         idTagihan = this.idTagihan,
-        billingMonth = this.billingMonth?.toMonth() ?: "Bulan tidak tersedia",
+        periodStart = this.periodStart.toDayMonthShortAndYear(),
+        periodEnd = this.periodEnd.toDayMonthShortAndYear(),
         total = this.total.toRupiahFormat(),
         paymentStatus = this.paymentStatus,
-        dueDate = this.dueDate?.toDayMonthAndYear() ?: "Tanggal tidak tersedia"
+        dueDate = this.dueDate.toDayMonthAndYear()
     )
 }

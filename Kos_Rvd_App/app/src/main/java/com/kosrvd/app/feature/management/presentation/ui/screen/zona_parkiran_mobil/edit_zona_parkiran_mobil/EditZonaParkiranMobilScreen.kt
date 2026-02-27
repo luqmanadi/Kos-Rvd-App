@@ -163,7 +163,10 @@ fun EditZonaParkiranMobilScreen(
         topBar = {
             TopBarLeftTitle(
                 title = titleTopBar,
-                onBackClick = { editZonaParkiranMobilActions(EditZonaParkiranMobilActions.NavigateBack)}
+                onBackClick = {
+                    keyboardController?.hide()
+                    editZonaParkiranMobilActions(EditZonaParkiranMobilActions.NavigateBack)
+                }
             )
         }
     ) { innerPadding ->
@@ -181,7 +184,7 @@ fun EditZonaParkiranMobilScreen(
             ) {
                 InfoSectionCard(
                     icon = Icons.Filled.AirlineSeatFlat,
-                    title = stringResource(R.string.room_number_completed),
+                    title = stringResource(R.string.zone_parking),
                     action = CardAction.None,
                     content = {
                         Text(

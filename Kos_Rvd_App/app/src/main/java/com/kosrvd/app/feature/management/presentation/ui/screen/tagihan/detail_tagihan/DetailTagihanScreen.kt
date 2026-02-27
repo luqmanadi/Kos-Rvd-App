@@ -8,8 +8,10 @@ import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -19,12 +21,18 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.relocation.BringIntoViewRequester
+import androidx.compose.foundation.relocation.bringIntoViewRequester
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.input.rememberTextFieldState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Send
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -32,10 +40,13 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -48,23 +59,23 @@ import com.kosrvd.app.core.domain.utils.CustomToastHostState
 import com.kosrvd.app.core.domain.utils.Role
 import com.kosrvd.app.core.presentation.designsystem.component.appbar.TopBarCenterTitle
 import com.kosrvd.app.core.presentation.designsystem.component.button.ActionButton
-import com.kosrvd.app.core.presentation.designsystem.component.button.ActionDangerButton
+import com.kosrvd.app.core.presentation.designsystem.component.button.ActionOutlineButton
 import com.kosrvd.app.core.presentation.designsystem.component.card.ErrorCard
 import com.kosrvd.app.core.presentation.designsystem.component.dialog.GeneralDialogConfirmationDanger
 import com.kosrvd.app.core.presentation.designsystem.component.text.CustomToastHost
-import com.kosrvd.app.core.presentation.designsystem.component.text.RequiredLabelText
 import com.kosrvd.app.core.presentation.designsystem.theme.KosRvdAppTheme
 import com.kosrvd.app.core.presentation.utils.shimmerEffect
-import com.kosrvd.app.feature.management.presentation.designsystem.component.card.BuktiFotoCard
-import com.kosrvd.app.feature.management.presentation.designsystem.component.card.InfoTanggalTagihanCard
+import com.kosrvd.app.feature.management.domain.model.AlatElektronik
+import com.kosrvd.app.feature.management.presentation.designsystem.component.card.UnggahBuktiPembayaranCard
 import com.kosrvd.app.feature.management.presentation.designsystem.utils.toDayMonthAndYear
-import com.kosrvd.app.feature.management.presentation.designsystem.utils.toNumber
+import com.kosrvd.app.feature.management.presentation.designsystem.utils.toFullIndonesianDateTime
 import com.kosrvd.app.feature.management.presentation.ui.models.DetailTagihanUi
-import com.kosrvd.app.feature.management.presentation.ui.screen.tagihan.component.InformasiTagihanCard
-import com.kosrvd.app.feature.management.presentation.ui.screen.tagihan.component.MetodePembayaranCardV1
-import com.kosrvd.app.feature.management.presentation.ui.screen.tagihan.component.MetodePembayaranCardV2
-import com.kosrvd.app.feature.management.presentation.ui.screen.tagihan.component.RejectionPaymentCard
-import com.kosrvd.app.feature.management.presentation.ui.screen.tagihan.component.RincianBiayaTagihanCard
+import com.kosrvd.app.feature.management.presentation.ui.screen.tagihan.component.BuktiPembayaranTagihanCard
+import com.kosrvd.app.feature.management.presentation.ui.screen.tagihan.component.InfoDetailTagihanCard
+import com.kosrvd.app.feature.management.presentation.ui.screen.tagihan.component.MetodePembayaranCardV3
+import com.kosrvd.app.feature.management.presentation.ui.screen.tagihan.component.MetodePembayaranCardV4
+import com.kosrvd.app.feature.management.presentation.ui.screen.tagihan.component.RincianBiayaCard
+import com.kosrvd.app.feature.management.presentation.ui.screen.tagihan.component.StatusTagihanCard
 import com.kosrvd.app.feature.management.presentation.ui.screen.tagihan.component.TolakTagihanBottomSheet
 import kotlinx.coroutines.flow.collectLatest
 
@@ -74,8 +85,8 @@ fun DetailTagihanScreen(
     customToastHostState: CustomToastHostState,
     detailTagihanUiState: DetailTagihanUiState,
     detailTagihanActions: (DetailTagihanActions) -> Unit,
+    uploadProofOfPaymentRequester: BringIntoViewRequester
 ) {
-    val listState = rememberLazyListState()
 
     Scaffold(
         topBar = {
@@ -88,7 +99,7 @@ fun DetailTagihanScreen(
                 isActionIcon = detailTagihanUiState.role == Role.ADMIN,
                 actionIcon = {
                     IconButton(
-                        onClick = {detailTagihanActions(DetailTagihanActions.ShowHapusDialog)}
+                        onClick = { detailTagihanActions(DetailTagihanActions.ShowHapusDialog) }
                     ) {
                         Icon(
                             imageVector = Icons.Filled.Delete,
@@ -120,7 +131,7 @@ fun DetailTagihanScreen(
                     detailTagihanUiState = detailTagihanUiState,
                     detailTagihanActions = detailTagihanActions,
                     detailTagihanUi = detailTagihanUiState.detailTagihanUi,
-                    listState = listState
+                    uploadProofOfPaymentRequester = uploadProofOfPaymentRequester
                 )
             }
         }
@@ -130,12 +141,14 @@ fun DetailTagihanScreen(
 @Composable
 private fun TagihanMainContent(
     modifier: Modifier = Modifier,
-    listState: LazyListState,
     customToastHostState: CustomToastHostState,
     detailTagihanUi: DetailTagihanUi,
     detailTagihanUiState: DetailTagihanUiState,
-    detailTagihanActions: (DetailTagihanActions) -> Unit
+    detailTagihanActions: (DetailTagihanActions) -> Unit,
+    uploadProofOfPaymentRequester: BringIntoViewRequester
 ) {
+    val state = rememberScrollState()
+
     val photoPicker = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia()
     ) { contetUri ->
@@ -151,211 +164,205 @@ private fun TagihanMainContent(
         }
     }
 
-    Box(modifier.fillMaxSize()){
-        LazyColumn(
-            state = listState,
-            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 25.dp),
-            modifier = Modifier.fillMaxSize()
-        ) {
-            item(key = "Informasi Tagihan Header") {
-                Text(
-                    text = stringResource(R.string.bill_information),
-                    style = MaterialTheme.typography.bodyLarge,
-                    fontWeight = FontWeight.Bold
+    Box(modifier.fillMaxSize()) {
+        Column(Modifier.fillMaxSize()) {
+            Column(
+                Modifier
+                    .weight(1f)
+                    .verticalScroll(state)
+                    .padding(16.dp),
+                verticalArrangement = Arrangement.spacedBy(20.dp)
+            ) {
+                // Status Tagihan Card
+                StatusTagihanCard(
+                    alasanPenolakan = detailTagihanUi.rejectionStatement,
+                    statusTagihan = detailTagihanUi.paymentStatus
                 )
-            }
-            item { Spacer(Modifier.height(15.dp)) }
-            item(key = "Informasi Tagihan Card") {
-                InformasiTagihanCard(
-                    modifier = Modifier.fillMaxWidth(),
-                    idTagihanOrIdPenyewaan = detailTagihanUi.idTagihan,
-                    numberRoom = detailTagihanUi.numberRoom?.toNumber() ?: "",
-                    month = detailTagihanUi.billingMonth,
-                    residentNameList = detailTagihanUi.residentNameList,
-                    paymentStatus = detailTagihanUi.paymentStatus
-                )
-            }
-            item { Spacer(Modifier.height(20.dp)) }
-            item(key = "Rincian Biaya Header") {
-                Text(
-                    text = stringResource(R.string.cost_breakdown),
-                    style = MaterialTheme.typography.bodyLarge,
-                    fontWeight = FontWeight.Bold
-                )
-            }
-            item { Spacer(Modifier.height(15.dp)) }
-            item(key = "Rincian Biaya Card") {
-                RincianBiayaTagihanCard(
-                    modifier = Modifier.fillMaxWidth(),
-                    adminFees = detailTagihanUi.adminFees,
-                    highPowerElectronicEquipmentUsageCosts = detailTagihanUi.highPowerElectronicEquipmentUsageCostsMonthly,
-                    roomRentalFee = detailTagihanUi.roomRentalFee,
-                    carParkingRentalFee = detailTagihanUi.carParkingRentalFeeMonthly
-                )
-            }
-            item { Spacer(Modifier.height(20.dp)) }
-            item(key = "Metode Pembayaran Transfer Header") {
-                Text(
-                    text = stringResource(R.string.payment_method),
-                    style = MaterialTheme.typography.bodyLarge,
-                    fontWeight = FontWeight.Bold
-                )
-            }
-            item { Spacer(Modifier.height(15.dp)) }
-            if (detailTagihanUi.paymentStatus == Constant.BELUM_LUNAS) {
-                item(key = "Metode Pembayaran Transfer Card V1") {
-                    MetodePembayaranCardV1(
-                        modifier = Modifier.fillMaxWidth(),
-                        dueDate = detailTagihanUi.dueDate,
-                        jumlahTransfer = detailTagihanUi.billAmount
-                    )
+
+                // Bukti Pembayaran
+                if (detailTagihanUi.proofOfPayment != null && detailTagihanUi.dateUploadProof != null){
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(10.dp)
+                    ) {
+                        Text(
+                            text = stringResource(R.string.proof_of_payment),
+                            style = MaterialTheme.typography.bodyLarge,
+                            fontWeight = FontWeight.Bold
+                        )
+                        BuktiPembayaranTagihanCard(
+                            proofOfPayment = detailTagihanUi.proofOfPayment,
+                            dateUploadProof = detailTagihanUi.dateUploadProof,
+                            onClick = { detailTagihanActions(DetailTagihanActions.NavigateToPreviewImage(detailTagihanUi.proofOfPayment.toUri())) }
+                        )
+                    }
                 }
-            } else {
-                item(key = "Metode Pembayaran Transfer Card V2") {
-                    MetodePembayaranCardV2(
-                        modifier = Modifier.fillMaxWidth(),
-                        jumlahTransfer = detailTagihanUi.billAmount
-                    )
-                }
-            }
-            item { Spacer(Modifier.height(20.dp)) }
-            item(key = "Bukti Pembayaran Header") {
-                Text(
-                    text = stringResource(R.string.proof_of_payment),
-                    style = MaterialTheme.typography.bodyLarge,
-                    fontWeight = FontWeight.Bold
-                )
-            }
-            item { Spacer(Modifier.height(15.dp)) }
-            if (detailTagihanUi.rejectionStatement != null && detailTagihanUi.paymentStatus == Constant.BELUM_LUNAS) {
-                item(key = "Bukti Pembayaran Sebelumnya Header") {
+
+                // Informasi Tagihan
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
                     Text(
-                        text = stringResource(R.string.previous_proof_of_payment),
-                        style = MaterialTheme.typography.bodySmall
+                        text = stringResource(R.string.bill_information),
+                        style = MaterialTheme.typography.bodyLarge,
+                        fontWeight = FontWeight.Bold
+                    )
+                    InfoDetailTagihanCard(
+                        detailTagihanUi = detailTagihanUi
                     )
                 }
-                item { Spacer(Modifier.height(15.dp)) }
-                item(key = "Alasan Penolakan Card") {
-                    RejectionPaymentCard(
-                        modifier = Modifier.fillMaxWidth(),
-                        dateUploadProofOfPayment = detailTagihanUi.dateUploadProof ?: Timestamp.now()
-                            .toDayMonthAndYear(),
-                        response = detailTagihanUi.rejectionStatement
+
+                // Rincian Biaya
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+                    Text(
+                        text = stringResource(R.string.cost_breakdown),
+                        style = MaterialTheme.typography.bodyLarge,
+                        fontWeight = FontWeight.Bold
+                    )
+
+                    RincianBiayaCard(
+                        biayaSewaKamar = detailTagihanUi.roomRentalFee,
+                        biayaAdmin = detailTagihanUi.adminFees,
+                        diskon = detailTagihanUi.diskon,
+                        biayaSewaParkir = detailTagihanUi.carParkingRentalFeeMonthly,
+                        pemakaianElektronik = detailTagihanUi.highPowerElectronicEquipmentUsageCostsMonthly,
+                        totalTagihan = detailTagihanUi.billAmount
                     )
                 }
-                item { Spacer(Modifier.height(15.dp)) }
-                item(key = "Bukti Pembayaran Sebelumnya Card") {
-                    BuktiFotoCard(
-                        modifier = Modifier.fillMaxWidth(),
-                        previewOnly = true,
-                        title = "",
-                        description = "",
-                        imageUri = (detailTagihanUi.proofOfPayment ?: "").toUri(),
-                        isCanChooseImage = false,
-                        isBuktiLaporan = false,
-                        onPreviewImage = {
-                            detailTagihanActions(
-                                DetailTagihanActions.NavigateToPreviewImage(
-                                    detailTagihanUi.proofOfPayment?.toUri()?: Uri.EMPTY
+
+                // Metode Pembayaran
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+                    Text(
+                        text = stringResource(R.string.payment_method),
+                        style = MaterialTheme.typography.bodyLarge,
+                        fontWeight = FontWeight.Bold
+                    )
+                    if (detailTagihanUi.paymentStatus == Constant.BELUM_LUNAS) {
+                        MetodePembayaranCardV3(
+                            jumlahTransfer = detailTagihanUi.billAmount,
+                            dueDate = detailTagihanUi.dueDate
+                        )
+                    } else {
+                        MetodePembayaranCardV4(totalTransfer = detailTagihanUi.billAmount)
+                    }
+                }
+
+                // Unggah Bukti Pembayaran
+                if(detailTagihanUi.paymentStatus == Constant.BELUM_LUNAS){
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(10.dp)
+                    ) {
+                        val title = if (detailTagihanUi.rejectionStatement!=null){
+                            stringResource(R.string.new_upload_proof)
+                        } else {
+                            stringResource(R.string.upload_proof)
+                        }
+                        Text(
+                            text = title,
+                            style = MaterialTheme.typography.bodyLarge,
+                            fontWeight = FontWeight.Bold
+                        )
+                        UnggahBuktiPembayaranCard(
+                            modifier = Modifier.bringIntoViewRequester(uploadProofOfPaymentRequester),
+                            paymentStatus = detailTagihanUi.paymentStatus,
+                            uploadProofOfPayment = detailTagihanUiState.proofOfPayment,
+                            rejectionStatement = detailTagihanUi.rejectionStatement,
+                            onClickPreview = { detailTagihanActions(DetailTagihanActions.NavigateToPreviewImage(detailTagihanUiState.proofOfPayment)) },
+                            onClickChooseImage = {
+                                photoPicker.launch(
+                                    PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
                                 )
+                            }
+                        )
+                    }
+                }
+            }
+            if (detailTagihanUi.paymentStatus == Constant.BELUM_LUNAS) {
+                Column {
+                    val textButton = when {
+                        detailTagihanUi.rejectionStatement != null -> stringResource(R.string.re_confirmation_payment)
+                        else -> stringResource(R.string.confirmation_payment)
+                    }
+                    HorizontalDivider(
+                        thickness = 1.dp,
+                        color = MaterialTheme.colorScheme.outline.copy(alpha = 0.2f)
+                    )
+                    ActionButton(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        height = 45.dp,
+                        onClick = { detailTagihanActions(DetailTagihanActions.BayarOrKirimTagihan) },
+                        text = textButton,
+                        shape = RoundedCornerShape(15.dp),
+                        isLoading = detailTagihanUiState.isButtonKirimOrBayarLoading,
+                        enabled = !detailTagihanUiState.isButtonKirimOrBayarLoading,
+                        leadingIcon = {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Filled.Send,
+                                contentDescription = textButton
                             )
                         }
                     )
-                }
-                item { Spacer(Modifier.height(15.dp)) }
-                item(key = "Bukti Pembayaran Sekarang Header") {
-                    RequiredLabelText(labelText = stringResource(R.string.proof_of_payment_now))
-                }
-                item { Spacer(Modifier.height(15.dp)) }
-            }
 
-            item(key = "Bukti Pembayaran Card") {
-                val previewOnly =
-                    detailTagihanUi.paymentStatus == Constant.MENUNGGU_VERIFIKASI || detailTagihanUi.paymentStatus == Constant.LUNAS
-                val uriImage =
-                    if (detailTagihanUi.proofOfPayment != null && (detailTagihanUi.paymentStatus == Constant.MENUNGGU_VERIFIKASI || detailTagihanUi.paymentStatus == Constant.LUNAS)) detailTagihanUi.proofOfPayment.toUri() else detailTagihanUiState.proofOfPayment
-                BuktiFotoCard(
-                    modifier = Modifier.fillMaxWidth(),
-                    previewOnly = previewOnly,
-                    title = stringResource(R.string.title_no_proof_of_payment),
-                    description = stringResource(R.string.description_no_proof_of_payment),
-                    imageUri = uriImage,
-                    isCanChooseImage = !previewOnly,
-                    isBuktiLaporan = false,
-                    onPreviewImage = {
-                        detailTagihanActions(
-                            DetailTagihanActions
-                                .NavigateToPreviewImage(
-                                    uriImage
-                                )
-                        )
-                    },
-                    onChooseImage = {
-                        photoPicker.launch(
-                            PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
-                        )
-                    }
-                )
-            }
-            item { Spacer(Modifier.height(20.dp)) }
-            item(key = "Tanggal Header") {
-                Text(
-                    text = stringResource(R.string.date),
-                    style = MaterialTheme.typography.bodyLarge,
-                    fontWeight = FontWeight.Bold
-                )
-            }
-            item { Spacer(Modifier.height(15.dp)) }
-            item(key = "Tanggal Card") {
-                InfoTanggalTagihanCard(
-                    modifier = Modifier.fillMaxWidth(),
-                    dibuat = detailTagihanUi.dateCreated,
-                    uploadBukti = if (detailTagihanUi.paymentStatus != Constant.BELUM_LUNAS) detailTagihanUi.dateUploadProof else null,
-                    jatuhTempo = detailTagihanUi.dueDate.toDayMonthAndYear(),
-                    dibayar = detailTagihanUi.datePaidOff
-                )
-            }
-            if (detailTagihanUi.paymentStatus == Constant.BELUM_LUNAS) {
-                item { Spacer(Modifier.height(20.dp)) }
-                item(key = "Tombol Bayar atau Kirim Bukti Pembayaran Tagihan") {
-                    val textButton = if (detailTagihanUiState.role != Role.PENGHUNI) stringResource(R.string.send) else stringResource(R.string.pay)
-                    ActionButton(
-                        modifier = Modifier.fillMaxWidth(),
-                        height = 43.dp,
-                        onClick = { detailTagihanActions(DetailTagihanActions.BayarOrKirimTagihan) },
-                        text = textButton,
-                        shape = RoundedCornerShape(12.dp),
-                        isLoading = detailTagihanUiState.isButtonKirimOrBayarLoading,
-                        enabled = !detailTagihanUiState.isButtonKirimOrBayarLoading
-                    )
                 }
             }
             if (detailTagihanUiState.role == Role.ADMIN && detailTagihanUi.paymentStatus == Constant.MENUNGGU_VERIFIKASI) {
-                item { Spacer(Modifier.height(20.dp)) }
-                item(key = "Tombol Verifikasi atau Tolak Pembayaran Tagihan") {
+                Column {
+                    HorizontalDivider(
+                        thickness = 1.dp,
+                        color = MaterialTheme.colorScheme.outline.copy(alpha = 0.2f)
+                    )
+
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(16.dp)
+                        horizontalArrangement = Arrangement.spacedBy(16.dp),
+                        modifier = Modifier.padding(16.dp)
                     ) {
-                        ActionDangerButton(
+                        ActionOutlineButton(
                             modifier = Modifier.weight(1f),
-                            height = 43.dp,
                             onClick = { detailTagihanActions(DetailTagihanActions.ShowTolakDialog) },
                             text = stringResource(R.string.reject),
-                            shape = RoundedCornerShape(12.dp)
+                            shape = RoundedCornerShape(15.dp),
+                            height = 45.dp,
+                            borderStroke = BorderStroke(1.dp, MaterialTheme.colorScheme.error),
+                            colorsButton = ButtonDefaults.outlinedButtonColors(
+                                disabledContainerColor = MaterialTheme.colorScheme.onSurface.copy(
+                                    alpha = 0.12f
+                                ),
+                                disabledContentColor = MaterialTheme.colorScheme.onSurface,
+                                contentColor = MaterialTheme.colorScheme.error,
+                                containerColor = Color.Transparent
+                            ),
+                            leadingIcon = {
+                                Icon(
+                                    painter = painterResource(R.drawable.ic_reject),
+                                    contentDescription = stringResource(R.string.reject)
+                                )
+                            }
                         )
                         ActionButton(
                             modifier = Modifier.weight(1f),
-                            height = 43.dp,
+                            height = 45.dp,
                             onClick = { detailTagihanActions(DetailTagihanActions.VerifikasiPembayaranTagihan) },
                             text = stringResource(R.string.verification),
-                            shape = RoundedCornerShape(12.dp),
+                            shape = RoundedCornerShape(15.dp),
                             isLoading = detailTagihanUiState.isButtonVerifikasiLoading,
-                            enabled = !detailTagihanUiState.isButtonVerifikasiLoading
+                            enabled = !detailTagihanUiState.isButtonVerifikasiLoading,
+                            leadingIcon = {
+                                Icon(
+                                    imageVector = Icons.Filled.Check,
+                                    contentDescription = stringResource(R.string.verification)
+                                )
+                            }
                         )
                     }
                 }
             }
+
         }
 
         CustomToastHost(
@@ -374,20 +381,20 @@ private fun TagihanMainContent(
         )
     }
 
-    if (detailTagihanUiState.isTolakBottomSheetVisible){
+    if (detailTagihanUiState.isTolakBottomSheetVisible) {
         TolakTagihanBottomSheet(
             modifier = modifier,
             isButtonSendLoading = detailTagihanUiState.isButtonKirimTolakLoading,
-            onDismiss = {detailTagihanActions(DetailTagihanActions.DismissTolakDialog)},
-            onSend = {detailTagihanActions(DetailTagihanActions.KirimTolakPembayaranTagihan)},
+            onDismiss = { detailTagihanActions(DetailTagihanActions.DismissTolakDialog) },
+            onSend = { detailTagihanActions(DetailTagihanActions.KirimTolakPembayaranTagihan) },
             isAlasanPenolakanError = detailTagihanUiState.isAlasanPenolakanError,
-            alasanPenolakanError = detailTagihanUiState.alasanPenolakanError?.asString()?: "",
+            alasanPenolakanError = detailTagihanUiState.alasanPenolakanError?.asString() ?: "",
             alasanPenolakanState = alasanPenolakanState,
             alasanPenolakanShakeTrigger = detailTagihanUiState.alasanPenolakanShakeTrigger
         )
     }
 
-    if (detailTagihanUiState.isHapusDialogVisible){
+    if (detailTagihanUiState.isHapusDialogVisible) {
         GeneralDialogConfirmationDanger(
             onConfirm = {
                 detailTagihanActions(DetailTagihanActions.HapusTagihan)
@@ -408,60 +415,21 @@ private fun LoadingTagihanContent(
 ) {
     LazyColumn(
         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 25.dp),
-        modifier = modifier.fillMaxSize()
+        modifier = modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
-        item {
+        items(3) {
             Box(
                 Modifier
                     .size(150.dp, 25.dp)
                     .clip(RoundedCornerShape(10.dp))
                     .shimmerEffect()
             )
-        }
-        item { Spacer(Modifier.height(15.dp)) }
-        item {
+            Spacer(Modifier.height(15.dp))
             Box(
                 Modifier
                     .fillMaxWidth()
-                    .height(391.dp)
-                    .clip(RoundedCornerShape(20.dp))
-                    .shimmerEffect()
-            )
-        }
-        item { Spacer(Modifier.height(20.dp)) }
-        item {
-            Box(
-                Modifier
-                    .size(111.dp, 25.dp)
-                    .clip(RoundedCornerShape(10.dp))
-                    .shimmerEffect()
-            )
-        }
-        item { Spacer(Modifier.height(15.dp)) }
-        item {
-            Box(
-                Modifier
-                    .fillMaxWidth()
-                    .height(310.dp)
-                    .clip(RoundedCornerShape(20.dp))
-                    .shimmerEffect()
-            )
-        }
-        item { Spacer(Modifier.height(20.dp)) }
-        item {
-            Box(
-                Modifier
-                    .size(240.dp, 25.dp)
-                    .clip(RoundedCornerShape(10.dp))
-                    .shimmerEffect()
-            )
-        }
-        item { Spacer(Modifier.height(15.dp)) }
-        item {
-            Box(
-                Modifier
-                    .fillMaxWidth()
-                    .height(310.dp)
+                    .height(240.dp)
                     .clip(RoundedCornerShape(20.dp))
                     .shimmerEffect()
             )
@@ -472,26 +440,32 @@ private fun LoadingTagihanContent(
 @Preview(showSystemUi = true)
 @Composable
 private fun DetailTagihanScreenPreview() {
+    val uploadProofOfPaymentRequester = remember { BringIntoViewRequester() }
     val detailTagihanUi = DetailTagihanUi(
         adminFees = true,
         billAmount = 100299,
-        billingMonth = "November 2025",
-        carParkingRentalFeeMonthly = "Rp 0",
+        periodStart = Timestamp.now(),
+        periodEnd = Timestamp.now(),
+        carParkingRentalFeeMonthly = 0,
         dateCreated = Timestamp.now().toDayMonthAndYear(),
         datePaidOff = null,
-        dateUploadProof = Timestamp.now().toDayMonthAndYear(),
+        dateUploadProof = Timestamp.now().toFullIndonesianDateTime(),
         dueDate = Timestamp.now(),
-        highPowerElectronicEquipmentUsageCostsMonthly = emptyList(),
+        highPowerElectronicEquipmentUsageCostsMonthly = listOf(
+            AlatElektronik("Setrika", 10000, ""),
+            AlatElektronik("Setrika", 10000, ""),
+        ),
         idPenyewa = "eifiejf02390293",
         idTagihan = "kfekfje23029303",
         numberRoom = 1,
-        paymentStatus = Constant.MENUNGGU_VERIFIKASI,
+        paymentStatus = Constant.BELUM_LUNAS,
         proofOfPayment = null,
         rejectionStatement = null,
         residentAccountIdList = listOf("eifiejfiefjief", "wijwijiwjriwjr"),
         residentNameList = listOf("Ndiman", "Januar"),
-        roomRentalFee = "Rp 100.299",
-        verificationDate = null
+        roomRentalFee = 500000,
+        verificationDate = null,
+        diskon = null
     )
     val detailTagihanUiState = DetailTagihanUiState(
         isLoading = false,
@@ -515,7 +489,8 @@ private fun DetailTagihanScreenPreview() {
             detailTagihanUiState = detailTagihanUiState,
             detailTagihanActions = {},
             idTagihan = detailTagihanUi.idTagihan,
-            customToastHostState = CustomToastHostState()
+            customToastHostState = CustomToastHostState(),
+            uploadProofOfPaymentRequester = uploadProofOfPaymentRequester
         )
     }
 }

@@ -243,6 +243,7 @@ class EditZonaParkiranMobilViewModel @Inject constructor(
                         typeEditZonaParkir = typeEditZonaParkir,
                         oldBiayaBulanan = biayaBulanan,
                         biayaBulanan = biayaBulanan,
+                        oldZoneName = namaZona,
                     )
                 }
             }
@@ -252,7 +253,8 @@ class EditZonaParkiranMobilViewModel @Inject constructor(
                         idZonaParkir = idZonaParkiran,
                         typeEditZonaParkir = typeEditZonaParkir,
                         oldBiayaHarian = biayaHarian,
-                        biayaHarian = biayaHarian
+                        biayaHarian = biayaHarian,
+                        oldZoneName = namaZona,
                     )
                 }
             }
@@ -266,15 +268,6 @@ class EditZonaParkiranMobilViewModel @Inject constructor(
                     )
                 }
             }
-        }
-        _state.update {
-            it.copy(
-                idZonaParkir = idZonaParkiran,
-                typeEditZonaParkir = typeEditZonaParkir,
-                zoneName = namaZona,
-                biayaBulanan = biayaBulanan,
-                biayaHarian = biayaHarian
-            )
         }
     }
 }

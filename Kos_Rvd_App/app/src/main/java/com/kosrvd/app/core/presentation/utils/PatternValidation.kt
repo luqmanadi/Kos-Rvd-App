@@ -72,6 +72,29 @@ object PatternValidation {
         return namaZona.isNotBlank()
     }
 
+    fun isDescriptionDiscountValid(descriptionDiscount: String): Boolean {
+        return descriptionDiscount.isNotBlank()
+    }
+
+    fun isPercentageDiscountValid(percentageDiscount: String): Boolean {
+        return percentageDiscount.isNotBlank() && percentageDiscount.isDigitsOnly()
+    }
+
+    fun getPercentageDiscountError(percentageDiscount: String): UiText {
+        return when {
+            percentageDiscount.isBlank() -> UiText.StringResource(R.string.nominal_persen_diskon_tidak_boleh_kosong)
+            !percentageDiscount.isDigitsOnly() -> UiText.StringResource(R.string.nominal_persen_diskon_harus_angka)
+            else -> UiText.DynamicString("")
+        }
+    }
+
+    fun getDescriptionDiscountError(descriptionDiscount: String): UiText {
+        return when {
+            descriptionDiscount.isBlank() -> UiText.StringResource(R.string.keterangan_tidak_boleh_kosong)
+            else -> UiText.DynamicString("")
+        }
+    }
+
     fun getNamaZonaError(namaZona: String): UiText {
         return when {
             namaZona.isBlank() -> UiText.StringResource(R.string.nama_zona_tidak_boleh_kosong)

@@ -5,10 +5,15 @@ import androidx.lifecycle.viewModelScope
 import com.kosrvd.app.core.domain.utils.onError
 import com.kosrvd.app.core.domain.utils.onSuccess
 import com.kosrvd.app.core.navigation.models.ResultTagihan
+import com.kosrvd.app.core.presentation.utils.PatternValidation
+import com.kosrvd.app.core.presentation.utils.UiText
+import com.kosrvd.app.core.presentation.utils.convertMillisToTimeStamp
 import com.kosrvd.app.feature.management.data.mappers.toResultTagihan
+import com.kosrvd.app.feature.management.domain.model.Diskon
 import com.kosrvd.app.feature.management.domain.model.Penyewaan
 import com.kosrvd.app.feature.management.domain.repository.PenyewaanRepository
 import com.kosrvd.app.feature.management.domain.usecase.BuatTagihanUseCase
+import com.kosrvd.app.feature.management.domain.usecase.CalculateTotalBillUseCase
 import com.kosrvd.app.feature.management.presentation.designsystem.utils.TypeResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -33,13 +38,20 @@ sealed interface BuatTagihanActions{
     data class UpdateAdminFees(val adminFees: Boolean): BuatTagihanActions
     data object NavigateBack: BuatTagihanActions
     data object TryAgain: BuatTagihanActions
+    data class UpdatePeriod(val periodStart: Long, val periodEnd: Long): BuatTagihanActions
+    data class UpdateUseDiscount(val useDiscount: Boolean): BuatTagihanActions
+    data class UpdatePercentageDiscount(val percentageDiscount: String): BuatTagihanActions
+    data class UpdateDescriptionDiscount(val descriptionDiscount: String): BuatTagihanActions
+    data object ShowDateRangePickerDialog: BuatTagihanActions
+    data object HideDateRangePickerDialog: BuatTagihanActions
 }
 
 
 @HiltViewModel
 class BuatTagihanViewModel @Inject constructor(
     private val buatTagihanUseCase: BuatTagihanUseCase,
-    private val penyewaanRepository: PenyewaanRepository
+    private val penyewaanRepository: PenyewaanRepository,
+    private val calculateTotalBillUseCase: CalculateTotalBillUseCase
 ): ViewModel() {
     private val _state = MutableStateFlow(BuatTagihanUiState())
     val state = _state
@@ -60,6 +72,125 @@ class BuatTagihanViewModel @Inject constructor(
             BuatTagihanActions.TryAgain -> loadPenyewaan()
             is BuatTagihanActions.UpdateAdminFees -> updateAdminFees(actions.adminFees)
             is BuatTagihanActions.UpdateItemSelected -> updateItemSelected(actions.item)
+            is BuatTagihanActions.UpdateDescriptionDiscount -> updateDescriptionDiscount(actions.descriptionDiscount)
+            is BuatTagihanActions.UpdatePercentageDiscount -> updatePercentageDiscount(actions.percentageDiscount)
+            is BuatTagihanActions.UpdatePeriod -> updatePeriod(actions.periodStart, actions.periodEnd)
+            is BuatTagihanActions.UpdateUseDiscount -> updateUseDiscount(actions.useDiscount)
+            BuatTagihanActions.HideDateRangePickerDialog -> hideDateRangePickerDialog()
+            BuatTagihanActions.ShowDateRangePickerDialog -> showDateRangePickerDialog()
+        }
+    }
+
+    private fun showDateRangePickerDialog() {
+        _state.update { it.copy(showDialogDatePickerRange = true) }
+    }
+
+    private fun hideDateRangePickerDialog() {
+        _state.update { it.copy(showDialogDatePickerRange = false) }
+    }
+
+    // FUNGSI BARU: Master Kalkulasi Live Preview
+    private fun calculateLivePreview() {
+        val currentState = _state.value
+
+        // Pastikan syarat minimal terpenuhi untuk bisa menghitung
+        if (currentState.itemSelected == null || currentState.selectedPeriodStart == 0L || currentState.selectedPeriodEnd == 0L) {
+            _state.update { it.copy(totalBill = 0L, priceDiscount = 0L, isShowContent = false) }
+            return
+        }
+
+        val currentRentalCostBySumResident = if (currentState.itemSelected.listResident.size == 2) {
+            currentState.itemSelected.infoKamar.currentRoomRentalCost.twoPersons
+        } else {
+            currentState.itemSelected.infoKamar.currentRoomRentalCost.onePerson
+        } ?: 0
+
+        // Jalankan UseCase
+        val result = calculateTotalBillUseCase(
+            totalMonthlyBill = currentState.itemSelected.totalMonthlyBill,
+            adminFees = currentState.adminFees,
+            periodStart = currentState.selectedPeriodStart,
+            periodEnd = currentState.selectedPeriodEnd,
+            useDiscount = currentState.useDiscount,
+            percentageDiscount = currentState.percentageDiscount
+        )
+
+        val discount = Diskon(
+            percent = currentState.percentageDiscount.toInt(),
+            price = result.priceDiscount,
+            description = currentState.descriptionDiscount
+        )
+
+        // Update State secara live!
+        _state.update {
+            it.copy(
+                totalBill = result.finalBill,
+                priceDiscount = result.priceDiscount,
+                isShowContent = true,
+                currentRentalCostBySumResident = currentRentalCostBySumResident,
+                discount = discount
+            )
+        }
+    }
+
+    private fun updatePeriod(periodStart: Long, periodEnd: Long) {
+        _state.update {
+            it.copy(
+                selectedPeriodStart = periodStart,
+                selectedPeriodEnd = periodEnd,
+                isSelectedPeriodError = false,
+                selectedPeriodError = null
+            )
+        }
+        calculateLivePreview()
+    }
+
+    private fun updateUseDiscount(useDiscount: Boolean) {
+        _state.update {
+            it.copy(
+                useDiscount = useDiscount,
+                // Opsional: Jika diskon dimatikan, reset error dan isiannya
+                isPercentageDiscountError = if (!useDiscount) false else it.isPercentageDiscountError,
+                isDescriptionDiscountError = if (!useDiscount) false else it.isDescriptionDiscountError
+            )
+        }
+        calculateLivePreview()
+    }
+
+    private fun updatePercentageDiscount(percentageDiscount: String) {
+        val isError = if (percentageDiscount.isEmpty()) false else PatternValidation.isPercentageDiscountValid(percentageDiscount)
+        val errorText = if (percentageDiscount.isEmpty()) null else PatternValidation.getPercentageDiscountError(percentageDiscount)
+
+        _state.update {
+            it.copy(
+                percentageDiscount = percentageDiscount,
+                isPercentageDiscountError = isError,
+                percentageDiscountError = errorText
+            )
+        }
+        calculateLivePreview() // Panggil di sini!
+    }
+
+    private fun updateDescriptionDiscount(descriptionDiscount: String) {
+        if (descriptionDiscount.isEmpty()){
+            _state.update {
+                it.copy(
+                    descriptionDiscount =descriptionDiscount,
+                    isDescriptionDiscountError = false,
+                    descriptionDiscountError = null
+                )
+            }
+            return
+        }
+
+        val descriptionDiscountError = PatternValidation.getDescriptionDiscountError(descriptionDiscount)
+        val isDescriptionDiscountError = PatternValidation.isDescriptionDiscountValid(descriptionDiscount)
+        _state.update {
+            it.copy(
+                descriptionDiscount = descriptionDiscount,
+                isDescriptionDiscountError = isDescriptionDiscountError,
+                descriptionDiscountError = descriptionDiscountError
+            )
         }
     }
 
@@ -69,6 +200,7 @@ class BuatTagihanViewModel @Inject constructor(
                 itemSelected = item
             )
         }
+        calculateLivePreview()
     }
 
     private fun updateAdminFees(adminFees: Boolean) {
@@ -77,6 +209,7 @@ class BuatTagihanViewModel @Inject constructor(
                 adminFees = adminFees
             )
         }
+        calculateLivePreview()
     }
 
     private fun loadPenyewaan() {
@@ -103,6 +236,12 @@ class BuatTagihanViewModel @Inject constructor(
 
             val itemSelected = _state.value.itemSelected
             val adminFees = _state.value.adminFees
+            val periodStart = _state.value.selectedPeriodStart
+            val periodEnd = _state.value.selectedPeriodEnd
+            val isUseDiscount = _state.value.useDiscount
+            val percentageDiscount = _state.value.percentageDiscount
+            val descriptionDiscount = _state.value.descriptionDiscount
+            val priceDiscount = _state.value.priceDiscount
 
             if (itemSelected == null) {
                 _state.update { it.copy(isButtonLoading = false) }
@@ -110,7 +249,66 @@ class BuatTagihanViewModel @Inject constructor(
                 return@launch
             }
 
-            buatTagihanUseCase(item = itemSelected, adminFees = adminFees)
+            if (periodStart == 0L && periodEnd == 0L) {
+                _state.update {
+                    it.copy(
+                        isButtonLoading = false,
+                        isSelectedPeriodError = true,
+                        selectedPeriodError = UiText.DynamicString("Pilih tanggal periode tagihan")
+                    )
+                }
+                return@launch
+            }
+
+            if (isUseDiscount){
+                val percentageDiscountError = PatternValidation.getPercentageDiscountError(percentageDiscount)
+                val isPercentageDiscountValid = PatternValidation.isPercentageDiscountValid(percentageDiscount)
+                val descriptionDiscountError = PatternValidation.getDescriptionDiscountError(descriptionDiscount)
+                val isDescriptionDiscountValid = PatternValidation.isDescriptionDiscountValid(descriptionDiscount)
+                if (!isPercentageDiscountValid || !isDescriptionDiscountValid) {
+                    _state.update {
+                        it.copy(
+                            isButtonLoading = false,
+                            isPercentageDiscountError = !isPercentageDiscountValid,
+                            percentageDiscountError = percentageDiscountError,
+                            isDescriptionDiscountError = !isDescriptionDiscountValid,
+                            descriptionDiscountError = descriptionDiscountError
+                        )
+                    }
+                    return@launch
+                }
+            }
+
+            _state.update {
+                it.copy(
+                    isSelectedPeriodError = false,
+                    selectedPeriodError = null,
+                    isPercentageDiscountError = false,
+                    percentageDiscountError = null,
+                    isDescriptionDiscountError = false,
+                    descriptionDiscountError = null
+                )
+            }
+
+            val totalBill = _state.value.totalBill
+            val diskon = if (isUseDiscount){
+                Diskon(
+                    percent = percentageDiscount.toInt(),
+                    price = priceDiscount,
+                    description = descriptionDiscount
+                )
+            } else { null }
+            val periodStartConvert = convertMillisToTimeStamp(periodStart)
+            val periodEndConvert = convertMillisToTimeStamp(periodEnd)
+
+            buatTagihanUseCase(
+                item = itemSelected,
+                adminFees = adminFees,
+                periodStart = periodStartConvert,
+                periodEnd = periodEndConvert,
+                diskon = diskon,
+                totalBill = totalBill
+            )
                 .onSuccess { result->
                     _state.update { it.copy(isButtonLoading = false) }
                     navigateToResult(resultBuatTagihan = result.toResultTagihan())
