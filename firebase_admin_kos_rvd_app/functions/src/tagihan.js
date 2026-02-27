@@ -52,6 +52,35 @@ exports.onTagihanUpdate = onDocumentUpdated("tagihan/{tagihanId}",
         info(`Tagihan ${tagihanId} berubah. Memulai create notifikasi...`);
 
         const roomNo = dataAfter.numberRoom;
+        const residentIds = dataAfter.residentAccountIdList || [];
+
+        // ==========================================
+        // LOGIKA: Update finalBill.paymentStatus
+        // ==========================================
+        residentIds.forEach((idAkun) => {
+          const updateAkunPromise = db.collection("akun").doc(idAkun).get()
+              .then((docSnap) => {
+                if (docSnap.exists) {
+                  const akunData = docSnap.data();
+                  // Cek apakah idTagihan di finalBill
+                  // sama dengan tagihan yang diupdate
+                  if (akunData?.dataPenghuni?.finalBill?.idTagihan ===
+                      tagihanId) {
+                    // Hanya update paymentStatus agar
+                    // periodStart & periodEnd tidak terganggu
+                    return docSnap.ref.update({
+                      "dataPenghuni.finalBill.paymentStatus":
+                      dataAfter.paymentStatus,
+                    });
+                  }
+                }
+                return null;
+              }).catch((e) =>
+                error(`Gagal update paymentStatus finalBill akun ${idAkun}`, e),
+              );
+
+          allPromises.push(updateAkunPromise);
+        });
 
         // Skenario 1: Admin (Menunggu Verifikasi)
         // Notif Admin + Update Statistik
@@ -201,6 +230,7 @@ exports.onTagihanCreate = onDocumentCreated("tagihan/{tagihanId}",
 
         // Loop ke setiap penghuni di list
         residentIds.forEach((idAkun) => {
+          // Buat Notifikasi Penghuni
           allPromises.push(
               db.collection("notifikasi").add({
                 idAkun: idAkun,
@@ -213,11 +243,32 @@ exports.onTagihanCreate = onDocumentCreated("tagihan/{tagihanId}",
                 notificationType: utils.TAGIHAN,
               }),
           );
+
+          // ==========================================
+          // LOGIKA: Update seluruh finalBill di akun penghuni dengan model baru
+          // ==========================================
+          const finalBillUpdate = {
+            idTagihan: tagihanId,
+            idPenyewa: idAkun,
+            total: dataTagihanBaru.total || 0,
+            paymentStatus: dataTagihanBaru.paymentStatus || utils.BELUM_LUNAS,
+            periodStart: dataTagihanBaru.periodStart || null, // Perubahan
+            periodEnd: dataTagihanBaru.periodEnd || null, // Perubahan
+            dueDate: dataTagihanBaru.dueDate || null,
+          };
+
+          const updateAkunPromise = db.collection("akun").doc(idAkun)
+              .update({"dataPenghuni.finalBill": finalBillUpdate})
+              .catch((e) =>
+                error(`Gagal update finalBill untuk akun ${idAkun}`, e));
+
+          allPromises.push(updateAkunPromise);
         });
 
         if (allPromises.length > 0) {
           await Promise.all(allPromises);
-          info(`Berhasil Create Tagihan: Dashboard updated & Notif sent.`);
+          info(`Berhasil Create Tagihan: `+
+              `Dashboard updated, Notif sent, finalBill synced.`);
         }
       } catch (e) {
         error(`GAGAL Create Notif Tagihan Baru id:` +
@@ -235,6 +286,7 @@ exports.onTagihanDelete = onDocumentDeleted("tagihan/{tagihanId}",
         const data = event.data.data();
         const proofOfPayment = data.proofOfPayment;
         const paymentStatus = data.paymentStatus;
+        const residentIds = data.residentAccountIdList || [];
         const tagihanId = event.params["tagihanId"];
         const db = getFirestore();
         const allPromises = [];
@@ -284,6 +336,64 @@ exports.onTagihanDelete = onDocumentDeleted("tagihan/{tagihanId}",
         if (statsUpdate) {
           allPromises.push(utils.updateAdminDashboardStat(db, statsUpdate));
         }
+
+        // ==========================================
+        // LOGIKA: Fallback finalBill menggunakan orderBy("startRent", "desc")
+        // ==========================================
+        residentIds.forEach((idAkun) => {
+          const updateAkunPromise = db.collection("akun").doc(idAkun).get()
+              .then(async (docSnap) => {
+                if (docSnap.exists) {
+                  const akunData = docSnap.data();
+
+                  // Jika tagihan yang dihapus adalah
+                  // tagihan yang sedang nangkring di finalBill
+                  if (akunData?.dataPenghuni?.finalBill?.idTagihan ===
+                      tagihanId) {
+                    // Cari tagihan bulan sebelumnya untuk
+                    // penghuni ini menggunakan periodStart
+                    const prevTagihanQuery = await db.collection("tagihan")
+                        .where("residentAccountIdList",
+                            "array-contains", idAkun)
+                        .orderBy("periodStart", "desc") // Perubahan disini
+                        .limit(1)
+                        .get();
+
+                    if (!prevTagihanQuery.empty) {
+                      // Ada tagihan lama, ganti dengan data tagihan lama
+                      const prevTagihanDoc = prevTagihanQuery.docs[0];
+                      const prevTagihanData = prevTagihanDoc.data();
+
+                      const fallbackBill = {
+                        idTagihan: prevTagihanDoc.id,
+                        idPenyewa: prevTagihanDoc.idPenyewa,
+                        total: prevTagihanData.billAmount || 0,
+                        paymentStatus: prevTagihanData.paymentStatus ||
+                            utils.BELUM_LUNAS,
+                        periodStart: prevTagihanData.periodStart ||
+                            Timestamp.now(), // Perubahan disini
+                        periodEnd: prevTagihanData.periodEnd ||
+                            Timestamp.now(), // Perubahan disini
+                        dueDate: prevTagihanData.dueDate || Timestamp.now(),
+                      };
+
+                      return docSnap.ref.update({
+                        "dataPenghuni.finalBill": fallbackBill,
+                      });
+                    } else {
+                      // Tidak ada tagihan sama sekali (kosong)
+                      return docSnap.ref.update({
+                        "dataPenghuni.finalBill": null,
+                      });
+                    }
+                  }
+                }
+                return null;
+              }).catch((e) =>
+                error(`Gagal rollback finalBill untuk akun ${idAkun}`, e));
+
+          allPromises.push(updateAkunPromise);
+        });
 
         await Promise.all(allPromises);
         info(`Tagihan ${tagihanId} Deleted. Clean up complete.`);
