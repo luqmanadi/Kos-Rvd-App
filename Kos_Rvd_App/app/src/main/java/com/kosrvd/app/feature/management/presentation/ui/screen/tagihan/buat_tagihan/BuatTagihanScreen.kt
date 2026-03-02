@@ -238,6 +238,7 @@ private fun BuatTagihanContent(
                         trailingIcon = {
                             Icon(Icons.Filled.DateRange, contentDescription = stringResource(R.string.choose_date_range))
                         },
+                        readOnly = true,
                         isError = buatTagihanUiState.isSelectedPeriodError,
                         supportingText = {
                             if (buatTagihanUiState.isSelectedPeriodError) {
@@ -309,7 +310,7 @@ private fun BuatTagihanContent(
                         fontWeight = FontWeight.Bold
                     )
 
-                    if (buatTagihanUiState.isShowContent && buatTagihanUiState.itemSelected != null){
+                    if (buatTagihanUiState.isShowContent && buatTagihanUiState.itemSelected != null && buatTagihanUiState.selectedPeriodStart != null && buatTagihanUiState.selectedPeriodEnd != null){
                         InfoDetailBuatTagihanCard(
                             idPenyewa = buatTagihanUiState.itemSelected.idPenyewa,
                             periodStart = convertMillisToTimeStamp(buatTagihanUiState.selectedPeriodStart),
@@ -376,9 +377,11 @@ private fun BuatTagihanContent(
 
         if (buatTagihanUiState.showDialogDatePickerRange) {
             DateRangePickerModalPeriodTagihan(
-                onDissmiss = { buatTagihanActions(BuatTagihanActions.ShowDateRangePickerDialog) },
-                onDateSelected = { startMillis, endMillis ->
-                    buatTagihanActions(BuatTagihanActions.UpdatePeriod(startMillis, endMillis))
+                initialSelectedStartDateMillis = buatTagihanUiState.selectedPeriodStart,
+                initialSelectedEndDateMillis = buatTagihanUiState.selectedPeriodEnd,
+                onDissmiss = { buatTagihanActions(BuatTagihanActions.HideDateRangePickerDialog) },
+                onDateSelected = { startMillis, endMillis, periodString ->
+                    buatTagihanActions(BuatTagihanActions.UpdatePeriod(startMillis, endMillis, periodString))
                 }
             )
         }
@@ -406,7 +409,7 @@ private fun BuatTagihanContent(
 private fun BuatTagihanScreenPreview() {
     KosRvdAppTheme {
         val buatTagihanUiState = BuatTagihanUiState(
-            isButtonLoading = false,
+            isButtonLoading = true,
             adminFees = false,
             itemSelected = null,
             loadError = null,

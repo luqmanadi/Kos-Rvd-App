@@ -38,7 +38,7 @@ sealed interface BuatTagihanActions{
     data class UpdateAdminFees(val adminFees: Boolean): BuatTagihanActions
     data object NavigateBack: BuatTagihanActions
     data object TryAgain: BuatTagihanActions
-    data class UpdatePeriod(val periodStart: Long, val periodEnd: Long): BuatTagihanActions
+    data class UpdatePeriod(val periodStart: Long, val periodEnd: Long, val periodString: String): BuatTagihanActions
     data class UpdateUseDiscount(val useDiscount: Boolean): BuatTagihanActions
     data class UpdatePercentageDiscount(val percentageDiscount: String): BuatTagihanActions
     data class UpdateDescriptionDiscount(val descriptionDiscount: String): BuatTagihanActions
@@ -74,7 +74,7 @@ class BuatTagihanViewModel @Inject constructor(
             is BuatTagihanActions.UpdateItemSelected -> updateItemSelected(actions.item)
             is BuatTagihanActions.UpdateDescriptionDiscount -> updateDescriptionDiscount(actions.descriptionDiscount)
             is BuatTagihanActions.UpdatePercentageDiscount -> updatePercentageDiscount(actions.percentageDiscount)
-            is BuatTagihanActions.UpdatePeriod -> updatePeriod(actions.periodStart, actions.periodEnd)
+            is BuatTagihanActions.UpdatePeriod -> updatePeriod(actions.periodStart, actions.periodEnd, actions.periodString)
             is BuatTagihanActions.UpdateUseDiscount -> updateUseDiscount(actions.useDiscount)
             BuatTagihanActions.HideDateRangePickerDialog -> hideDateRangePickerDialog()
             BuatTagihanActions.ShowDateRangePickerDialog -> showDateRangePickerDialog()
@@ -94,7 +94,7 @@ class BuatTagihanViewModel @Inject constructor(
         val currentState = _state.value
 
         // Pastikan syarat minimal terpenuhi untuk bisa menghitung
-        if (currentState.itemSelected == null || currentState.selectedPeriodStart == 0L || currentState.selectedPeriodEnd == 0L) {
+        if (currentState.itemSelected == null || currentState.selectedPeriodStart == null || currentState.selectedPeriodEnd == null) {
             _state.update { it.copy(totalBill = 0L, priceDiscount = 0L, isShowContent = false) }
             return
         }
@@ -116,7 +116,7 @@ class BuatTagihanViewModel @Inject constructor(
         )
 
         val discount = Diskon(
-            percent = currentState.percentageDiscount.toInt(),
+            percent = if (currentState.percentageDiscount.isEmpty()) 0 else currentState.percentageDiscount.toInt(),
             price = result.priceDiscount,
             description = currentState.descriptionDiscount
         )
@@ -133,13 +133,15 @@ class BuatTagihanViewModel @Inject constructor(
         }
     }
 
-    private fun updatePeriod(periodStart: Long, periodEnd: Long) {
+    private fun updatePeriod(periodStart: Long, periodEnd: Long, periodString: String) {
         _state.update {
             it.copy(
                 selectedPeriodStart = periodStart,
                 selectedPeriodEnd = periodEnd,
+                selectedPeriod = periodString,
                 isSelectedPeriodError = false,
-                selectedPeriodError = null
+                selectedPeriodError = null,
+                showDialogDatePickerRange = false
             )
         }
         calculateLivePreview()
@@ -158,7 +160,7 @@ class BuatTagihanViewModel @Inject constructor(
     }
 
     private fun updatePercentageDiscount(percentageDiscount: String) {
-        val isError = if (percentageDiscount.isEmpty()) false else PatternValidation.isPercentageDiscountValid(percentageDiscount)
+        val isError = if (percentageDiscount.isEmpty()) false else !PatternValidation.isPercentageDiscountValid(percentageDiscount)
         val errorText = if (percentageDiscount.isEmpty()) null else PatternValidation.getPercentageDiscountError(percentageDiscount)
 
         _state.update {
@@ -184,7 +186,7 @@ class BuatTagihanViewModel @Inject constructor(
         }
 
         val descriptionDiscountError = PatternValidation.getDescriptionDiscountError(descriptionDiscount)
-        val isDescriptionDiscountError = PatternValidation.isDescriptionDiscountValid(descriptionDiscount)
+        val isDescriptionDiscountError = !PatternValidation.isDescriptionDiscountValid(descriptionDiscount)
         _state.update {
             it.copy(
                 descriptionDiscount = descriptionDiscount,
@@ -249,7 +251,7 @@ class BuatTagihanViewModel @Inject constructor(
                 return@launch
             }
 
-            if (periodStart == 0L && periodEnd == 0L) {
+            if (periodStart == null || periodEnd == null) {
                 _state.update {
                     it.copy(
                         isButtonLoading = false,

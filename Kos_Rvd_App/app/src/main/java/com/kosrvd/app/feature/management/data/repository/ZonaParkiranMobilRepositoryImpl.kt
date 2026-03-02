@@ -21,6 +21,17 @@ import javax.inject.Inject
 class ZonaParkiranMobilRepositoryImpl @Inject constructor(
     private val db: FirebaseFirestore
 ): ZonaParkiranMobilRepository {
+    override suspend fun getAllZonaParkiranMobilStatusKosong(): Result<List<ZonaParkiran>, DataError> {
+        return safeCall {
+            db.collection(Constant.ZONA_PARKIRAN_COLLECTION)
+                .whereEqualTo(Constant.STATUS_FIELD, Constant.KOSONG)
+                .get()
+                .await()
+                .toObjectListOrThrow<ZonaParkiranDto>(
+                    mappingErrorMessage = ErrorMessages.ZONA_PARKIRAN_MOBIL_MAPPING_ERROR
+                )
+        }.map { it.toZonaParkiranList() }
+    }
     override suspend fun getAllZonaParkiranMobil(): Result<List<ZonaParkiran>, DataError> {
         return safeCall {
             db.collection(Constant.ZONA_PARKIRAN_COLLECTION)

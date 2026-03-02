@@ -469,6 +469,8 @@
     <string name="enter_information_discount">Masukkan Keterangan Diskon</string>
     <string name="choose_date_range">Pilih Rentang Tanggal</string>
     <string name="choose_period_bill">Pilih Periode Tagihan</string>
+    <string name="add_usage_parking_card">Tambah Pemakaian Parkiran</string>
+    <string name="confirmation_data">Konfirmasi Data</string>
 
     // New Strings for RincianBiayaCard
     <string name="biaya_bulanan_reguler">Biaya bulanan reguler</string>
@@ -487,7 +489,11 @@
     <string name="masukkan_jumlah_diskon">Masukkan Nominal Diskon</string>
     <string name="title_is_use_discount">Apakah perlu diskon atau potongan harga?</string>
     <string name="max_choose_date_range">Batas maksimal memilih rentang hari adalah 31 Hari</string>
-
+    <string name="merk_mobil_tidak_boleh_kosong">Merk mobil tidak boleh kosong</string>
+    <string name="nama_mobil_tidak_boleh_kosong">Nama mobil tidak boleh kosong</string>
+    <string name="nama_penyewa_tidak_boleh_kosong">Nama penyewa tidak boleh kosong</string>
+    <string name="plat_nomor_tidak_boleh_kosong">Plat nomor tidak boleh kosong</string>
+    <string name="title_empty_list_zone_parking">Mohon maaf, semua zona parkir sudah penuh pada tanggal yang di pilih.</string>
 
 
     // Menu

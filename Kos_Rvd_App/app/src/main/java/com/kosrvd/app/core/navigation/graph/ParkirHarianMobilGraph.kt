@@ -27,6 +27,9 @@ import com.kosrvd.app.feature.management.presentation.ui.screen.parkir_harian_mo
 import com.kosrvd.app.feature.management.presentation.ui.screen.parkir_harian_mobil.list_parkir_harian_mobil.ListParkirHarianMobilEvents
 import com.kosrvd.app.feature.management.presentation.ui.screen.parkir_harian_mobil.list_parkir_harian_mobil.ListParkirHarianMobilScreen
 import com.kosrvd.app.feature.management.presentation.ui.screen.parkir_harian_mobil.list_parkir_harian_mobil.ListParkirHarianMobilViewModel
+import com.kosrvd.app.feature.management.presentation.ui.screen.parkir_harian_mobil.tambah_parkir_harian_mobil.TambahParkirHarianMobilEvents
+import com.kosrvd.app.feature.management.presentation.ui.screen.parkir_harian_mobil.tambah_parkir_harian_mobil.TambahParkirHarianMobilScreen
+import com.kosrvd.app.feature.management.presentation.ui.screen.parkir_harian_mobil.tambah_parkir_harian_mobil.TambahParkirHarianMobilViewModel
 import kotlinx.coroutines.launch
 
 fun NavGraphBuilder.parkirHarianMobilGraph(
@@ -130,7 +133,32 @@ fun NavGraphBuilder.parkirHarianMobilGraph(
             )
         }
         composable<NavigationScreen.TambahParkirHarianMobilScreen> {
-            // TODO: Kerjakan Bagian Tambah Pemakaian Parkir Mobil Harian ini
+            val tambahParkirHarianMobilViewModel = hiltViewModel<TambahParkirHarianMobilViewModel>()
+            val tambahParkirHarianMobilUiState by tambahParkirHarianMobilViewModel.state.collectAsStateWithLifecycle()
+            val scope = rememberCoroutineScope()
+            val customToastHostState = rememberCustomToastHostState()
+
+            ObserveAsEvents(tambahParkirHarianMobilViewModel.events){ events ->
+                when(events){
+                    TambahParkirHarianMobilEvents.NavigateBack -> {
+                        navController.navigateUp()
+                    }
+                    TambahParkirHarianMobilEvents.NavigateBackSuccessAddParkirHarianMobil -> {
+                        navController.navigateBackWithSendKey(Constant.ADD_PARKIR_HARIAN_KEY)
+                    }
+                    is TambahParkirHarianMobilEvents.ShowSnackBarErrorMessage -> {
+                        scope.launch {
+                            customToastHostState.showToast(events.message)
+                        }
+                    }
+                }
+            }
+
+            TambahParkirHarianMobilScreen(
+                tambahParkirHarianMobilUiState = tambahParkirHarianMobilUiState,
+                tambahParkirHarianMobilActions = tambahParkirHarianMobilViewModel::onActions,
+                customToastHostState = customToastHostState
+            )
         }
     }
 }

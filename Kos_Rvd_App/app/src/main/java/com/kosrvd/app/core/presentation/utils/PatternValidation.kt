@@ -80,6 +80,50 @@ object PatternValidation {
         return percentageDiscount.isNotBlank() && percentageDiscount.isDigitsOnly()
     }
 
+    fun isCarBrandValid(carBrand: String): Boolean {
+        return carBrand.isNotBlank()
+    }
+
+    fun isCarNameValid(carName: String): Boolean {
+        return carName.isNotBlank()
+    }
+
+    fun isUserNameValid(userName: String): Boolean {
+        return userName.isNotBlank()
+    }
+
+    fun isNumberPlateValid(numberPlate: String): Boolean {
+        return numberPlate.isNotBlank()
+    }
+
+    fun getCarBrandError(carBrand: String): UiText {
+        return when {
+            carBrand.isBlank() -> UiText.StringResource(R.string.merk_mobil_tidak_boleh_kosong)
+            else -> UiText.DynamicString("")
+        }
+    }
+
+    fun getCarNameError(carName: String): UiText {
+        return when {
+            carName.isBlank() -> UiText.StringResource(R.string.nama_mobil_tidak_boleh_kosong)
+            else -> UiText.DynamicString("")
+        }
+    }
+
+    fun getUserNameError(userName: String): UiText {
+        return when {
+            userName.isBlank() -> UiText.StringResource(R.string.nama_penyewa_tidak_boleh_kosong)
+            else -> UiText.DynamicString("")
+        }
+    }
+
+    fun getNumberPlateError(numberPlate: String): UiText {
+        return when {
+            numberPlate.isBlank() -> UiText.StringResource(R.string.plat_nomor_tidak_boleh_kosong)
+            else -> UiText.DynamicString("")
+        }
+    }
+
     fun getPercentageDiscountError(percentageDiscount: String): UiText {
         return when {
             percentageDiscount.isBlank() -> UiText.StringResource(R.string.nominal_persen_diskon_tidak_boleh_kosong)

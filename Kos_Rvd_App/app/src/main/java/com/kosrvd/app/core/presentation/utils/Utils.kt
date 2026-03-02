@@ -26,16 +26,20 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawOutline
+import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.Constraints
@@ -260,4 +264,33 @@ fun getMaxEndDateMillisUTC(startMillis: Long): Long {
         add(Calendar.DAY_OF_MONTH, -1) // Langkah 2: Mundur 1 hari (16 Mar -> 15 Mar)
     }
     return calendar.timeInMillis
+}
+
+fun Modifier.customShadow(
+    color: Color = Color.Black,
+    blur: Dp = 0.dp,
+    spread: Dp = 0.dp
+) = drawBehind {
+    drawIntoCanvas { canvas ->
+        val paint = Paint()
+        val frameworkPaint = paint.asFrameworkPaint()
+        frameworkPaint.color = Color.Transparent.toArgb()
+        
+        frameworkPaint.setShadowLayer(
+            blur.toPx(),
+            0f, 0f, // x dan y offset = 0
+            color.toArgb()
+        )
+
+        val spreadPx = spread.toPx()
+        canvas.drawRoundRect(
+            left = -spreadPx,
+            top = -spreadPx,
+            right = size.width + spreadPx,
+            bottom = size.height + spreadPx,
+            radiusX = (size.width / 2) + spreadPx,
+            radiusY = (size.height / 2) + spreadPx,
+            paint = paint
+        )
+    }
 }

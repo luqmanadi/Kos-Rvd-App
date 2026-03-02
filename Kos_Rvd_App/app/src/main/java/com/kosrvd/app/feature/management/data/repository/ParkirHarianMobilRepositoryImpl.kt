@@ -13,6 +13,7 @@ import com.kosrvd.app.feature.management.data.mappers.toListOfParkirHarianMobil
 import com.kosrvd.app.feature.management.data.mappers.toParkirHarianMobil
 import com.kosrvd.app.feature.management.data.repository.dto.ParkirHarianMobilDto
 import com.kosrvd.app.feature.management.domain.model.ParkirHarianMobil
+import com.kosrvd.app.feature.management.domain.model.TambahParkirHarianMobil
 import com.kosrvd.app.feature.management.domain.repository.ParkirHarianMobilRepository
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
@@ -20,6 +21,17 @@ import javax.inject.Inject
 class ParkirHarianMobilRepositoryImpl @Inject constructor (
     private val db: FirebaseFirestore
 ): ParkirHarianMobilRepository {
+    override suspend fun getAllParkirHarianMobilIsCancelledFalse(): Result<List<ParkirHarianMobil>, DataError> {
+        return safeCall {
+            db.collection(Constant.PARKIR_HARIAN_MOBIL_COLLECTION)
+                .whereEqualTo(Constant.IS_CANCELLED_FIELD, false)
+                .get()
+                .await()
+                .toObjectListOrThrow<ParkirHarianMobilDto>(
+                    mappingErrorMessage = ErrorMessages.PARKIR_HARIAN_MOBIL_MAPPING_ERROR
+                )
+        }.map { it.toListOfParkirHarianMobil() }
+    }
     override suspend fun getAllParkirHarianMobil(): Result<List<ParkirHarianMobil>, DataError> {
         return safeCall {
             db.collection(Constant.PARKIR_HARIAN_MOBIL_COLLECTION)
@@ -58,6 +70,14 @@ class ParkirHarianMobilRepositoryImpl @Inject constructor (
             db.collection(Constant.PARKIR_HARIAN_MOBIL_COLLECTION)
                 .document(idParkirHarianMobil)
                 .delete()
+                .await()
+        }
+    }
+
+    override suspend fun addParkirHarianMobil(tambahParkirHarianMobil: TambahParkirHarianMobil): Result<Unit, DataError> {
+        return safeCall {
+            db.collection(Constant.PARKIR_HARIAN_MOBIL_COLLECTION)
+                .add(tambahParkirHarianMobil)
                 .await()
         }
     }
