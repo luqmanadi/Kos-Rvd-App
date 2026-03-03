@@ -1,6 +1,5 @@
 package com.kosrvd.app.feature.management.domain.usecase
 
-import android.util.Log
 import com.google.firebase.Timestamp
 import com.kosrvd.app.core.data.constant.Constant
 import com.kosrvd.app.core.domain.utils.DataError
@@ -42,7 +41,7 @@ class GetListParkirHarianMobilUseCase @Inject constructor(
 
     private fun determineStatus(data: ParkirHarianMobil, now: Timestamp): String {
         return when {
-            data.isCancelled -> Constant.DIBATALKAN
+            data.cancelledStatus -> Constant.DIBATALKAN
             now < data.startDate -> Constant.DIPESAN
             now <= data.completionDate -> Constant.DIPAKAI
             else -> Constant.SELESAI

@@ -16,5 +16,5 @@ data class ParkirHarianMobil(
     val proofOfPayment: String?,
     val paymentStatus: String,
     val totalCost: Long,
-    val isCancelled: Boolean
+    val cancelledStatus: Boolean
 )

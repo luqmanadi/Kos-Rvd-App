@@ -115,7 +115,7 @@ class BuatTagihanViewModel @Inject constructor(
             percentageDiscount = currentState.percentageDiscount
         )
 
-        val discount = Diskon(
+        val discount = if (!currentState.useDiscount) null else Diskon(
             percent = if (currentState.percentageDiscount.isEmpty()) 0 else currentState.percentageDiscount.toInt(),
             price = result.priceDiscount,
             description = currentState.descriptionDiscount
@@ -170,23 +170,12 @@ class BuatTagihanViewModel @Inject constructor(
                 percentageDiscountError = errorText
             )
         }
-        calculateLivePreview() // Panggil di sini!
+        calculateLivePreview()
     }
 
     private fun updateDescriptionDiscount(descriptionDiscount: String) {
-        if (descriptionDiscount.isEmpty()){
-            _state.update {
-                it.copy(
-                    descriptionDiscount =descriptionDiscount,
-                    isDescriptionDiscountError = false,
-                    descriptionDiscountError = null
-                )
-            }
-            return
-        }
-
-        val descriptionDiscountError = PatternValidation.getDescriptionDiscountError(descriptionDiscount)
-        val isDescriptionDiscountError = !PatternValidation.isDescriptionDiscountValid(descriptionDiscount)
+        val descriptionDiscountError = if (descriptionDiscount.isEmpty()) null else PatternValidation.getDescriptionDiscountError(descriptionDiscount)
+        val isDescriptionDiscountError = if (descriptionDiscount.isEmpty()) false else !PatternValidation.isDescriptionDiscountValid(descriptionDiscount)
         _state.update {
             it.copy(
                 descriptionDiscount = descriptionDiscount,
@@ -194,6 +183,7 @@ class BuatTagihanViewModel @Inject constructor(
                 descriptionDiscountError = descriptionDiscountError
             )
         }
+        calculateLivePreview()
     }
 
     private fun updateItemSelected(item: Penyewaan) {

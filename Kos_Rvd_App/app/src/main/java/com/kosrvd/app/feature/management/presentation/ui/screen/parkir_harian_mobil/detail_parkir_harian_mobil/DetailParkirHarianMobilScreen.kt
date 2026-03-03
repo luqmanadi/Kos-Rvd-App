@@ -262,7 +262,7 @@ private fun DetailParkirHarianMobilContent(
             )
         }
         item { Spacer(Modifier.height(20.dp)) }
-        if (!detailParkirHarianMobilUi.isCancelled){
+        if (!detailParkirHarianMobilUi.cancelledStatus){
             item(key = "Bukti Pembayaran Header") {
                 Text(
                     text = stringResource(R.string.proof_of_payment),
@@ -316,7 +316,7 @@ private fun DetailParkirHarianMobilContent(
                 selesaiSewa = detailParkirHarianMobilUi.completionDate
             )
         }
-        if (detailParkirHarianMobilUi.paymentStatus == Constant.BELUM_LUNAS){
+        if (detailParkirHarianMobilUi.paymentStatus == Constant.BELUM_LUNAS && !detailParkirHarianMobilUi.cancelledStatus){
             item { Spacer(Modifier.height(20.dp)) }
             item(key = "Tombol Upload Bukti Pembayaran") {
                 ActionButton(

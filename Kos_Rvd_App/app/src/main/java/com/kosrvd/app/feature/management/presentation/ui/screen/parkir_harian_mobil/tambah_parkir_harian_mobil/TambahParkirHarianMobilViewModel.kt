@@ -1,5 +1,6 @@
 package com.kosrvd.app.feature.management.presentation.ui.screen.parkir_harian_mobil.tambah_parkir_harian_mobil
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kosrvd.app.core.domain.utils.onError
@@ -8,6 +9,7 @@ import com.kosrvd.app.core.presentation.utils.PatternValidation
 import com.kosrvd.app.feature.management.domain.model.ZonaParkiran
 import com.kosrvd.app.feature.management.domain.usecase.GetListZonaParkirHarianUseCase
 import com.kosrvd.app.feature.management.domain.usecase.TambahParkirHarianMobilUseCase
+import com.kosrvd.app.feature.management.presentation.designsystem.utils.UTC_ZONE_ID
 import com.kosrvd.app.feature.management.presentation.designsystem.utils.toDayMonthShortAndYear
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -152,6 +154,7 @@ class TambahParkirHarianMobilViewModel @Inject constructor(
         if (currentPage < sizePage) {
             val nextPageIndex = currentPage + 1
             if (nextPageIndex == 2) {
+                Log.d("Next Page", "Trigger Next Page == 2")
                 loadListZoneParking()
             }
             _state.update {
@@ -166,6 +169,7 @@ class TambahParkirHarianMobilViewModel @Inject constructor(
         if (currentPage > 1) {
             val prevPageIndex = currentPage - 1
             if (prevPageIndex == 1) {
+                Log.d("Back Page", "Trigger Back Page == 1")
                 _state.update {
                     it.copy(
                         selectedZoneParking = null,
@@ -198,6 +202,7 @@ class TambahParkirHarianMobilViewModel @Inject constructor(
                 startDate = startDate,
                 completionDate = completionDate
             ).onSuccess { result ->
+                Log.d("Load List Zone", result.toString())
                 _state.update { it.copy(isListZoneParkingLoading = false, listZoneParking = result) }
             }.onError { result ->
                 _state.update { it.copy(isListZoneParkingLoading = false, loadError = result.message) }

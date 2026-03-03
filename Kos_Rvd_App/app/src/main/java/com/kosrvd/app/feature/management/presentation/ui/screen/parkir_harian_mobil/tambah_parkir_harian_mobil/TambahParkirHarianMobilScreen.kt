@@ -88,7 +88,8 @@ fun TambahParkirHarianMobilScreen(
         Column(
             modifier = Modifier
                 .padding(innerPadding)
-                .fillMaxSize(),
+                .fillMaxSize()
+                .imePadding(),
         ) {
             MultiStepIndicator(
                 modifier = Modifier.padding(vertical = 16.dp),
@@ -320,8 +321,7 @@ private fun StepThreeFillData(
         modifier = modifier
             .fillMaxSize()
             .verticalScroll(scrollState)
-            .padding(vertical = 16.dp, horizontal = 20.dp)
-            .imePadding(),
+            .padding(vertical = 16.dp, horizontal = 20.dp),
     ) {
         Text(
             text = stringResource(R.string.title_fill_data_usage_parking_daily),

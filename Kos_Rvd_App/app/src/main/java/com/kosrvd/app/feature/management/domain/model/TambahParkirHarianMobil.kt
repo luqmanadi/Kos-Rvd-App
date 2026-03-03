@@ -1,7 +1,6 @@
 package com.kosrvd.app.feature.management.domain.model
 
 import com.google.firebase.Timestamp
-import com.kosrvd.app.core.data.constant.Constant
 
 data class TambahParkirHarianMobil(
     val idZonaParkir: String,
@@ -10,11 +9,11 @@ data class TambahParkirHarianMobil(
     val numberPlate: String,
     val carBrand: String,
     val carName: String,
+    val cancelledStatus: Boolean,
     val notes: String?,
     val startDate: Timestamp,
     val completionDate: Timestamp,
     val proofOfPayment: String?,
     val paymentStatus: String,
-    val totalCost: Long,
-    val isCancelled: Boolean
+    val totalCost: Long
 )

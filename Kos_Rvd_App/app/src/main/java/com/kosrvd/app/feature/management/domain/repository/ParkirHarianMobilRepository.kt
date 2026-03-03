@@ -11,5 +11,5 @@ interface ParkirHarianMobilRepository {
     suspend fun updateDataParkirHarianMobil(idParkirHarianMobil: String, updateDataParkirHarianMobil: Map<String, Any?>): Result<Unit, DataError>
     suspend fun deleteParkirHarianMobil(idParkirHarianMobil: String): Result<Unit, DataError>
     suspend fun addParkirHarianMobil(tambahParkirHarianMobil: TambahParkirHarianMobil): Result<Unit, DataError>
-    suspend fun getAllParkirHarianMobilIsCancelledFalse(): Result<List<ParkirHarianMobil>, DataError>
+    suspend fun getAllParkirHarianMobilCancelledStatusFalse(): Result<List<ParkirHarianMobil>, DataError>
 }

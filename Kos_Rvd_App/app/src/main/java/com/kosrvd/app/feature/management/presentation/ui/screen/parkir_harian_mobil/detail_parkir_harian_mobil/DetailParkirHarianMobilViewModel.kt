@@ -94,7 +94,7 @@ class DetailParkirHarianMobilViewModel @Inject constructor(
         viewModelScope.launch {
             _state.update { it.copy(isButtonCancelledLoading = true) }
             val idParkirHarianMobil = _state.value.dataDetailParkirHarianMobil?.idParkirHarianMobil ?: ""
-            val updateDataParkirHarianMobil = mapOf(Constant.IS_CANCELLED_FIELD to true)
+            val updateDataParkirHarianMobil = mapOf(Constant.CANCELLED_STATUS_FIELD to true)
 
             parkirHarianMobilRepository.updateDataParkirHarianMobil(
                 idParkirHarianMobil = idParkirHarianMobil,
@@ -227,6 +227,8 @@ class DetailParkirHarianMobilViewModel @Inject constructor(
 
     private fun loadDetailParkirHarianMobil(){
         viewModelScope.launch {
+            if (_state.value.dataDetailParkirHarianMobil != null) return@launch
+
             _state.update { it.copy(isLoading = true, loadError = null) }
             val idParkirHarianMobil = getIdFromSavedStateHandle()
 

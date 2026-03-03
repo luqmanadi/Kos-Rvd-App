@@ -38,6 +38,8 @@ import com.kosrvd.app.feature.management.presentation.designsystem.utils.UTC_ZON
 import com.kosrvd.app.feature.management.presentation.designsystem.utils.toDayMonthShortAndYear
 import com.kosrvd.app.feature.management.presentation.designsystem.utils.toEndOfDay
 import com.kosrvd.app.feature.management.presentation.designsystem.utils.toStartOfDay
+import java.time.Instant
+import java.time.ZoneId
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -56,17 +58,41 @@ fun DateRangePickerParkirHarianMobilCard(
     }
 
     CompositionLocalProvider(LocalConfiguration provides localizedConfiguration) {
+        val initialStart = remember(startDate) {
+            startDate?.let {
+                Instant.ofEpochMilli(it)
+                    .atZone(ZoneId.of("Asia/Jakarta"))
+                    .toLocalDate()
+                    .atStartOfDay(ZoneId.of("UTC"))
+                    .toInstant()
+                    .toEpochMilli()
+            }
+        }
+
+        val initialEnd = remember(completionDate) {
+            completionDate?.let {
+                Instant.ofEpochMilli(it)
+                    .atZone(ZoneId.of("Asia/Jakarta"))
+                    .toLocalDate()
+                    .atStartOfDay(ZoneId.of("UTC"))
+                    .toInstant()
+                    .toEpochMilli()
+            }
+        }
+
         val dateRangePickerState = rememberDateRangePickerState(
-            initialSelectedStartDateMillis = startDate,
-            initialSelectedEndDateMillis = completionDate
+            initialSelectedStartDateMillis = initialStart,
+            initialSelectedEndDateMillis = initialEnd
         )
 
         // Callback saat tanggal berubah
         LaunchedEffect(dateRangePickerState.selectedStartDateMillis, dateRangePickerState.selectedEndDateMillis) {
-            onSelectedDate(
-                dateRangePickerState.selectedStartDateMillis?.toStartOfDay(),
-                dateRangePickerState.selectedEndDateMillis?.toEndOfDay()
-            )
+            val newStart = dateRangePickerState.selectedStartDateMillis
+            val newEnd = dateRangePickerState.selectedEndDateMillis
+            // Hanya update jika data tidak null dan berbeda dengan data awal (opsional)
+            if (newStart != null && newEnd != null) {
+                onSelectedDate(newStart.toStartOfDay(), newEnd.toEndOfDay())
+            }
         }
 
         Card(
@@ -120,9 +146,9 @@ fun DateRangePickerParkirHarianMobilCard(
                 val endMillis = dateRangePickerState.selectedEndDateMillis
 
                 val dateRangeText = if (startMillis != null && endMillis != null) {
-                    "${startMillis.toDayMonthShortAndYear(UTC_ZONE_ID)} - ${endMillis.toDayMonthShortAndYear(UTC_ZONE_ID)}"
+                    "${startMillis.toDayMonthShortAndYear()} - ${endMillis.toDayMonthShortAndYear()}"
                 } else if (startMillis != null) {
-                    "${startMillis.toDayMonthShortAndYear(UTC_ZONE_ID)} - ..."
+                    "${startMillis.toDayMonthShortAndYear()} - ..."
                 } else {
                     "Pilih Rentang Tanggal"
                 }

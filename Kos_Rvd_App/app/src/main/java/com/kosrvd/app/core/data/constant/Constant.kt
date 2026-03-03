@@ -79,7 +79,7 @@ object Constant {
     const val ZONE_NAME_FIELD = "zoneName"
     const val MONTHLY_FEE_FIELD = "monthlyFee"
     const val DAILY_COSTS_FIELD = "dailyCosts"
-    const val IS_CANCELLED_FIELD = "isCancelled"
+    const val CANCELLED_STATUS_FIELD = "cancelledStatus"
 
     // Name Value
     const val ACTIVE = "Aktif"

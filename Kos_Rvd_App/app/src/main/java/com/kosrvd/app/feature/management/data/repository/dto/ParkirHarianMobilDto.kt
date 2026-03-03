@@ -20,5 +20,5 @@ data class ParkirHarianMobilDto(
     val proofOfPayment: String? = null,
     val paymentStatus: String = "",
     val totalCost: Long = 0,
-    val isCancelled: Boolean = false
+    val cancelledStatus: Boolean = false
 )

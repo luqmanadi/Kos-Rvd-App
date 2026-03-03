@@ -18,7 +18,7 @@ fun ParkirHarianMobilDto.toParkirHarianMobil(): ParkirHarianMobil {
         proofOfPayment = this.proofOfPayment,
         paymentStatus = this.paymentStatus,
         totalCost = this.totalCost,
-        isCancelled = this.isCancelled
+        cancelledStatus = this.cancelledStatus
     )
 }
 

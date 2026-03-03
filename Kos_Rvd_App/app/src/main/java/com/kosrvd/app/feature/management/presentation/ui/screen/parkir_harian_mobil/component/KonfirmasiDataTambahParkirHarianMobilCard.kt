@@ -66,8 +66,8 @@ fun KonfirmasiDataTambahParkirHarianMobilCard(
             verticalArrangement = Arrangement.spacedBy(25.dp)
         ) {
             // Tanggal Pemakaian
-            val startDateStr = tambahParkirHarianMobilUiState.startDate?.toDayMonthShortAndYear(UTC_ZONE_ID) ?: "-"
-            val endDateStr = tambahParkirHarianMobilUiState.completionDate?.toDayMonthShortAndYear(UTC_ZONE_ID) ?: "-"
+            val startDateStr = tambahParkirHarianMobilUiState.startDate?.toDayMonthShortAndYear() ?: "-"
+            val endDateStr = tambahParkirHarianMobilUiState.completionDate?.toDayMonthShortAndYear() ?: "-"
             val dateRangeText = buildAnnotatedString {
                 append("$startDateStr - $endDateStr ")
                 withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.Normal)) {
@@ -116,7 +116,7 @@ fun KonfirmasiDataTambahParkirHarianMobilCard(
             ConfirmationItem(
                 icon = Icons.AutoMirrored.Filled.Comment,
                 label = stringResource(R.string.note),
-                value = tambahParkirHarianMobilUiState.notes ?: "-",
+                value = tambahParkirHarianMobilUiState.notes.ifEmpty { "-" },
                 isLast = false
             )
 

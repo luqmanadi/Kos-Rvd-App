@@ -1,5 +1,6 @@
 package com.kosrvd.app.feature.management.domain.usecase
 
+import android.util.Log
 import com.kosrvd.app.core.data.constant.Constant
 import com.kosrvd.app.core.domain.utils.DataError
 import com.kosrvd.app.core.domain.utils.Result
@@ -36,8 +37,9 @@ class TambahParkirHarianMobilUseCase @Inject constructor(
             proofOfPayment = null,
             paymentStatus = Constant.BELUM_LUNAS,
             totalCost = totalCost,
-            isCancelled = false
+            cancelledStatus = false
         )
+        Log.d("Tambah Parkir", tambahParkirHarianMobilModel.toString())
         return parkirHarianMobilRepository.addParkirHarianMobil(tambahParkirHarianMobilModel)
     }
 }

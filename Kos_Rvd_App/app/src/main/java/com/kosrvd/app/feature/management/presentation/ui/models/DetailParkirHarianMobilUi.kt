@@ -20,7 +20,7 @@ data class DetailParkirHarianMobilUi(
     val paymentStatus: String,
     val totalCost: String,
     val statusParkir: String,
-    val isCancelled: Boolean
+    val cancelledStatus: Boolean
 )
 
 fun ParkirHarianMobil.toDetailParkirHarianMobilUi(): DetailParkirHarianMobilUi {
@@ -39,18 +39,18 @@ fun ParkirHarianMobil.toDetailParkirHarianMobilUi(): DetailParkirHarianMobilUi {
         paymentStatus = this.paymentStatus,
         totalCost = this.totalCost.toRupiahFormat(),
         statusParkir = determineStatus(
-            isCancelled = this.isCancelled,
+            cancelledStatus = this.cancelledStatus,
             startDate = this.startDate,
             completionDate = this.completionDate
         ),
-        isCancelled = this.isCancelled
+        cancelledStatus = this.cancelledStatus
     )
 }
 
-private fun determineStatus(isCancelled: Boolean, startDate: Timestamp, completionDate: Timestamp): String {
+private fun determineStatus(cancelledStatus: Boolean, startDate: Timestamp, completionDate: Timestamp): String {
     val now = Timestamp.now()
     return when {
-        isCancelled -> "Dibatalkan"
+        cancelledStatus -> "Dibatalkan"
         now < startDate -> "Dipesan"
         now <= completionDate -> "Dipakai"
         else -> "Selesai"

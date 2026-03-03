@@ -54,7 +54,7 @@ fun StepperControlBar(
         ActionButton(
             modifier = Modifier.weight(1f),
             height = 45.dp,
-            onClick = { if (currentStep < totalSteps - 1) onNext() else onSubmit() },
+            onClick = { if (currentStep < totalSteps) onNext() else onSubmit() },
             text = textButtonPrimary,
             shape = RoundedCornerShape(15.dp),
             isLoading = isButtonSubmitLoading,

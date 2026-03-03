@@ -21,10 +21,10 @@ import javax.inject.Inject
 class ParkirHarianMobilRepositoryImpl @Inject constructor (
     private val db: FirebaseFirestore
 ): ParkirHarianMobilRepository {
-    override suspend fun getAllParkirHarianMobilIsCancelledFalse(): Result<List<ParkirHarianMobil>, DataError> {
+    override suspend fun getAllParkirHarianMobilCancelledStatusFalse(): Result<List<ParkirHarianMobil>, DataError> {
         return safeCall {
             db.collection(Constant.PARKIR_HARIAN_MOBIL_COLLECTION)
-                .whereEqualTo(Constant.IS_CANCELLED_FIELD, false)
+                .whereEqualTo(Constant.CANCELLED_STATUS_FIELD, false)
                 .get()
                 .await()
                 .toObjectListOrThrow<ParkirHarianMobilDto>(

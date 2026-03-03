@@ -27,9 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.capitalize
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.kosrvd.app.R
@@ -70,9 +68,7 @@ fun ItemParkirHarianMobilCard(
                     .padding(8.dp)
             )
             Spacer(Modifier.width(15.dp))
-            Column(
-                modifier = Modifier.weight(1f)
-            ) {
+            Column {
                 Text(
                     text = listParkirHarianMobilUi.userName,
                     style = MaterialTheme.typography.bodyLarge,
@@ -81,30 +77,26 @@ fun ItemParkirHarianMobilCard(
                     overflow = TextOverflow.Ellipsis
                 )
                 Spacer(Modifier.height(5.dp))
-                Row(
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    IconTextInfo(
-                        text = ZonaParkirFormatter.format(listParkirHarianMobilUi.zoneName),
-                        icon = ImageVector.vectorResource(R.drawable.ic_zona_parkir),
-                        sizeIcon = 10.dp,
-                        colorIcon = MaterialTheme.colorScheme.secondary,
-                        colorText = MaterialTheme.colorScheme.secondary,
-                        spacing = 5.dp,
-                        fontWeight = FontWeight.Medium
-                    )
-                    Spacer(Modifier.width(5.dp))
-                    IconTextInfo(
-                        text = listParkirHarianMobilUi.numberPlate,
-                        icon = Icons.Filled.DirectionsCar,
-                        sizeIcon = 10.dp,
-                        spacing = 5.dp,
-                        fontWeight = FontWeight.Medium
-                    )
-                }
+                IconTextInfo(
+                    text = ZonaParkirFormatter.format(listParkirHarianMobilUi.zoneName),
+                    icon = ImageVector.vectorResource(R.drawable.ic_zona_parkir),
+                    sizeIcon = 10.dp,
+                    colorIcon = MaterialTheme.colorScheme.secondary,
+                    colorText = MaterialTheme.colorScheme.secondary,
+                    spacing = 5.dp,
+                    fontWeight = FontWeight.Medium
+                )
+                Spacer(Modifier.height(5.dp))
+                IconTextInfo(
+                    text = listParkirHarianMobilUi.numberPlate,
+                    icon = Icons.Filled.DirectionsCar,
+                    sizeIcon = 10.dp,
+                    spacing = 5.dp,
+                    fontWeight = FontWeight.Medium
+                )
             }
-            Spacer(Modifier.width(10.dp))
             Spacer(Modifier.weight(1f))
+            Spacer(Modifier.width(10.dp))
             IconTextInfo(
                 text = listParkirHarianMobilUi.status,
                 icon = Icons.Filled.Circle,
