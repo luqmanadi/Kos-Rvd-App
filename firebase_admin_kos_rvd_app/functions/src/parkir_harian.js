@@ -16,12 +16,13 @@ exports.onParkirHarianMobilUpdate =
 
             if (!dataAfter) return null;
 
-            // Deteksi perubahan isCancelled (false -> true)
-            const isCancelledChanged = dataBefore.isCancelled === false &&
-                    dataAfter.isCancelled === true;
+            // Deteksi perubahan cancelledStatus (false -> true)
+            const cancelledStatusChanged =
+                dataBefore.cancelledStatus === false &&
+                    dataAfter.cancelledStatus === true;
             const proofOfPayment = dataAfter.proofOfPayment;
 
-            if (!isCancelledChanged) {
+            if (!cancelledStatusChanged) {
               return null; // Silent skip
             }
 
@@ -64,7 +65,11 @@ exports.onDucumentDeletedParkirHarianMobil = onDocumentDeleted(
         const data = event.data.data();
         const proofOfPayment = data.proofOfPayment;
 
-        if (!proofOfPayment) return null;
+        if (!proofOfPayment) {
+          info(`Parkir Harian ${parkirHarianMobilId} tidak memiliki `+
+            `bukti pembayaran. Skip.`);
+          return null;
+        }
 
         // Langsung hapus dari storage tanpa perlu array promise
         const getProofOfPaymentPathUrl =

@@ -249,8 +249,8 @@ exports.onTagihanCreate = onDocumentCreated("tagihan/{tagihanId}",
           // ==========================================
           const finalBillUpdate = {
             idTagihan: tagihanId,
-            idPenyewa: idAkun,
-            total: dataTagihanBaru.total || 0,
+            idPenyewa: dataTagihanBaru.idPenyewa || null,
+            total: dataTagihanBaru.billAmount || 0,
             paymentStatus: dataTagihanBaru.paymentStatus || utils.BELUM_LUNAS,
             periodStart: dataTagihanBaru.periodStart || null, // Perubahan
             periodEnd: dataTagihanBaru.periodEnd || null, // Perubahan
@@ -338,7 +338,7 @@ exports.onTagihanDelete = onDocumentDeleted("tagihan/{tagihanId}",
         }
 
         // ==========================================
-        // LOGIKA: Fallback finalBill menggunakan orderBy("startRent", "desc")
+        // LOGIKA: Fallback finalBill menggunakan orderBy("periodStart", "desc")
         // ==========================================
         residentIds.forEach((idAkun) => {
           const updateAkunPromise = db.collection("akun").doc(idAkun).get()
@@ -366,14 +366,13 @@ exports.onTagihanDelete = onDocumentDeleted("tagihan/{tagihanId}",
 
                       const fallbackBill = {
                         idTagihan: prevTagihanDoc.id,
-                        idPenyewa: prevTagihanDoc.idPenyewa,
+                        idPenyewa: prevTagihanData.idPenyewa || null,
                         total: prevTagihanData.billAmount || 0,
                         paymentStatus: prevTagihanData.paymentStatus ||
                             utils.BELUM_LUNAS,
                         periodStart: prevTagihanData.periodStart ||
-                            Timestamp.now(), // Perubahan disini
-                        periodEnd: prevTagihanData.periodEnd ||
-                            Timestamp.now(), // Perubahan disini
+                            Timestamp.now(),
+                        periodEnd: prevTagihanData.periodEnd || Timestamp.now(),
                         dueDate: prevTagihanData.dueDate || Timestamp.now(),
                       };
 

@@ -122,58 +122,6 @@ exports.onPenyewaanUpdate = onDocumentUpdated("penyewaan/{penyewaanId}",
           }
         }
 
-        // ==========================================
-        // Skenario 4: Kalkulasi Ulang Tagihan (Alat Elektronik & Parkir)
-        // ==========================================
-
-        const alatBeforeStr =
-            JSON.stringify(dataBefore.pemakaianAlatElektronikBulanan || []);
-        const alatAfterStr =
-            JSON.stringify(dataAfter.pemakaianAlatElektronikBulanan || []);
-        const isAlatBerubah = alatBeforeStr !== alatAfterStr;
-
-        const parkirBeforeFee =
-            dataBefore.pemakaianParkirMobilBulanan?.zonaParkir?.monthlyFee || 0;
-        const parkirAfterFee =
-            dataAfter.pemakaianParkirMobilBulanan?.zonaParkir?.monthlyFee || 0;
-        const isBiayaParkirBerubah = parkirBeforeFee !== parkirAfterFee;
-
-        // Jika alat elektronik berubah ATAU biaya parkir berubah,
-        // lakukan kalkulasi ulang
-        if (isAlatBerubah || isBiayaParkirBerubah) {
-          info(`Kalkulasi ulang totalMonthlyBill untuk penyewaan: `+
-              `${idPenyewaan}`);
-
-          let newTotal = 0;
-
-          // a. Hitung Kamar
-          const listResident = dataAfter.listResident || [];
-          const costKamar = dataAfter.infoKamar?.currentRoomRentalCost || {};
-          newTotal += (listResident.length > 1) ?
-                (costKamar.twoPersons || costKamar.onePerson || 0) :
-                (costKamar.onePerson || 0);
-
-          // b. Hitung Alat Elektronik
-          const listAlat = dataAfter.pemakaianAlatElektronikBulanan || [];
-          listAlat.forEach((alat) => {
-            newTotal += (alat.cost || 0);
-          });
-
-          // c. Hitung Parkir
-          newTotal += parkirAfterFee;
-
-          // SAFETY NET: Hindari infinite loop
-          if (dataAfter.totalMonthlyBill !== newTotal) {
-            info(`Update totalMonthlyBill dari ${dataAfter.totalMonthlyBill} `+
-                `menjadi ${newTotal} untuk ${idPenyewaan}`);
-            allPromises.push(
-                db.collection("penyewaan").doc(idPenyewaan).update({
-                  totalMonthlyBill: newTotal,
-                }),
-            );
-          }
-        }
-
         // Eksekusi semua promise
         if (allPromises.length > 0) {
           await Promise.all(allPromises);

@@ -21,6 +21,9 @@ const tagihan = require("./src/tagihan");
 const keluhan = require("./src/keluhan");
 const pengumuman = require("./src/pengumuman");
 const notifikasi = require("./src/notifikasi");
+const zonaParkiran = require("./src/zona_parkiran");
+const parkirHarian = require("./src/parkir_harian");
+const penyewaan = require("./src/penyewaan");
 
 // --- EXPORT FUNCTIONS ---
 
@@ -49,3 +52,17 @@ exports.onDucumentDeletedPengumuman = pengumuman.onDucumentDeletedPengumuman;
 
 // Notifikasi
 exports.onNotifikasiCreate = notifikasi.onNotifikasiCreate;
+exports.onNotifikasiUpdate = notifikasi.onNotifikasiUpdate;
+exports.onNotifikasiDelete = notifikasi.onNotifikasiDelete;
+
+// Zona Parkiran
+exports.onZonaParkirUpdate = zonaParkiran.onZonaParkirUpdate;
+
+// Parkir Harian
+exports.onParkirHarianMobilUpdate = parkirHarian.onParkirHarianMobilUpdate;
+exports.onDucumentDeletedParkirHarianMobil =
+    parkirHarian.onDucumentDeletedParkirHarianMobil;
+
+// Penyewaan
+exports.onPenyewaanCreate = penyewaan.onPenyewaanCreate;
+exports.onPenyewaanUpdate = penyewaan.onPenyewaanUpdate;
