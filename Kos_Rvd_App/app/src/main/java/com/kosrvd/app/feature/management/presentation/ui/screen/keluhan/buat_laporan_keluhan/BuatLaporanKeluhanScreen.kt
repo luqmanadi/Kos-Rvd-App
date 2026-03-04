@@ -180,7 +180,7 @@ private fun MainContent (
                         },
                     shakeTrigger = titleShakeTrigger,
                     keyboardOptions = KeyboardOptions.Default.copy(
-                        capitalization = KeyboardCapitalization.Characters,
+                        capitalization = KeyboardCapitalization.Words,
                         imeAction = ImeAction.Next,
                         keyboardType = KeyboardType.Text,
                     ),

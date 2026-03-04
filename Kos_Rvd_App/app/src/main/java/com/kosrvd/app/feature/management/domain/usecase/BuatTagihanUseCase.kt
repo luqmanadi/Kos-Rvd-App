@@ -12,7 +12,7 @@ import com.kosrvd.app.feature.management.domain.model.Penyewaan
 import com.kosrvd.app.feature.management.domain.model.ProrataDetail
 import com.kosrvd.app.feature.management.domain.model.Tagihan
 import com.kosrvd.app.feature.management.domain.repository.TagihanRepository
-import com.kosrvd.app.feature.management.presentation.designsystem.utils.getDueDateAsFifteenthOfMonth
+import com.kosrvd.app.feature.management.presentation.designsystem.utils.calculateSmartDueDate
 import com.kosrvd.app.feature.management.presentation.designsystem.utils.toDayMonthAndYear
 import javax.inject.Inject
 
@@ -44,7 +44,7 @@ class BuatTagihanUseCase @Inject constructor(
 
         val residentAccountIdList = item.listResident.map { it.idAkun }
         val residentNameList = item.listResident.map { it.name }
-        val dueDate = getDueDateAsFifteenthOfMonth()
+        val dueDate = calculateSmartDueDate(periodStart)
         val roomRentalFee = if (item.listResident.size > 1) {
             item.infoKamar.currentRoomRentalCost.twoPersons ?: item.infoKamar.currentRoomRentalCost.onePerson
         } else {

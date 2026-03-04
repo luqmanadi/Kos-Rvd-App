@@ -86,34 +86,28 @@ fun Timestamp.toDayMonthShortAndYear(): String {
 }
 
 
-fun getDueDateAsFifteenthOfMonth(originalTimestamp: Timestamp): Timestamp {
-    // 1. Konversi Timestamp Firebase ke java.util.Date
-    val originalDate = originalTimestamp.toDate()
+fun calculateSmartDueDate(periodStart: Timestamp): Timestamp {
+    // Konversi ke LocalDate (Jakarta Zone agar akurat dengan kalender Indonesia)
+    val startDate = periodStart.toDate().toInstant()
+        .atZone(JAKARTA_ZONE_ID)
+        .toLocalDate()
 
-    // 2. Gunakan Calendar untuk manipulasi tanggal
-    val calendar = Calendar.getInstance()
-    calendar.time = originalDate // Set Calendar ke tanggal asli
+    val day = startDate.dayOfMonth
 
-    // 3. Set hari dalam bulan menjadi 15
-    calendar.set(Calendar.DAY_OF_MONTH, 15)
+    val dueDateLocal = if (day == 16) {
+        // SKEMA 1: Jika tgl 16, maka due date tgl 15 bulan tersebut
+        startDate.withDayOfMonth(15)
+    } else {
+        // SKEMA 2: Jika bukan tgl 16, maka due date = Start Date + 2 hari (Total 3 hari)
+        // Contoh: Masuk tgl 20, due date tgl 22.
+        startDate.plusDays(2)
+    }
 
-    // 4. Set waktu menjadi 23:59:59 (akhir hari)
-    calendar.set(Calendar.HOUR_OF_DAY, 23) // Jam 23 (11 PM)
-    calendar.set(Calendar.MINUTE, 59)     // Menit 59
-    calendar.set(Calendar.SECOND, 59)     // Detik 59
-    calendar.set(Calendar.MILLISECOND, 999) // Milidetik 999 (mewakili akhir detik ke-59, sebelum detik berikutnya)
+    // Set ke jam 23:59:59 agar tidak dianggap telat di detik pertama hari tersebut
+    val dueDateTime = dueDateLocal.atTime(23, 59, 59)
+    val instant = dueDateTime.atZone(JAKARTA_ZONE_ID).toInstant()
 
-    // 5. Konversi kembali dari Calendar ke java.util.Date
-    val dueDateAsDate = calendar.time
-
-    // 6. Konversi java.util.Date ke Timestamp Firebase dan kembalikan
-    return Timestamp(dueDateAsDate)
-}
-
-fun getDueDateAsFifteenthOfMonth(): Timestamp {
-    // Ambil waktu saat ini
-    val now = Timestamp.now()
-    return getDueDateAsFifteenthOfMonth(now)
+    return Timestamp(instant.epochSecond, instant.nano)
 }
 
 // Contoh Output: "15 Jul 2025"
