@@ -1,5 +1,6 @@
 package com.kosrvd.app.feature.management.presentation.ui.models
 
+import com.kosrvd.app.core.presentation.utils.calculateTotalBill
 import com.kosrvd.app.feature.management.domain.model.AlatElektronik
 import com.kosrvd.app.feature.management.domain.model.InfoPakaiParkirMobilBulanan
 import com.kosrvd.app.feature.management.domain.model.Penyewaan
@@ -28,6 +29,10 @@ fun Penyewaan.toDetailSewaKamarUi(): DetailSewaKamarUi {
         currentRoomRentalCost = if (this.listResident.size > 1 && this.infoKamar.currentRoomRentalCost.twoPersons != null ) this.infoKamar.currentRoomRentalCost.twoPersons.toRupiahFormat() else this.infoKamar.currentRoomRentalCost.onePerson.toRupiahFormat(),
         pemakaianAlatElektronik = this.pemakaianAlatElektronikBulanan,
         pemakaianParkirMobil = this.pemakaianParkirMobilBulanan,
-        totalMonthlyBill = this.totalMonthlyBill.toRupiahFormat()
+        totalMonthlyBill = calculateTotalBill(
+            this.infoKamar.currentRoomRentalCost.onePerson,
+            this.pemakaianParkirMobilBulanan?.zonaParkir?.monthlyFee,
+            this.pemakaianAlatElektronikBulanan
+        ).toRupiahFormat()
     )
 }

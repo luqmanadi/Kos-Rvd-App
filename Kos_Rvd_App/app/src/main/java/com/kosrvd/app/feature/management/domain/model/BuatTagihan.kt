@@ -16,6 +16,8 @@ data class BuatTagihan(
     val highPowerElectronicEquipmentUsageCostsMonthly: List<AlatElektronik>,
     val adminFees: Boolean,
     val billAmount: Long,
+    val sumDayPeriodeBill: Int,
+    val prorataDetail: ProrataDetail?,
     val paymentStatus: String,
     val proofOfPayment: String? = null,
     val rejectionStatement: String? = null,

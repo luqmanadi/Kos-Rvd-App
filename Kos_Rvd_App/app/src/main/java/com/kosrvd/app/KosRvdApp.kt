@@ -3,13 +3,14 @@ package com.kosrvd.app
 import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.media.AudioAttributes
 import android.os.Build
+import androidx.core.net.toUri
 import com.google.firebase.FirebaseApp
 import com.google.firebase.appcheck.FirebaseAppCheck
 import com.google.firebase.appcheck.debug.DebugAppCheckProviderFactory
 import com.google.firebase.appcheck.playintegrity.PlayIntegrityAppCheckProviderFactory
 import dagger.hilt.android.HiltAndroidApp
-import androidx.core.net.toUri
 
 @HiltAndroidApp
 class KosRvdApp: Application() {
@@ -46,10 +47,16 @@ class KosRvdApp: Application() {
             val importance = NotificationManager.IMPORTANCE_HIGH
             val soundUri = "android.resource://${packageName}/${R.raw.notification_default}".toUri()
 
+            // Tambahkan AudioAttributes agar lebih aman di semua merek HP
+            val audioAttributes = AudioAttributes.Builder()
+                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                .setUsage(AudioAttributes.USAGE_NOTIFICATION)
+                .build()
+
             val channel = NotificationChannel(channelId, channelName, importance).apply {
                 description = channelDescription
                 enableLights(true)
-                setSound(soundUri, null)
+                setSound(soundUri, audioAttributes)
             }
 
             val notificationManager = getSystemService(NotificationManager::class.java)

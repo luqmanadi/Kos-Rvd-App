@@ -350,9 +350,11 @@ val fakeDetailTagihanUi = DetailTagihanUi(
     paymentStatus = Constant.MENUNGGU_VERIFIKASI,
     proofOfPayment = null,
     rejectionStatement = null,
-    residentAccountIdList = listOf("wfjifjiefjiejf","inefineifniefn"),
+    residentAccountIdList = listOf("wfjifjiefjiejf", "inefineifniefn"),
     residentNameList = listOf("Ndiman NN", "HH Juan"),
     roomRentalFee = 100000,
     verificationDate = null,
-    diskon = null
+    diskon = null,
+    sumDayPeriodeBill = 30,
+    prorataDetail = null,
 )

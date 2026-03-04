@@ -23,8 +23,7 @@ fun PenyewaanDto.toPenyewaan(): Penyewaan{
         pemakaianParkirMobilBulanan = this.pemakaianParkirMobilBulanan?.toInfoPakaiParkirMobil(),
         rentalStartDate = this.rentalStartDate,
         rentalCompletionDate = this.rentalCompletionDate,
-        rentalStatus = this.rentalStatus,
-        totalMonthlyBill = this.totalMonthlyBill
+        rentalStatus = this.rentalStatus
     )
 }
 
@@ -69,8 +68,7 @@ fun BuatPenyewaan.toPenyewaan(idPenyewaan: String): Penyewaan{
         rentalCompletionDate = this.rentalCompletionDate,
         rentalStatus = this.rentalStatus,
         pemakaianAlatElektronikBulanan = this.pemakaianAlatElektronik,
-        pemakaianParkirMobilBulanan = this.pemakaianParkirMobil,
-        totalMonthlyBill = this.totalMonthlyBill
+        pemakaianParkirMobilBulanan = this.pemakaianParkirMobil
     )
 }
 

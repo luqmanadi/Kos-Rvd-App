@@ -10,6 +10,5 @@ data class Penyewaan(
     val pemakaianParkirMobilBulanan: InfoPakaiParkirMobilBulanan?,
     val rentalStartDate: Timestamp,
     val rentalCompletionDate: Timestamp?,
-    val rentalStatus: String,
-    val totalMonthlyBill: Long
+    val rentalStatus: String
 )

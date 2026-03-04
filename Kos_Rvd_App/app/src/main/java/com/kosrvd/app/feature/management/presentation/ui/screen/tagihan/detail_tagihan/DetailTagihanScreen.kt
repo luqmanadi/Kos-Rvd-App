@@ -227,7 +227,9 @@ private fun TagihanMainContent(
                         diskon = detailTagihanUi.diskon,
                         biayaSewaParkir = detailTagihanUi.carParkingRentalFeeMonthly,
                         pemakaianElektronik = detailTagihanUi.highPowerElectronicEquipmentUsageCostsMonthly,
-                        totalTagihan = detailTagihanUi.billAmount
+                        totalTagihan = detailTagihanUi.billAmount,
+                        sumDayPeriodeBill = detailTagihanUi.sumDayPeriodeBill,
+                        prorataDetail = detailTagihanUi.prorataDetail
                     )
                 }
 
@@ -465,7 +467,9 @@ private fun DetailTagihanScreenPreview() {
         residentNameList = listOf("Ndiman", "Januar"),
         roomRentalFee = 500000,
         verificationDate = null,
-        diskon = null
+        diskon = null,
+        sumDayPeriodeBill = 30,
+        prorataDetail = null
     )
     val detailTagihanUiState = DetailTagihanUiState(
         isLoading = false,

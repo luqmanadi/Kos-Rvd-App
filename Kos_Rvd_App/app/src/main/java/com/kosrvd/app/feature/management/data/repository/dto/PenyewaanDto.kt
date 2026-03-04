@@ -14,6 +14,5 @@ data class PenyewaanDto(
     val pemakaianParkirMobilBulanan: InfoPakaiParkirMobilBulananDto? = null,
     val rentalStartDate: Timestamp = Timestamp.now(),
     val rentalCompletionDate: Timestamp? = null,
-    val rentalStatus: String = "",
-    val totalMonthlyBill: Long = 0
+    val rentalStatus: String = ""
 )

@@ -3,6 +3,7 @@ package com.kosrvd.app.feature.management.presentation.ui.screen.tagihan.buat_ta
 import com.kosrvd.app.core.presentation.utils.UiText
 import com.kosrvd.app.feature.management.domain.model.Diskon
 import com.kosrvd.app.feature.management.domain.model.Penyewaan
+import com.kosrvd.app.feature.management.domain.model.ProrataDetail
 
 data class BuatTagihanUiState(
     val isButtonErrorLoading: Boolean = false,
@@ -28,5 +29,7 @@ data class BuatTagihanUiState(
     val loadError: String? = null,
     val listPenyewaan: List<Penyewaan> = emptyList(),
     val currentRentalCostBySumResident: Long = 0,
-    val discount: Diskon? = null
+    val discount: Diskon? = null,
+    val sumDayPeriodeBill: Int = 0,
+    val prorataDetail: ProrataDetail? = null,
 )

@@ -9,6 +9,5 @@ data class BuatPenyewaan(
     val pemakaianParkirMobil: InfoPakaiParkirMobilBulanan?,
     val rentalStartDate: Timestamp,
     val rentalCompletionDate: Timestamp?,
-    val rentalStatus: String,
-    val totalMonthlyBill: Long
+    val rentalStatus: String
 )

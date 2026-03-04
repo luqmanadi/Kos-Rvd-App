@@ -42,7 +42,10 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.input.pointer.PointerEventPass
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastJoinToString
@@ -157,15 +160,14 @@ private fun BuatTagihanContent(
         }
     }
 
-    Box(modifier = modifier.fillMaxSize()){
+    Box(modifier = modifier.fillMaxSize().imePadding()){
         Column {
             // content
             Column(
                 modifier = Modifier
                     .weight(1f)
                     .verticalScroll(state)
-                    .padding(16.dp)
-                    .imePadding(),
+                    .padding(16.dp),
                 verticalArrangement = Arrangement.spacedBy(20.dp)
             ) {
                 Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -265,9 +267,15 @@ private fun BuatTagihanContent(
                 // radio button use discount or not
                 Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
                     Text(
-                        text = stringResource(R.string.title_is_use_discount),
+                        text = buildAnnotatedString {
+                            withStyle(SpanStyle(
+                                fontWeight = FontWeight.Bold
+                            )){
+                                append(stringResource(R.string.title_is_use_discount))
+                            }
+                            append(" (Opsional)")
+                        },
                         style = MaterialTheme.typography.bodyMedium,
-                        fontWeight = FontWeight.Bold
                     )
 
                     val useDiscountOptions = listOf(true , false)
@@ -342,7 +350,9 @@ private fun BuatTagihanContent(
                             diskon = buatTagihanUiState.discount,
                             biayaSewaParkir = buatTagihanUiState.itemSelected.pemakaianParkirMobilBulanan?.zonaParkir?.monthlyFee,
                             pemakaianElektronik = buatTagihanUiState.itemSelected.pemakaianAlatElektronikBulanan,
-                            totalTagihan = buatTagihanUiState.totalBill
+                            totalTagihan = buatTagihanUiState.totalBill,
+                            sumDayPeriodeBill = buatTagihanUiState.sumDayPeriodeBill,
+                            prorataDetail = buatTagihanUiState.prorataDetail
                         )
                     } else {
                         EmptyItemDataCard(

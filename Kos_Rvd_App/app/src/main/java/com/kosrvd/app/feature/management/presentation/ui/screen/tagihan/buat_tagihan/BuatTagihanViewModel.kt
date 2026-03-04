@@ -99,15 +99,20 @@ class BuatTagihanViewModel @Inject constructor(
             return
         }
 
-        val currentRentalCostBySumResident = if (currentState.itemSelected.listResident.size == 2) {
+        val roomRentalFee = if (currentState.itemSelected.listResident.size == 2) {
             currentState.itemSelected.infoKamar.currentRoomRentalCost.twoPersons
         } else {
             currentState.itemSelected.infoKamar.currentRoomRentalCost.onePerson
         } ?: 0
 
+        val parkingFee = currentState.itemSelected.pemakaianParkirMobilBulanan?.zonaParkir?.monthlyFee
+        val electronics = currentState.itemSelected.pemakaianAlatElektronikBulanan
+
         // Jalankan UseCase
         val result = calculateTotalBillUseCase(
-            totalMonthlyBill = currentState.itemSelected.totalMonthlyBill,
+            roomRentalFee = roomRentalFee,
+            parkingFee = parkingFee,
+            electronics = electronics,
             adminFees = currentState.adminFees,
             periodStart = currentState.selectedPeriodStart,
             periodEnd = currentState.selectedPeriodEnd,
@@ -127,8 +132,10 @@ class BuatTagihanViewModel @Inject constructor(
                 totalBill = result.finalBill,
                 priceDiscount = result.priceDiscount,
                 isShowContent = true,
-                currentRentalCostBySumResident = currentRentalCostBySumResident,
-                discount = discount
+                currentRentalCostBySumResident = roomRentalFee,
+                discount = discount,
+                sumDayPeriodeBill = result.sumDayPeriodeBill,
+                prorataDetail = result.prorataDetail
             )
         }
     }
@@ -292,6 +299,8 @@ class BuatTagihanViewModel @Inject constructor(
             } else { null }
             val periodStartConvert = convertMillisToTimeStamp(periodStart)
             val periodEndConvert = convertMillisToTimeStamp(periodEnd)
+            val sumDayPeriodeBill = _state.value.sumDayPeriodeBill
+            val prorataDetail = _state.value.prorataDetail
 
             buatTagihanUseCase(
                 item = itemSelected,
@@ -299,7 +308,9 @@ class BuatTagihanViewModel @Inject constructor(
                 periodStart = periodStartConvert,
                 periodEnd = periodEndConvert,
                 diskon = diskon,
-                totalBill = totalBill
+                totalBill = totalBill,
+                sumDayPeriodeBill = sumDayPeriodeBill,
+                prorataDetail = prorataDetail
             )
                 .onSuccess { result->
                     _state.update { it.copy(isButtonLoading = false) }

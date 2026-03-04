@@ -21,6 +21,8 @@ data class TagihanDto(
     val highPowerElectronicEquipmentUsageCostsMonthly: List<AlatElektronikDto> = emptyList(),
     val adminFees: Boolean = false,
     val billAmount: Long = 0,
+    val sumDayPeriodeBill: Int = 0,
+    val prorataDetail: ProrataDetailDto? = null,
     val paymentStatus: String = "",
     val proofOfPayment: String? = null,
     val rejectionStatement: String? = null,

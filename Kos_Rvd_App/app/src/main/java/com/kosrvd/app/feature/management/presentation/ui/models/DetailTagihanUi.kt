@@ -3,6 +3,7 @@ package com.kosrvd.app.feature.management.presentation.ui.models
 import com.google.firebase.Timestamp
 import com.kosrvd.app.feature.management.domain.model.AlatElektronik
 import com.kosrvd.app.feature.management.domain.model.Diskon
+import com.kosrvd.app.feature.management.domain.model.ProrataDetail
 import com.kosrvd.app.feature.management.domain.model.Tagihan
 import com.kosrvd.app.feature.management.presentation.designsystem.utils.toDayMonthAndYear
 
@@ -21,6 +22,8 @@ data class DetailTagihanUi(
     val idPenyewa: String,
     val idTagihan: String,
     val numberRoom: Int,
+    val sumDayPeriodeBill: Int,
+    val prorataDetail: ProrataDetail?,
     val paymentStatus: String,
     val proofOfPayment: String? = null,
     val rejectionStatement: String? = null,
@@ -52,6 +55,8 @@ fun Tagihan.toDetailTagihanUi(): DetailTagihanUi{
         residentNameList = this.residentNameList,
         roomRentalFee = this.roomRentalFee,
         verificationDate = this.verificationDate?.toDayMonthAndYear(),
-        diskon = this.diskon
+        diskon = this.diskon,
+        sumDayPeriodeBill = this.sumDayPeriodeBill,
+        prorataDetail = this.prorataDetail
     )
 }

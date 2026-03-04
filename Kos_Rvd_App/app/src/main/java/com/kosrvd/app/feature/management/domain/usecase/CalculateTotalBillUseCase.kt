@@ -1,7 +1,9 @@
 package com.kosrvd.app.feature.management.domain.usecase
 
 import com.kosrvd.app.core.data.constant.Constant
+import com.kosrvd.app.feature.management.domain.model.AlatElektronik
 import com.kosrvd.app.feature.management.domain.model.BillCalculationResult
+import com.kosrvd.app.feature.management.domain.model.ProrataDetail
 import java.util.Calendar
 import javax.inject.Inject
 import kotlin.math.roundToLong
@@ -9,7 +11,9 @@ import kotlin.math.roundToLong
 
 class CalculateTotalBillUseCase @Inject constructor() {
     operator fun invoke(
-        totalMonthlyBill: Long,
+        roomRentalFee: Long, // Harga Kamar Reguler
+        parkingFee: Long?,   // Harga Parkir Reguler
+        electronics: List<AlatElektronik>, // List Elektronik Reguler
         adminFees: Boolean,
         periodStart: Long,
         periodEnd: Long,
@@ -23,16 +27,47 @@ class CalculateTotalBillUseCase @Inject constructor() {
         val totalHariDalamSatuPeriode = calculateDaysInPeriod(periodEnd)
 
         // 3. Kalkulasi Prorata
-        // Rumus: (Total Hari Ditempati / Total Hari 1 Periode) * Total Biaya Normal
-        val proratedBill = (totalHariDitempati.toDouble() / totalHariDalamSatuPeriode) * totalMonthlyBill
+        // Cek apakah Prorata? (Jika hari ditempati < hari dalam periode baku)
+        val isProrata = totalHariDitempati < totalHariDalamSatuPeriode
+
+        var currentRoomFee = roomRentalFee
+        var currentParkingFee = parkingFee ?: 0L
+        val currentElectronicsCosts = mutableListOf<Long>()
+
+        var prorataDetail: ProrataDetail? = null
+
+        if (isProrata) {
+            val proSewaKamar = ((totalHariDitempati.toDouble() / totalHariDalamSatuPeriode) * roomRentalFee).roundToLong()
+            val proSewaParkir = parkingFee?.let {
+                ((totalHariDitempati.toDouble() / totalHariDalamSatuPeriode) * it).roundToLong()
+            }
+
+            val proSewaElektronik = electronics.map { alat ->
+                if (alat.cost > 0) {
+                    ((totalHariDitempati.toDouble() / totalHariDalamSatuPeriode) * alat.cost).roundToLong()
+                } else 0L // Gratis tetap 0
+            }
+
+            prorataDetail = ProrataDetail(proSewaKamar, proSewaParkir, proSewaElektronik)
+
+            // Gunakan harga prorata untuk totalan akhir
+            currentRoomFee = proSewaKamar
+            currentParkingFee = proSewaParkir ?: 0L
+            currentElectronicsCosts.addAll(proSewaElektronik)
+        } else {
+            currentElectronicsCosts.addAll(electronics.map { it.cost })
+        }
+
+        // Kalkulasi Subtotal (Kamar + Parkir + Elektronik)
+        val subtotal = currentRoomFee + currentParkingFee + currentElectronicsCosts.sum()
 
         // 4. Potong Diskon (Jika Ada)
         var discountAmount = 0.0
-        var billAfterDiscount = proratedBill
+        var billAfterDiscount = subtotal.toDouble()
         if (useDiscount && percentageDiscount.isNotBlank()) {
             val discountPercent = percentageDiscount.toDoubleOrNull() ?: 0.0
-            discountAmount = proratedBill * (discountPercent / 100.0)
-            billAfterDiscount = proratedBill - discountAmount
+            discountAmount = subtotal * (discountPercent / 100.0)
+            billAfterDiscount = subtotal - discountAmount
         }
 
         // 5. Tambahkan Biaya Admin (Jika Ada)
@@ -46,7 +81,9 @@ class CalculateTotalBillUseCase @Inject constructor() {
         // Return dalam bentuk Long (Dibulatkan agar tidak ada desimal)
         return BillCalculationResult(
             finalBill = finalBill.roundToLong(),
-            priceDiscount = discountAmount.roundToLong()
+            priceDiscount = discountAmount.roundToLong(),
+            sumDayPeriodeBill = totalHariDitempati,
+            prorataDetail = prorataDetail
         )
     }
 

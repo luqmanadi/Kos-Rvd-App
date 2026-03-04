@@ -9,6 +9,7 @@ import com.kosrvd.app.core.domain.utils.onError
 import com.kosrvd.app.feature.management.domain.model.BuatTagihan
 import com.kosrvd.app.feature.management.domain.model.Diskon
 import com.kosrvd.app.feature.management.domain.model.Penyewaan
+import com.kosrvd.app.feature.management.domain.model.ProrataDetail
 import com.kosrvd.app.feature.management.domain.model.Tagihan
 import com.kosrvd.app.feature.management.domain.repository.TagihanRepository
 import com.kosrvd.app.feature.management.presentation.designsystem.utils.getDueDateAsFifteenthOfMonth
@@ -24,7 +25,9 @@ class BuatTagihanUseCase @Inject constructor(
         periodStart: Timestamp,
         periodEnd: Timestamp,
         diskon: Diskon? = null,
-        totalBill: Long
+        totalBill: Long,
+        sumDayPeriodeBill: Int,
+        prorataDetail: ProrataDetail? = null
     ): Result<Tagihan, DataError> {
         val periodEndConvert = periodEnd.toDayMonthAndYear()
         val recentTagihanEndDates = tagihanRepository.checkTagihanByIdPenyewa(item.idPenyewa)
@@ -69,7 +72,9 @@ class BuatTagihanUseCase @Inject constructor(
             dateUploadProof = null,
             verificationDate = null,
             datePaidOff = null,
-            dateCreated = Timestamp.now()
+            dateCreated = Timestamp.now(),
+            sumDayPeriodeBill = sumDayPeriodeBill,
+            prorataDetail = prorataDetail
         )
 
         return tagihanRepository.buatTagihan(modelBuatTagihan)

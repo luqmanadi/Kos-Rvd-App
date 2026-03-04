@@ -51,8 +51,13 @@ import androidx.navigation.NavHostController
 import com.google.firebase.Timestamp
 import com.kosrvd.app.BuildConfig
 import com.kosrvd.app.core.di.laptopIp
+import com.kosrvd.app.feature.management.domain.model.AlatElektronik
 import com.kosrvd.app.feature.management.presentation.designsystem.utils.INDONESIAN_LOCALE
+import java.time.Instant
+import java.time.LocalDate
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 import java.util.Calendar
 import java.util.Date
 import java.util.TimeZone
@@ -293,4 +298,43 @@ fun Modifier.customShadow(
             paint = paint
         )
     }
+}
+
+fun calculateTotalBill (
+    hargaSewaKamar: Long,
+    hargaSewaParkirMobil: Long?,
+    hargaPemakaianElektronik: List<AlatElektronik>
+): Long {
+    return hargaSewaKamar + (hargaSewaParkirMobil ?: 0) + hargaPemakaianElektronik.sumOf { it.cost }
+}
+
+data class PeriodInfo(
+    val maxEndDateMillisUTC: Long,
+    val totalDaysInPeriod: Int
+)
+
+fun calculateMaxEndPeriodInfo(startMillisUTC: Long): PeriodInfo {
+    // Picker menggunakan UTC, jadi kita baca sebagai LocalDate UTC agar tanggalnya tidak geser
+    val startDate = Instant.ofEpochMilli(startMillisUTC).atZone(ZoneId.of("UTC")).toLocalDate()
+    val day = startDate.dayOfMonth
+
+    val startPeriodDate: LocalDate
+    val endPeriodDate: LocalDate
+
+    // Logika: Jika tanggal mulai >= 16, periode sampai tgl 15 bulan DEPAN.
+    // Jika tanggal mulai <= 15, periode sampai tgl 15 bulan INI.
+    if (day >= 16) {
+        startPeriodDate = startDate.withDayOfMonth(16)
+        endPeriodDate = startDate.plusMonths(1).withDayOfMonth(15)
+    } else {
+        startPeriodDate = startDate.minusMonths(1).withDayOfMonth(16)
+        endPeriodDate = startDate.withDayOfMonth(15)
+    }
+
+    val maxEndDateMillisUTC = endPeriodDate.atStartOfDay(ZoneId.of("UTC")).toInstant().toEpochMilli()
+
+    // Hitung total hari (inklusif, makanya ditambah 1)
+    val totalDaysInPeriod = ChronoUnit.DAYS.between(startPeriodDate, endPeriodDate).toInt() + 1
+
+    return PeriodInfo(maxEndDateMillisUTC, totalDaysInPeriod)
 }

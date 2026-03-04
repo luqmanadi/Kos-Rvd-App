@@ -40,12 +40,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kosrvd.app.R
 import com.kosrvd.app.core.presentation.designsystem.theme.KosRvdAppTheme
 import com.kosrvd.app.feature.management.domain.model.AlatElektronik
 import com.kosrvd.app.feature.management.domain.model.Diskon
+import com.kosrvd.app.feature.management.domain.model.ProrataDetail
 import com.kosrvd.app.feature.management.presentation.designsystem.component.text.InfoContentColumnText
 import com.kosrvd.app.feature.management.presentation.designsystem.component.text.InfoContentColumnTextForAlatElektronik
 import com.kosrvd.app.feature.management.presentation.designsystem.utils.toRupiahFormat
@@ -115,8 +117,12 @@ fun RincianBiayaCard(
     diskon: Diskon?,
     biayaSewaParkir: Long?,
     pemakaianElektronik: List<AlatElektronik>,
-    totalTagihan: Long
+    totalTagihan: Long,
+    sumDayPeriodeBill: Int,
+    prorataDetail: ProrataDetail?
 ) {
+    val isProrata = prorataDetail != null
+
     Card(
         modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(24.dp),
@@ -134,17 +140,21 @@ fun RincianBiayaCard(
                 RincianItem(
                     icon = Icons.Filled.KingBed,
                     title = stringResource(R.string.room_rental),
-                    subtitle = stringResource(R.string.biaya_bulanan_reguler),
-                    amount = biayaSewaKamar.toRupiahFormat()
+                    subtitle = if (!isProrata) stringResource(R.string.biaya_bulanan_reguler) else null,
+                    amount = if (isProrata) prorataDetail.proSewaKamar.toRupiahFormat() else biayaSewaKamar.toRupiahFormat(),
+                    originalAmount = if (isProrata) biayaSewaKamar.toRupiahFormat() else null,
+                    prorataDays = if (isProrata) sumDayPeriodeBill else null
                 )
 
                 // Sewa Parkir
                 if (biayaSewaParkir != null && biayaSewaParkir > 0) {
-                    Spacer(modifier = Modifier.height(12.dp))
+                    Spacer(modifier = Modifier.height(16.dp))
                     RincianItem(
                         icon = Icons.Filled.Garage,
                         title = stringResource(R.string.car_parking_rental),
-                        amount = biayaSewaParkir.toRupiahFormat()
+                        amount = if (isProrata) prorataDetail.proSewaParkir?.toRupiahFormat() ?: "" else biayaSewaParkir.toRupiahFormat(),
+                        originalAmount = if (isProrata) biayaSewaParkir.toRupiahFormat() else null,
+                        prorataDays = if (isProrata) sumDayPeriodeBill else null
                     )
                 }
 
@@ -160,9 +170,12 @@ fun RincianBiayaCard(
 
                 // Pemakaian Elektronik
                 if (pemakaianElektronik.isNotEmpty()) {
-                    Spacer(modifier = Modifier.height(12.dp))
+                    Spacer(modifier = Modifier.height(16.dp))
                     ElectronicUsageSection(
-                        electronics = pemakaianElektronik
+                        electronics = pemakaianElektronik,
+                        isProrata = isProrata,
+                        prorataDays = sumDayPeriodeBill,
+                        prorataPrices = prorataDetail?.proSewaElektronik
                     )
                 }
 
@@ -188,7 +201,9 @@ private fun RincianItem(
     icon: Any,
     title: String,
     subtitle: String? = null,
-    amount: String
+    amount: String,
+    originalAmount: String? = null, // Parameter untuk harga coret
+    prorataDays: Int? = null        // Parameter untuk memunculkan badge
 ) {
     Row(
         modifier = Modifier
@@ -205,7 +220,21 @@ private fun RincianItem(
                 color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.Normal
             )
-            if (subtitle != null) {
+            if (prorataDays != null) {
+                // Badge Prorata
+                Surface(
+                    color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f),
+                    shape = RoundedCornerShape(12.dp),
+                    modifier = Modifier.padding(top = 4.dp)
+                ) {
+                    Text(
+                        text = "Prorata ($prorataDays hari)",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp)
+                    )
+                }
+            } else if (subtitle != null) {
                 Text(
                     text = subtitle,
                     style = MaterialTheme.typography.bodySmall,
@@ -213,12 +242,24 @@ private fun RincianItem(
                 )
             }
         }
-        Text(
-            text = amount,
-            style = MaterialTheme.typography.bodyLarge,
-            fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.onSurface
-        )
+        // Bagian Harga (Coret dan Final)
+        Column(horizontalAlignment = Alignment.End) {
+            if (originalAmount != null) {
+                Text(
+                    text = originalAmount,
+                    style = MaterialTheme.typography.bodySmall.copy(
+                        textDecoration = TextDecoration.LineThrough
+                    ),
+                    color = MaterialTheme.colorScheme.outline
+                )
+            }
+            Text(
+                text = amount,
+                style = MaterialTheme.typography.bodyLarge,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+        }
     }
 }
 
@@ -250,18 +291,37 @@ private fun IconBox(icon: Any) {
 
 @Composable
 private fun ElectronicUsageSection(
-    electronics: List<AlatElektronik>
+    electronics: List<AlatElektronik>,
+    isProrata: Boolean,
+    prorataDays: Int,
+    prorataPrices: List<Long>?
 ) {
     Column(modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             IconBox(icon = Icons.Filled.FlashOn)
             Spacer(modifier = Modifier.width(16.dp))
-            Text(
-                text = stringResource(R.string.use_of_electronic_devices),
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurface,
-                fontWeight = FontWeight.Normal
-            )
+            Column {
+                Text(
+                    text = stringResource(R.string.use_of_electronic_devices),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    fontWeight = FontWeight.Bold
+                )
+                if (isProrata) {
+                    Surface(
+                        color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f),
+                        shape = RoundedCornerShape(12.dp),
+                        modifier = Modifier.padding(top = 4.dp)
+                    ) {
+                        Text(
+                            text = "Prorata ($prorataDays hari)",
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp)
+                        )
+                    }
+                }
+            }
         }
 
         Row(
@@ -280,7 +340,10 @@ private fun ElectronicUsageSection(
             )
             
             Column(modifier = Modifier.padding(start = 32.dp)) {
-                electronics.forEach { electronic ->
+                electronics.forEachIndexed { index, electronic ->
+                    val isGratis = electronic.cost == 0L
+                    val finalPrice = if (isProrata && !isGratis) prorataPrices?.getOrNull(index)?.toRupiahFormat() ?: "" else electronic.cost.toRupiahFormat()
+                    val originalPrice = if (isProrata && !isGratis) electronic.cost.toRupiahFormat() else null
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -288,22 +351,26 @@ private fun ElectronicUsageSection(
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        val toolName = if (electronic.cost == 0L) {
-                            "${electronic.toolName} (Gratis)"
-                        } else {
-                            electronic.toolName
-                        }
                         Text(
-                            text = toolName,
+                            text = if (isGratis) "${electronic.toolName} (Gratis)" else electronic.toolName,
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurface
                         )
-                        Text(
-                            text = electronic.cost.toRupiahFormat(),
-                            style = MaterialTheme.typography.bodyLarge,
-                            fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.onSurface
-                        )
+                        Column(horizontalAlignment = Alignment.End) {
+                            if (originalPrice != null) {
+                                Text(
+                                    text = originalPrice,
+                                    style = MaterialTheme.typography.bodySmall.copy(textDecoration = TextDecoration.LineThrough),
+                                    color = MaterialTheme.colorScheme.outline
+                                )
+                            }
+                            Text(
+                                text = finalPrice,
+                                style = MaterialTheme.typography.bodyMedium,
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
+                        }
                     }
                 }
             }
@@ -426,6 +493,11 @@ private fun RincianBiayaTagihanCardPreview() {
 @Composable
 private fun RincianBiayaCardPreview() {
     KosRvdAppTheme {
+        val prorataDetail = ProrataDetail(
+            proSewaKamar = 350000,
+            proSewaParkir = 50000,
+            proSewaElektronik = listOf(0, 12000, 0)
+        )
         Box(modifier = Modifier.padding(16.dp)) {
             RincianBiayaCard(
                 biayaSewaKamar = 595000,
@@ -434,9 +506,12 @@ private fun RincianBiayaCardPreview() {
                 biayaSewaParkir = 100000,
                 pemakaianElektronik = listOf(
                     AlatElektronik("Magicom", 0, "User"),
-                    AlatElektronik("Dispenser", 25000, "User")
+                    AlatElektronik("Dispenser", 25000, "User"),
+                    AlatElektronik("AC", 0, "User")
                 ),
-                totalTagihan = 715500
+                totalTagihan = 715500,
+                sumDayPeriodeBill = 15,
+                prorataDetail = prorataDetail
             )
         }
     }

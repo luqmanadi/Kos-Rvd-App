@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import com.kosrvd.app.R
 import com.kosrvd.app.core.presentation.designsystem.theme.KosRvdAppTheme
-import com.kosrvd.app.core.presentation.utils.getMaxEndDateMillisUTC
+import com.kosrvd.app.core.presentation.utils.calculateMaxEndPeriodInfo
 import com.kosrvd.app.feature.management.presentation.designsystem.utils.INDONESIAN_LOCALE
 import com.kosrvd.app.feature.management.presentation.designsystem.utils.UTC_ZONE_ID
 import com.kosrvd.app.feature.management.presentation.designsystem.utils.toDayMonthShortAndYear
@@ -54,17 +54,13 @@ fun DateRangePickerModalPeriodTagihan(
         val startMillis = dateRangePickerState.selectedStartDateMillis
         val endMillis = dateRangePickerState.selectedEndDateMillis
 
-        val maxEndDateMillis = remember(startMillis) {
-            startMillis?.let { getMaxEndDateMillisUTC(it) }
+        // --- MENGGUNAKAN LOGIKA PERIODE BARU ---
+        val periodInfo = remember(startMillis) {
+            startMillis?.let { calculateMaxEndPeriodInfo(it) }
         }
 
-        val maxDaysCount = remember(startMillis, maxEndDateMillis) {
-            if (startMillis != null && maxEndDateMillis != null) {
-                ((maxEndDateMillis - startMillis) / (1000 * 60 * 60 * 24)).toInt() + 1
-            } else {
-                31
-            }
-        }
+        val maxEndDateMillis = periodInfo?.maxEndDateMillisUTC
+        val periodTotalDays = periodInfo?.totalDaysInPeriod ?: 30 // Default fallback
 
         val isRangeTooLong = if (endMillis != null && maxEndDateMillis != null) {
             endMillis > maxEndDateMillis
@@ -111,13 +107,15 @@ fun DateRangePickerModalPeriodTagihan(
                             text = stringResource(R.string.choose_period_bill),
                             style = MaterialTheme.typography.bodyMedium
                         )
-                        val warningText = if (startMillis != null && isRangeTooLong) {
-                            "Rentang melebihi batas! (Maksimal $maxDaysCount hari)"
-                        } else if (startMillis != null && endMillis == null && maxEndDateMillis != null) {
-                            val maxDateStr = maxEndDateMillis.toDayMonthShortAndYear(UTC_ZONE_ID)
-                            "Maksimal s.d $maxDateStr ($maxDaysCount hari)"
+                        // --- TEKS PERINGATAN DINAMIS ---
+                        val warningText = if (startMillis != null && isRangeTooLong && maxEndDateMillis != null) {
+                            val maxDateStr = maxEndDateMillis.toDayMonthShortAndYear()
+                            "Rentang melebihi batas! (Maks. s.d $maxDateStr)"
+                        } else if (startMillis != null && maxEndDateMillis != null) {
+                            val maxDateStr = maxEndDateMillis.toDayMonthShortAndYear()
+                            "Maksimal s.d $maxDateStr (1 Periode = $periodTotalDays hari)"
                         } else {
-                            "Maksimal 1 bulan siklus penagihan"
+                            "Maksimal s.d tgl 15 siklus penagihan"
                         }
 
                         Text(
@@ -129,11 +127,11 @@ fun DateRangePickerModalPeriodTagihan(
                 },
                 headline = {
                     val displayText = if (startMillis != null && endMillis != null) {
-                        val startStr = startMillis.toDayMonthShortAndYear(UTC_ZONE_ID)
-                        val endStr = endMillis.toDayMonthShortAndYear(UTC_ZONE_ID)
+                        val startStr = startMillis.toDayMonthShortAndYear()
+                        val endStr = endMillis.toDayMonthShortAndYear()
                         "$startStr - $endStr"
                     } else if (startMillis != null) {
-                        val startStr = startMillis.toDayMonthShortAndYear(UTC_ZONE_ID)
+                        val startStr = startMillis.toDayMonthShortAndYear()
                         "$startStr - Periode Akhir"
                     } else {
                         "Pilih Periode"

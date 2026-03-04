@@ -74,14 +74,8 @@ fun AddDiskonCard(
                 contentDescription = "Diskon logo"
             )
             Text(
-                text = buildAnnotatedString {
-                    withStyle(SpanStyle(
-                        fontWeight = FontWeight.Bold
-                    )){
-                        append("Tambah Potongan/Diskon")
-                    }
-                    append(" (Opsional)")
-                },
+                text = "Isi Tambah Potongan/Diskon",
+                fontWeight = FontWeight.Bold,
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurface
             )

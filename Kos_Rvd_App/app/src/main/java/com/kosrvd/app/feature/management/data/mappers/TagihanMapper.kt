@@ -3,10 +3,12 @@ package com.kosrvd.app.feature.management.data.mappers
 import com.kosrvd.app.core.navigation.models.ResultTagihan
 import com.kosrvd.app.feature.management.data.repository.dto.AlatElektronikDto
 import com.kosrvd.app.feature.management.data.repository.dto.DiskonDto
+import com.kosrvd.app.feature.management.data.repository.dto.ProrataDetailDto
 import com.kosrvd.app.feature.management.data.repository.dto.TagihanDto
 import com.kosrvd.app.feature.management.domain.model.AlatElektronik
 import com.kosrvd.app.feature.management.domain.model.BuatTagihan
 import com.kosrvd.app.feature.management.domain.model.Diskon
+import com.kosrvd.app.feature.management.domain.model.ProrataDetail
 import com.kosrvd.app.feature.management.domain.model.Tagihan
 import com.kosrvd.app.feature.management.presentation.designsystem.utils.toDayMonthShortAndYear
 
@@ -32,7 +34,17 @@ fun TagihanDto.toTagihan(): Tagihan {
         residentAccountIdList = this.residentAccountIdList,
         residentNameList = this.residentNameList,
         roomRentalFee = this.roomRentalFee,
-        verificationDate = this.verificationDate
+        verificationDate = this.verificationDate,
+        sumDayPeriodeBill = this.sumDayPeriodeBill,
+        prorataDetail = this.prorataDetail?.toProRataDetail(),
+    )
+}
+
+fun ProrataDetailDto.toProRataDetail(): ProrataDetail {
+    return ProrataDetail(
+        proSewaKamar = this.proSewaKamar,
+        proSewaParkir = this.proSewaParkir,
+        proSewaElektronik = this.proSewaElektronik
     )
 }
 
@@ -75,7 +87,9 @@ fun BuatTagihan.toTagihan(idTagihan: String): Tagihan{
         dateUploadProof = this.dateUploadProof,
         verificationDate = this.verificationDate,
         datePaidOff = this.datePaidOff,
-        dateCreated = this.dateCreated
+        dateCreated = this.dateCreated,
+        sumDayPeriodeBill = this.sumDayPeriodeBill,
+        prorataDetail = this.prorataDetail
     )
 }
 
