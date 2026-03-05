@@ -59,6 +59,10 @@ object ErrorMessages {
     const val PEMAKAIAN_ALAT_ELEKTRONIK_MAPPING_ERROR = "Gagal memproses data pemakaian alat elektronik"
     const val PEMAKAIAN_ALAT_ELEKTRONIK_NOT_FOUND = "Data pemakaian alat elektronik tidak ditemukan"
 
+    // Pengaturan Error
+    const val OTOMATISASI_NOT_FOUND = "Data otomatisasi tidak ditemukan"
+    const val OTOMATISASI_MAPPING_ERROR = "Gagal memproses data automatisasi"
+
     // Kamar Error
     const val KAMAR_MAPPING_ERROR = "Gagal memproses data kamar"
     const val KAMAR_NOT_FOUND = "Data kamar tidak ditemukan"

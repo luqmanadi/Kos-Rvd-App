@@ -3,7 +3,7 @@ package com.kosrvd.app.feature.management.presentation.ui.models
 import com.kosrvd.app.core.data.constant.Constant
 import com.kosrvd.app.feature.management.domain.model.Notification
 import com.kosrvd.app.feature.management.presentation.designsystem.utils.TypeNotification
-import com.kosrvd.app.feature.management.presentation.designsystem.utils.toAnnouncementDateTimeFormat
+import com.kosrvd.app.feature.management.presentation.designsystem.utils.toAnnouncementDateTimeFormatShort
 
 data class NotificationUi(
     val idNotifikasi: String,
@@ -23,7 +23,7 @@ fun Notification.toNotificationUi(): NotificationUi {
         idDetailReferensi = this.idDetailReferensi,
         title = this.title,
         content = this.content,
-        date = this.date.toAnnouncementDateTimeFormat(),
+        date = this.date.toAnnouncementDateTimeFormatShort(),
         alreadyRead = this.alreadyRead,
         typeNotification = typeNotificationStringToTypeNotificationEnum(this.notificationType)
     )

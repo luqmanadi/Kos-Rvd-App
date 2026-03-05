@@ -92,17 +92,15 @@ class TagihanRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun checkTagihanByIdPenyewa(idPenyewa: String): Result<List<Timestamp>, DataError>{
+    override suspend fun checkTagihanByIdPenyewa(idPenyewa: String, periodEnd: Timestamp): Result<Boolean, DataError> {
         return safeCall {
-            db.collection(Constant.TAGIHAN_COLLECTION)
+            val snapshoot = db.collection(Constant.TAGIHAN_COLLECTION)
                 .whereEqualTo(Constant.ID_PENYEWA_FIELD, idPenyewa)
-                .orderBy(Constant.PERIOD_END_FIELD, Query.Direction.DESCENDING)
-                .limit(5)
+                .whereEqualTo(Constant.PERIOD_END_FIELD, periodEnd)
+                .limit(1)
                 .get()
                 .await()
-                .toObjectListOrThrow<TagihanDto>(
-                    mappingErrorMessage = ErrorMessages.TAGIHAN_NOT_FOUND
-                ).map { it.periodEnd }
+            !snapshoot.isEmpty
         }
     }
 

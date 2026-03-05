@@ -21,6 +21,6 @@ interface TagihanRepository {
 
     suspend fun buatTagihan(item: BuatTagihan): Result<Tagihan, DataError>
 
-    suspend fun checkTagihanByIdPenyewa(idPenyewa: String): Result<List<Timestamp>,DataError>
+    suspend fun checkTagihanByIdPenyewa(idPenyewa: String, periodEnd: Timestamp): Result<Boolean,DataError>
 
 }

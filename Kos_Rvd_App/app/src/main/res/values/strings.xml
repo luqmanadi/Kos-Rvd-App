@@ -494,6 +494,11 @@
     <string name="nama_penyewa_tidak_boleh_kosong">Nama penyewa tidak boleh kosong</string>
     <string name="plat_nomor_tidak_boleh_kosong">Plat nomor tidak boleh kosong</string>
     <string name="title_empty_list_zone_parking">Mohon maaf, semua zona parkir sudah penuh pada tanggal yang di pilih.</string>
+    <string name="pengaturan_tagihan">Pengaturan Otomatisasi Tagihan</string>
+    <string name="title_pengaturan_tagihan_1">Pengingat Pembayaran Otomatis</string>
+    <string name="description_pengaturan_tagihan_1">Kirim pengingat notifikasi otomatis setiap jam 09:00 WIB untuk pembayaran tagihan yang belum lunas.</string>
+    <string name="title_pengaturan_tagihan_2">Buat Tagihan Otomatis</string>
+    <string name="description_pengaturan_tagihan_2">Generate tagihan otomatis setiap tanggal 10 pukul 07:00 WIB.</string>
 
 
     // Menu

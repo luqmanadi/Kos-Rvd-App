@@ -12,7 +12,10 @@ object Constant {
     const val PARKIR_HARIAN_MOBIL_COLLECTION = "parkirHarianMobil"
     const val ZONA_PARKIRAN_COLLECTION = "zonaParkiran"
     const val KAMAR_COLLECTION = "kamar"
+    const val PENGATURAN_COLLECTION = "pengaturan"
 
+    // Name Document
+    const val OTOMATISASI_DOC = "otomatisasi"
 
     // Child Firebase Storage
     const val IMAGE_LAPORAN_KELUHAN_FOLDER = "imageLaporanKeluhan"
@@ -34,6 +37,8 @@ object Constant {
     const val TAG_PENGHUNI_REPO = "RepoPenghuni"
 
     // Name Field
+    const val USE_AUTO_REMINDER_FIELD = "useAutoReminder"
+    const val USE_GENERATE_OTOMATIS_FIELD = "useGenerateOtomatis"
     const val NAME_FIELD = "name"
     const val PHONE_NUMBER_FIELD = "dataPenghuni.phoneNumber"
     const val ADDRESS_FIELD = "dataPenghuni.address"

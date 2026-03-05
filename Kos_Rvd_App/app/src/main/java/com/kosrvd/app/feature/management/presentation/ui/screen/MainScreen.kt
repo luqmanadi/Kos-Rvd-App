@@ -70,6 +70,9 @@ fun MainScreen(
             MainScreenEvent.NavigateToCreateTagihan -> {
                 rootNavController.navigate(NavigationScreen.BuatTagihanScreen)
             }
+            MainScreenEvent.NavigateToPengaturanScreen -> {
+                rootNavController.navigate(NavigationScreen.PengaturanTagihanScreen)
+            }
         }
     }
 

@@ -25,8 +25,10 @@ sealed interface MainScreenEvent {
     data object NavigateToNotificationScreen : MainScreenEvent
     data object NavigateToCreateTagihan: MainScreenEvent
     data object NavigateToCreateKeluhan: MainScreenEvent
+    data object NavigateToPengaturanScreen: MainScreenEvent
 }
 sealed interface MainScreenActions{
+    data object NavigateToPengaturanScreen: MainScreenActions
     data object NavigateToCreateTagihan: MainScreenActions
     data object NavigateToNotificationScreen: MainScreenActions
     data object NavigateToCreateKeluhan: MainScreenActions
@@ -58,6 +60,13 @@ class MainScreenViewModel @Inject constructor(
             MainScreenActions.NavigateToNotificationScreen -> navigateToNotificationScreen()
             MainScreenActions.NavigateToCreateKeluhan -> navigateCreateKeluhan()
             MainScreenActions.NavigateToCreateTagihan -> navigateCreateTagihan()
+            MainScreenActions.NavigateToPengaturanScreen -> navigateToPengaturanScreen()
+        }
+    }
+
+    private fun navigateToPengaturanScreen() {
+        viewModelScope.launch {
+            _events.send(MainScreenEvent.NavigateToPengaturanScreen)
         }
     }
 

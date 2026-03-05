@@ -24,6 +24,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kosrvd.app.R
@@ -73,6 +74,7 @@ fun ItemNotificationCard(
                 Spacer(Modifier.weight(1f))
                 Text(
                     text = dataNotificationUi.date,
+                    textAlign = TextAlign.Right,
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurface
                 )
@@ -127,9 +129,9 @@ private fun ItemNotificationCardPreview() {
                 idNotifikasi = "",
                 idAkun = "",
                 idDetailReferensi = "",
-                title = "Pembayaran Tagihan ditolak",
+                title = "⚠\uFE0F TAGIHAN MULAI MENUNGGAK ⚠\uFE0F",
                 content = "Pembayaran ditolak. Segera lakukan pembayaran tagihan kamar no 3. paling lambat 15 Oktober 2025, 23:59",
-                date = "12 Oktober 2025, 07:00",
+                date = "12 Okt 2025, 07:00",
                 alreadyRead = false,
                 typeNotification = TypeNotification.TAGIHAN
             ),

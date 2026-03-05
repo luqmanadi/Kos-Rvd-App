@@ -76,7 +76,7 @@ class MainViewModel @Inject constructor(
 
     fun handleDeepLink(type: String?, refId: String?, notificationId: String?) {
 
-        if (notificationId != null){
+        if (!notificationId.isNullOrEmpty()){
             viewModelScope.launch {
                 notificationRepository.updateNotificationAlreadyRead(notificationId)
                     .onSuccess {

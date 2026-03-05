@@ -13,7 +13,6 @@ import com.kosrvd.app.feature.management.domain.model.ProrataDetail
 import com.kosrvd.app.feature.management.domain.model.Tagihan
 import com.kosrvd.app.feature.management.domain.repository.TagihanRepository
 import com.kosrvd.app.feature.management.presentation.designsystem.utils.calculateSmartDueDate
-import com.kosrvd.app.feature.management.presentation.designsystem.utils.toDayMonthAndYear
 import javax.inject.Inject
 
 class BuatTagihanUseCase @Inject constructor(
@@ -29,14 +28,9 @@ class BuatTagihanUseCase @Inject constructor(
         sumDayPeriodeBill: Int,
         prorataDetail: ProrataDetail? = null
     ): Result<Tagihan, DataError> {
-        val periodEndConvert = periodEnd.toDayMonthAndYear()
-        val recentTagihanEndDates = tagihanRepository.checkTagihanByIdPenyewa(item.idPenyewa)
+        val isAlreadyExist = tagihanRepository.checkTagihanByIdPenyewa(item.idPenyewa, periodEnd)
             .onError { return Result.Error(it) }
-            .getOrNull() ?: emptyList()
-
-        val isAlreadyExist = recentTagihanEndDates.any {
-            it.toDayMonthAndYear() == periodEndConvert
-        }
+            .getOrNull() ?: false
 
         if (isAlreadyExist){
             return Result.Error(DataError.TAGIHAN_SUDAH_TERDAFTAR)

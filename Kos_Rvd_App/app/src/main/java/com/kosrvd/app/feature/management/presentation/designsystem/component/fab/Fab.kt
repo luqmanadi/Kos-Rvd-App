@@ -1,5 +1,6 @@
 package com.kosrvd.app.feature.management.presentation.designsystem.component.fab
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -31,7 +32,11 @@ fun Fab(
         currentDestination?.hierarchy?.any { it.hasRoute(config.route::class) } == true && userRole == config.requiredRole
     }
 
-    fabConfig?.FabContent(
-        mainActions = mainScreenActions
-    )
+    AnimatedVisibility(
+        visible = fabConfig != null
+    ) {
+        fabConfig?.FabContent(
+            mainActions = mainScreenActions
+        )
+    }
 }

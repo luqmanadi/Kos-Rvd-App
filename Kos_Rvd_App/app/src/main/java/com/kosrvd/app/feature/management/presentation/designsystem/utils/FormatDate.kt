@@ -33,6 +33,16 @@ fun Timestamp.toAnnouncementDateTimeFormat(): String {
     return formatter.format(instant)
 }
 
+// contoh output: "15 Jul 2025, 23:59"
+fun Timestamp.toAnnouncementDateTimeFormatShort(): String {
+    val instant: Instant = this.toDate().toInstant()
+    val pattern = "dd MMM yyyy, HH:mm"
+    val formatter = DateTimeFormatter
+        .ofPattern(pattern, INDONESIAN_LOCALE)
+        .withZone(JAKARTA_ZONE_ID)
+    return formatter.format(instant)
+}
+
 // Contoh Output: "Bulan Juni"
 fun Timestamp.toMonth(): String {
     val instant: Instant = this.toDate().toInstant()

@@ -4,6 +4,7 @@ import com.kosrvd.app.feature.management.data.repository.KamarRepositoryImpl
 import com.kosrvd.app.feature.management.data.repository.KeluhanRepositoryImpl
 import com.kosrvd.app.feature.management.data.repository.NotificationRepositoryImpl
 import com.kosrvd.app.feature.management.data.repository.ParkirHarianMobilRepositoryImpl
+import com.kosrvd.app.feature.management.data.repository.PengaturanRepositoryImpl
 import com.kosrvd.app.feature.management.data.repository.PengumumanRepositoryImpl
 import com.kosrvd.app.feature.management.data.repository.PenyewaanRepositoryImpl
 import com.kosrvd.app.feature.management.data.repository.RingkasanDashboardAdminRepositoryImpl
@@ -13,6 +14,7 @@ import com.kosrvd.app.feature.management.domain.repository.KamarRepository
 import com.kosrvd.app.feature.management.domain.repository.KeluhanRepository
 import com.kosrvd.app.feature.management.domain.repository.NotificationRepository
 import com.kosrvd.app.feature.management.domain.repository.ParkirHarianMobilRepository
+import com.kosrvd.app.feature.management.domain.repository.PengaturanRepository
 import com.kosrvd.app.feature.management.domain.repository.PengumumanRepository
 import com.kosrvd.app.feature.management.domain.repository.PenyewaanRepository
 import com.kosrvd.app.feature.management.domain.repository.RingkasanDashboardAdminRepository
@@ -65,4 +67,8 @@ abstract class ManagementModule {
     @Binds
     @Singleton
     abstract fun bindParkirHarianMobilRepository(parkirHarianMobilRepositoryImpl: ParkirHarianMobilRepositoryImpl): ParkirHarianMobilRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindPengaturanRepository(pengaturanRepositoryImpl: PengaturanRepositoryImpl): PengaturanRepository
 }

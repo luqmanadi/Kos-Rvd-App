@@ -12,9 +12,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.Color
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
@@ -76,6 +78,9 @@ import com.kosrvd.app.feature.management.presentation.ui.screen.tagihan.buat_tag
 import com.kosrvd.app.feature.management.presentation.ui.screen.tagihan.detail_tagihan.DetailTagihanEvents
 import com.kosrvd.app.feature.management.presentation.ui.screen.tagihan.detail_tagihan.DetailTagihanScreen
 import com.kosrvd.app.feature.management.presentation.ui.screen.tagihan.detail_tagihan.DetailTagihanViewModel
+import com.kosrvd.app.feature.management.presentation.ui.screen.tagihan.pengaturan_tagihan.PengaturanTagihanEvents
+import com.kosrvd.app.feature.management.presentation.ui.screen.tagihan.pengaturan_tagihan.PengaturanTagihanScreen
+import com.kosrvd.app.feature.management.presentation.ui.screen.tagihan.pengaturan_tagihan.PengaturanTagihanViewModel
 import kotlinx.coroutines.launch
 import kotlin.reflect.typeOf
 
@@ -240,6 +245,35 @@ fun RootNavGraph(
                 buatTagihanUiState = buatTagihanUiState,
                 buatTagihanActions = buatTagihanViewModel::onActions,
                 customToastHostState = customToastHostState
+            )
+        }
+
+        composable<NavigationScreen.PengaturanTagihanScreen> {
+            val pengaturanTagihanViewModel = hiltViewModel<PengaturanTagihanViewModel>()
+            val pengaturanTagihanUiState by pengaturanTagihanViewModel.state.collectAsStateWithLifecycle()
+            val scope = rememberCoroutineScope()
+            val customToastHostState = rememberCustomToastHostState()
+            var colorShowBanner by remember { mutableStateOf(Color.Unspecified) }
+
+            ObserveAsEvents(pengaturanTagihanViewModel.events) { events ->
+                when(events){
+                    PengaturanTagihanEvents.NavigateBack -> {
+                        navController.navigateUp()
+                    }
+                    is PengaturanTagihanEvents.ShowSnackBar -> {
+                        scope.launch {
+                            colorShowBanner = if (events.isRedColor) Color(0xFFBA1A1A) else Color(0xFF006877)
+                            customToastHostState.showToast(events.message)
+                        }
+                    }
+                }
+            }
+
+            PengaturanTagihanScreen(
+                pengaturanTagihanUiState = pengaturanTagihanUiState,
+                pengaturanTagihanActions = pengaturanTagihanViewModel::onActions,
+                customToastHostState = customToastHostState,
+                colorToast = colorShowBanner
             )
         }
 

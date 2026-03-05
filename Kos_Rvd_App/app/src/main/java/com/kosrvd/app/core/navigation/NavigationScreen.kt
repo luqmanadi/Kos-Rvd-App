@@ -95,6 +95,11 @@ sealed interface NavigationScreen {
         override val route: String = "buat_tagihan"
     }
 
+    @Serializable
+    data object PengaturanTagihanScreen: NavigationScreen {
+        override val route: String = "pengaturan_tagihan"
+    }
+
 
     // Keluhan Graph di dalam Main Graph
     @Serializable
