@@ -51,6 +51,24 @@ async function updateAdminDashboardStat(db, updateData) {
   }
 }
 
+/**
+ * Helper untuk membuat objek Date dengan zona waktu WIB (+07:00).
+ *
+ * @param {number} year - Tahun (contoh: 2024).
+ * @param {number} month - Bulan dalam angka 0-11 (0 = Januari, 11 = Desember).
+ * @param {number} day - Tanggal dalam sebulan (1-31).
+ * @param {number} hour - Jam (0-23).
+ * @param {number} minute - Menit (0-59).
+ * @param {number} second - Detik (0-59).
+ * @return {Date} Objek Date yang sudah disesuaikan dengan offset WIB.
+ */
+function createWibDate(year, month, day, hour, minute, second) {
+  const pad = (n) => n.toString().padStart(2, "0");
+  // Format ISO string dengan offset WIB: YYYY-MM-DDTHH:mm:ss.000+07:00
+  const isoString = `${year}-${pad(month + 1)}-${pad(day)}T` +
+      `${pad(hour)}:${pad(minute)}:${pad(second)}.000+07:00`;
+  return new Date(isoString);
+}
 
 // Variabel untuk status tagihan
 const BELUM_LUNAS = "Belum Lunas";
@@ -67,6 +85,7 @@ const PENGUMUMAN = "Pengumuman";
 module.exports = {
   getFilePathFromUrl,
   updateAdminDashboardStat,
+  createWibDate,
   BELUM_LUNAS,
   LUNAS,
   MENUNGGU_VERIFIKASI,

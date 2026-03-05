@@ -17,7 +17,7 @@ const validateAuth = async (req) => {
   try {
     return await admin.auth().verifyIdToken(idToken);
   } catch (error) {
-    throw new HttpsError("unauthenticated", "Invalid token");
+    throw new HttpsError("unauthenticated", "Invalid token", error);
   }
 };
 

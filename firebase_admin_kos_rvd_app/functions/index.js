@@ -24,6 +24,7 @@ const notifikasi = require("./src/notifikasi");
 const zonaParkiran = require("./src/zona_parkiran");
 const parkirHarian = require("./src/parkir_harian");
 const penyewaan = require("./src/penyewaan");
+const pengaturan = require("./src/pengaturan");
 
 // --- EXPORT FUNCTIONS ---
 
@@ -66,3 +67,7 @@ exports.onDucumentDeletedParkirHarianMobil =
 // Penyewaan
 exports.onPenyewaanCreate = penyewaan.onPenyewaanCreate;
 exports.onPenyewaanUpdate = penyewaan.onPenyewaanUpdate;
+
+// Pengaturan
+exports.generateTagihanOtomatis = pengaturan.generateTagihanOtomatis;
+exports.pengingatTagihanHarian = pengaturan.pengingatTagihanHarian;

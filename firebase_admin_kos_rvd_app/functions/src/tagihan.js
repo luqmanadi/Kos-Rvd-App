@@ -155,11 +155,9 @@ exports.onTagihanUpdate = onDocumentUpdated("tagihan/{tagihanId}",
           // B. Notif ke Penghuni (Deadline tgl 15)
           const residentIds = dataAfter.residentAccountIdList || [];
 
-          // Hitung tanggal 15 bulan ini, jam 23:59
-          const deadline = new Date();
-          deadline.setDate(15);
-          deadline.setHours(23, 59, 59, 999);
-          const deadlineStr = deadline.toLocaleDateString("id-ID", {
+          const dueDateTs = dataAfter.dueDate;
+          const deadlineDate = dueDateTs.toDate();
+          const deadlineStr = deadlineDate.toLocaleDateString("id-ID", {
             day: "numeric",
             month: "long",
             year: "numeric",
@@ -216,11 +214,9 @@ exports.onTagihanCreate = onDocumentCreated("tagihan/{tagihanId}",
         // 2. Buat Notifikasi Penghuni
         const roomNo = dataTagihanBaru.numberRoom;
 
-        // Deadline tanggal 15 bulan pembuatan
-        const deadline = new Date();
-        deadline.setDate(15);
-        deadline.setHours(23, 59, 59, 999);
-        const deadlineStr = deadline.toLocaleDateString("id-ID", {
+        const dueDateTs = dataTagihanBaru.dueDate;
+        const deadlineDate = dueDateTs.toDate();
+        const deadlineStr = deadlineDate.toLocaleDateString("id-ID", {
           day: "numeric",
           month: "long",
           year: "numeric",

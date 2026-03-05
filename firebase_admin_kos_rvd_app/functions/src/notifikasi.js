@@ -68,6 +68,9 @@ exports.onNotifikasiCreate = onDocumentCreated("notifikasi/{notifikasiId}",
               typeNotification: typeNotification,
               idDetailReferensi: idDetailReferensi,
             },
+            android: {
+              priority: "high",
+            },
             tokens: tokens,
           };
 
