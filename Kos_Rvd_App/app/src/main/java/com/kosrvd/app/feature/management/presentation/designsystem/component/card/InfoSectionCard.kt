@@ -1,6 +1,5 @@
 package com.kosrvd.app.feature.management.presentation.designsystem.component.card
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -40,6 +39,7 @@ fun InfoSectionCard(
     modifier: Modifier = Modifier,
     icon: ImageVector,
     title: String,
+    isRedBackgroundIcon: Boolean = false,
     action: CardAction, // Default tidak ada aksi
     footer: (@Composable () -> Unit)? = null, // Opsional untuk bagian bawah
     content: @Composable () -> Unit // Slot untuk isi (bisa teks/list)
@@ -65,6 +65,16 @@ fun InfoSectionCard(
         )
 
     val bottomPadding = if (footer != null) 10.dp else 16.dp
+    val backgroundIconColor = if (isRedBackgroundIcon) {
+        MaterialTheme.colorScheme.error
+    } else {
+        MaterialTheme.colorScheme.primary
+    }
+    val iconColor = if (isRedBackgroundIcon) {
+        MaterialTheme.colorScheme.onError
+    } else {
+        MaterialTheme.colorScheme.onPrimary
+    }
 
     Card(
         modifier = cardModifier,
@@ -75,15 +85,15 @@ fun InfoSectionCard(
     ) {
         Row(
             Modifier.padding(start = 16.dp, top = 16.dp, bottom = bottomPadding, end = 16.dp),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.Top
         ) {
             Icon(
                 imageVector = icon,
                 contentDescription = title,
-                tint = MaterialTheme.colorScheme.onPrimary,
+                tint = iconColor,
                 modifier = Modifier
                     .background(
-                        color = MaterialTheme.colorScheme.primary,
+                        color = backgroundIconColor,
                         shape = RoundedCornerShape(10.dp)
                     )
                     .padding(8.dp)
@@ -160,7 +170,7 @@ private fun InfoSectionCardPreview() {
             Modifier.padding(20.dp),
             icon = Icons.Filled.Group,
             title = "Kapasitas Penghuni",
-            action = CardAction.NavigationIconFooter({}),
+            action = CardAction.None,
             footer = footer,
             content = {
                 Text(

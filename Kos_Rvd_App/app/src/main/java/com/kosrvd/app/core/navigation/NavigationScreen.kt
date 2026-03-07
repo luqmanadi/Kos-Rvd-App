@@ -170,14 +170,14 @@ sealed interface NavigationScreen {
         override val route: String = "pindah_kamar"
     }
     @Serializable
-    data class EditAtauTambahPemakaianAlatEleketronikScreen(
+    data class EditPemakaianAlatEleketronikScreen(
         val idPenyewaan: String, val idPakaiAlat: String? = null
     ) : NavigationScreen {
         override val route: String = "edit_atau_tambah_pemakaian_alat_elektronik"
     }
 
     @Serializable
-    data class EditAtauTambahPemakaianParkirMobilScreen(
+    data class EditPemakaianParkirMobilBulananScreen(
         val idPenyewaan: String, val idPakaiParkiranMobil: String? = null
     ) : NavigationScreen {
         override val route: String = "edit_atau_tambah_pemakaian_parkir_mobil"

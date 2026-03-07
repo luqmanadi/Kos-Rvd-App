@@ -83,4 +83,12 @@ class PenyewaanRepositoryImpl @Inject constructor(
         }.map { it.listResident.size }
     }
 
+    override suspend fun endPenyewaan(idPenyewaan: String): Result<Unit, DataError> {
+        return safeCall {
+            db.collection(Constant.PENYEWAAN_COLLECTION)
+                .document(idPenyewaan)
+                .update(Constant.RENTAL_STATUS_FIELD, Constant.NON_ACTIVE)
+                .await()
+        }
+    }
 }

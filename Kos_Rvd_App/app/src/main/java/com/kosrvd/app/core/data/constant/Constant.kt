@@ -88,6 +88,7 @@ object Constant {
 
     // Name Value
     const val ACTIVE = "Aktif"
+    const val NON_ACTIVE = "Tidak Aktif"
     const val ADMIN_FEES: Long = 50000
     const val YES = "Iya"
     const val NO = "Tidak"
@@ -141,6 +142,9 @@ object Constant {
     const val REMOVE_PARKIR_HARIAN_KEY = "RemoveParkirHarian"
     const val SUCCESS_UPLOAD_PROOF_OF_PAYMENT_PARKIR_HARIAN_KEY = "SuccessUploadProofOfPaymentParkirH"
     const val CANCEL_PARKIR_HARIAN_KEY = "CancelParkirHarian"
+    const val NON_ACTIVE_RENTAL_KEY = "NonActiveRental"
+    const val UPDATE_PEMAKAIAN_PARKIR_MOBIL_BULANAN_KEY = "UpdatePemakaianParkirMobilBulanan"
+    const val UPDATE_PEMAKAIAN_ALAT_ELEKTRONIK_KEY = "UpdatePemakaianAlatElektronik"
 
 
     // Title Notif

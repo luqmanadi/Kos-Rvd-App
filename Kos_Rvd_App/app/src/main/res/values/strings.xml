@@ -194,6 +194,7 @@
     <string name="total_bill_with_a_colon">Total Tagihan :</string>
     <string name="total_with_a_colon">Total: </string>
     <string name="start_rental_date">Tanggal Mulai Sewa</string>
+    <string name="end_rental_date">Tanggal Akhir Sewa</string>
     <string name="start_date">Tanggal Mulai</string>
     <string name="end_date">Tanggal Selesai</string>
     <string name="rental_begin">Mulai Sewa</string>
@@ -346,7 +347,7 @@
     <string name="subtitle_dialog_confirmation_lease_end_parking_car_part_2">mengakhiri sewa pemakaian parkiran ini? </string>
     <string name="subtitle_dialog_confirmation_lease_end_parking_car_part_3">Tindakan ini tidak dapat dibatalkan.</string>
     <string name="success_lease_end_parking_car">Berhasil Akhiri Sewa Pemakaian Parkiran</string>
-    <string name="not_usage_tools">Tidak Memakai Alat Elektronik Daya Tinggi</string>
+    <string name="not_usage_tools">Tidak Memakai Alat</string>
     <string name="add_usage">Tambah Pemakaian</string>
     <string name="not_usage_parking">Tidak Memakai Parkiran</string>
     <string name="bill_not_pay_off">Tagihan Belum Lunas</string>
@@ -500,6 +501,7 @@
     <string name="title_pengaturan_tagihan_2">Buat Tagihan Otomatis</string>
     <string name="description_pengaturan_tagihan_2">Generate tagihan otomatis setiap tanggal 10 pukul 07:00 WIB.</string>
     <string name="title_otomatisasi_delete_notif">Notifikasi akan terhapus otomatis dalam 30 hari setelah dikirim</string>
+    <string name="detail_rent">Detail Penyewa</string>
 
 
     // Menu

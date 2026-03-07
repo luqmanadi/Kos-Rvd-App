@@ -12,4 +12,5 @@ interface PenyewaanRepository {
     suspend fun getPenyewaanById(idPenyewaan: String): Result<Penyewaan, DataError>
     suspend fun buatPenyewaan(item: BuatPenyewaan): Result<Penyewaan, DataError>
     suspend fun getJumlahPenghuniByIdKamarAndStatusPenyewaanAktif(idKamar: String): Result<Int, DataError>
+    suspend fun endPenyewaan(idPenyewaan: String): Result<Unit, DataError>
 }

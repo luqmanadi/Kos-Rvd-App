@@ -35,7 +35,7 @@ sealed interface DetailPenyewaActions {
 }
 
 @HiltViewModel
-class DetailPenyewaViewModel @Inject constructor(
+class DetailPenyewaanViewModel @Inject constructor(
     private val penyewaanRepository: PenyewaanRepository,
     private val savedStateHandle: SavedStateHandle
 ): ViewModel() {
