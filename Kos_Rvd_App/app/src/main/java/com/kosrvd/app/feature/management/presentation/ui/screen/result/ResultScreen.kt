@@ -357,7 +357,7 @@ private fun ResultScreePreview() {
         statusLaporan = "Menunggu Konfirmasi",
         namaPelapor = "Ndim ndim",
         judulLaporan = "Kamar Boror",
-        nomorKamar = 4,
+        nomorKamar = 0,
     )
     val resultTagihan =  ResultTagihan(
         idTagihan = "hefheifheifhwohfoiewhfowieejfiwjriofjoriwjf",
@@ -378,7 +378,7 @@ private fun ResultScreePreview() {
     )
     KosRvdAppTheme {
         ResultScreen(
-            typeResult = TypeResult.BAYAR_TAGIHAN,
+            typeResult = TypeResult.BUAT_KELUHAN,
             resultLaporanKeluhan = resultLaporan,
             resultTagihan = resultTagihan,
             resultCreatePenyewaan = resultCreatePenyewaan,

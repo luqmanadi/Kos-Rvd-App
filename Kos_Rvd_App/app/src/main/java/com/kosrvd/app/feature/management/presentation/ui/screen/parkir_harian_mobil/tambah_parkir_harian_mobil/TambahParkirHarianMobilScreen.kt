@@ -45,6 +45,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.focus.onFocusEvent
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -77,11 +78,16 @@ fun TambahParkirHarianMobilScreen(
     tambahParkirHarianMobilActions: (TambahParkirHarianMobilActions) -> Unit,
     customToastHostState: CustomToastHostState
 ) {
+    val keyboardController = LocalSoftwareKeyboardController.current
+
     Scaffold(
         topBar = {
             TopBarLeftTitle(
                 title = stringResource(R.string.add_usage_parking_card),
-                onBackClick = { tambahParkirHarianMobilActions(TambahParkirHarianMobilActions.NavigateBack) }
+                onBackClick = {
+                    keyboardController?.hide()
+                    tambahParkirHarianMobilActions(TambahParkirHarianMobilActions.NavigateBack)
+                }
             )
         }
     ) { innerPadding ->
@@ -157,7 +163,8 @@ fun TambahParkirHarianMobilScreen(
                 isButtonSubmitLoading = tambahParkirHarianMobilUiState.isButtonSubmitLoading,
                 onBack = { tambahParkirHarianMobilActions(TambahParkirHarianMobilActions.BackPage)},
                 onNext = { tambahParkirHarianMobilActions(TambahParkirHarianMobilActions.NextPage)},
-                onSubmit = { tambahParkirHarianMobilActions(TambahParkirHarianMobilActions.TambahParkirHarianMobil)}
+                onSubmit = { tambahParkirHarianMobilActions(TambahParkirHarianMobilActions.TambahParkirHarianMobil)},
+                keyboardController = keyboardController
             )
         }
     }

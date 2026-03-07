@@ -1,11 +1,13 @@
 package com.kosrvd.app.feature.management.presentation.ui.screen.result.component
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -87,7 +89,9 @@ fun InfoResulTagihanCard(
                 icon = Icons.Default.ChangeCircle,
                 titleTextInfo = stringResource(R.string.bill_status_with_a_colon),
                 contextTextResult = {
-                    StatusBackgroundText(status = resultTagihan.statusTagihan)
+                    StatusBackgroundText(
+                        status = resultTagihan.statusTagihan,
+                    )
                 },
             )
             Spacer(Modifier.height(15.dp))
@@ -95,7 +99,9 @@ fun InfoResulTagihanCard(
                 icon = Icons.Default.DoorFront,
                 titleTextInfo = stringResource(R.string.number_room_with_a_colon),
                 contextTextResult = {
-                    BackgroundInfoText(text = resultTagihan.nomorKamar.toNumber())
+                    BackgroundInfoText(
+                        text = resultTagihan.nomorKamar.toNumber(),
+                    )
                 },
             )
             Spacer(Modifier.height(15.dp))
@@ -104,7 +110,8 @@ fun InfoResulTagihanCard(
                 titleTextInfo = stringResource(R.string.period_with_a_color),
                 contextTextResult = {
                     BackgroundInfoText(
-                        text = "${resultTagihan.periodStart} - ${resultTagihan.periodEnd}"
+                        modifier = Modifier.widthIn(max = 190.dp),
+                        text = "${resultTagihan.periodStart} - ${resultTagihan.periodEnd}",
                     )
                 },
             )
@@ -114,8 +121,9 @@ fun InfoResulTagihanCard(
                 titleTextInfo = stringResource(lastTitleSection),
                 contextTextResult = {
                     BackgroundInfoText(
+                        modifier = Modifier.widthIn(max = 170.dp),
                         text = resultTagihan.jumlahDibayar.toRupiahFormat(),
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
                     )
                 },
             )
@@ -190,7 +198,9 @@ fun InfoResultBuatKeluhanCard(
                 icon = Icons.Default.ChangeCircle,
                 titleTextInfo = stringResource(R.string.status_with_colon),
                 contextTextResult = {
-                    StatusBackgroundText(status = resultBuatKeluhan.statusLaporan)
+                    StatusBackgroundText(
+                        status = resultBuatKeluhan.statusLaporan,
+                    )
                 },
             )
             Spacer(Modifier.height(15.dp))
@@ -198,7 +208,9 @@ fun InfoResultBuatKeluhanCard(
                 icon = Icons.Default.DoorFront,
                 titleTextInfo = stringResource(R.string.number_room_with_a_colon),
                 contextTextResult = {
-                    BackgroundInfoText(text = resultBuatKeluhan.nomorKamar.toNumber())
+                    BackgroundInfoText(
+                        text = resultBuatKeluhan.nomorKamar.toNumber(),
+                    )
                 },
             )
             Spacer(Modifier.height(15.dp))
@@ -210,7 +222,7 @@ fun InfoResultBuatKeluhanCard(
                         modifier = Modifier.widthIn(max = 170.dp),
                         text = resultBuatKeluhan.namaPelapor,
                         maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
+                        overflow = TextOverflow.Ellipsis,
                     )
                 },
             )
@@ -223,7 +235,7 @@ fun InfoResultBuatKeluhanCard(
                         modifier = Modifier.widthIn(max = 200.dp),
                         text = resultBuatKeluhan.judulLaporan,
                         maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
+                        overflow = TextOverflow.Ellipsis,
                     )
                 },
             )
@@ -270,7 +282,7 @@ fun InfoResultCreatePenyewaanCard(
                         modifier = Modifier.widthIn(max = 170.dp),
                         text = resultCreatePenyewaan.idPenyewaan,
                         maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
+                        overflow = TextOverflow.Ellipsis,
                     )
                 },
             )
@@ -283,7 +295,7 @@ fun InfoResultCreatePenyewaanCard(
                         text = resultCreatePenyewaan.status,
                         colorBg = MaterialTheme.colorScheme.primary,
                         fontWeight = FontWeight.Bold,
-                        style = MaterialTheme.typography.bodySmall
+                        style = MaterialTheme.typography.bodySmall,
                     )
                 },
             )
@@ -292,7 +304,9 @@ fun InfoResultCreatePenyewaanCard(
                 icon = Icons.Default.DoorFront,
                 titleTextInfo = stringResource(R.string.number_room_with_a_colon),
                 contextTextResult = {
-                    BackgroundInfoText(text = resultCreatePenyewaan.nomorKamar.toNumber())
+                    BackgroundInfoText(
+                        text = resultCreatePenyewaan.nomorKamar.toNumber(),
+                    )
                 },
             )
             Spacer(Modifier.height(15.dp))
@@ -300,7 +314,10 @@ fun InfoResultCreatePenyewaanCard(
                 icon = Icons.Default.Group,
                 titleTextInfo = stringResource(R.string.resident_with_a_colon),
                 contextTextResult = {
-                    BackgroundInfoText(text = resultCreatePenyewaan.penghuni)
+                    BackgroundInfoText(
+                        modifier = Modifier.widthIn(max = 170.dp),
+                        text = resultCreatePenyewaan.penghuni,
+                    )
                 },
             )
             Spacer(Modifier.height(15.dp))
@@ -309,17 +326,15 @@ fun InfoResultCreatePenyewaanCard(
                 titleTextInfo = stringResource(R.string.total_bill_with_a_colon ),
                 contextTextResult = {
                     BackgroundInfoText(
+                        modifier = Modifier.widthIn(max = 170.dp),
                         text = resultCreatePenyewaan.totalTagihan.toRupiahFormat(),
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
                     )
                 },
             )
         }
     }
 }
-
-
-
 
 @Composable
 private fun RowTextInfoResult(
@@ -329,9 +344,7 @@ private fun RowTextInfoResult(
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding()
+        modifier = Modifier.fillMaxWidth(),
     ) {
         IconTextInfo(
             icon = icon,
@@ -341,11 +354,15 @@ private fun RowTextInfoResult(
             spacing = 5.dp,
             sizeIcon = 32.dp
         )
-        Spacer(Modifier.weight(1f))
-        contextTextResult()
+        Spacer(Modifier.width(10.dp))
+        Box(
+            modifier = Modifier.weight(1f),
+            contentAlignment = Alignment.CenterEnd
+        ) {
+            contextTextResult()
+        }
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable

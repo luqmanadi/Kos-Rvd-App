@@ -499,6 +499,7 @@
     <string name="description_pengaturan_tagihan_1">Kirim pengingat notifikasi otomatis setiap jam 09:00 WIB untuk pembayaran tagihan yang belum lunas.</string>
     <string name="title_pengaturan_tagihan_2">Buat Tagihan Otomatis</string>
     <string name="description_pengaturan_tagihan_2">Generate tagihan otomatis setiap tanggal 10 pukul 07:00 WIB.</string>
+    <string name="title_otomatisasi_delete_notif">Notifikasi akan terhapus otomatis dalam 30 hari setelah dikirim</string>
 
 
     // Menu

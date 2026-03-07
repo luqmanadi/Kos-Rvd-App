@@ -1,6 +1,6 @@
 [versions]
 activityCompose = "1.12.4"
-agp = "9.0.1"
+agp = "9.1.0"
 coilCompose = "3.4.0"
 coilNetworkOkhttp = "3.4.0"
 composeBom = "2026.02.01"
@@ -32,6 +32,7 @@ uiTextGoogleFonts = "1.10.4"
 window = "1.5.1"
 windowCore = "1.5.1"
 exifinterface = "1.4.2"
+uiGraphics = "1.10.4"
 
 
 [libraries]
@@ -85,6 +86,7 @@ firebase-appcheck-debug = { group = "com.google.firebase", name = "firebase-appc
 okhttp-dnsoverhttps = { module = "com.squareup.okhttp3:okhttp-dnsoverhttps", version.ref = "okhttpDnsoverhttps" }
 symbol-processing-gradle-plugin = { module = "com.google.devtoolsksp:symbol-processing-gradle-plugin", version.ref = "ksp" }
 androidx-exifinterface = { group = "androidx.exifinterface", name = "exifinterface", version.ref = "exifinterface" }
+androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics", version.ref = "uiGraphics" }
 
 [bundles]
 ktor = [

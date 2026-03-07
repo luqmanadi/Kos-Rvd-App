@@ -145,15 +145,11 @@ private fun BuatTagihanContent(
         if (buatTagihanUiState.isSelectedPeriodError){
             delay(300)
             selectDateRangeRequester.bringIntoView()
-        }
-
-        if (buatTagihanUiState.isPercentageDiscountError){
+        } else if (buatTagihanUiState.isPercentageDiscountError){
             delay(300)
             percentageDiscountRequester.bringIntoView()
             percentageDiscountFocus.requestFocus()
-        }
-
-        if (buatTagihanUiState.isDescriptionDiscountError){
+        } else if (buatTagihanUiState.isDescriptionDiscountError){
             delay(300)
             descriptionDiscountRequester.bringIntoView()
             descriptionDiscountFocus.requestFocus()

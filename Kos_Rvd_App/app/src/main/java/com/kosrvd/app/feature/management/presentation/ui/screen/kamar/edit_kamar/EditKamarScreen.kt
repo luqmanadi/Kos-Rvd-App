@@ -218,7 +218,10 @@ fun EditKamarScreen(
         topBar = {
             TopBarLeftTitle(
                 title = titleTopBar,
-                onBackClick = { editKamarActions(EditKamarActions.NavigateBack) }
+                onBackClick = {
+                    keyboardController?.hide()
+                    editKamarActions(EditKamarActions.NavigateBack)
+                }
             )
         }
     ) { innerPadding ->

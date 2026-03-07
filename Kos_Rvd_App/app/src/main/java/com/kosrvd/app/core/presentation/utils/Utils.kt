@@ -4,6 +4,7 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Context.CLIPBOARD_SERVICE
+import android.graphics.Paint
 import android.os.Build
 import android.widget.Toast
 import androidx.compose.animation.core.Animatable
@@ -31,14 +32,14 @@ import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.asComposePaint
 import androidx.compose.ui.graphics.drawOutline
-import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.layout.onGloballyPositioned
@@ -277,16 +278,20 @@ fun Modifier.customShadow(
     spread: Dp = 0.dp
 ) = drawBehind {
     drawIntoCanvas { canvas ->
-        val paint = Paint()
-        val frameworkPaint = paint.asFrameworkPaint()
-        frameworkPaint.color = Color.Transparent.toArgb()
-        
-        frameworkPaint.setShadowLayer(
-            blur.toPx(),
-            0f, 0f, // x dan y offset = 0
-            color.toArgb()
-        )
+        // 1. Setup menggunakan Android Native Paint
+        val nativePaint = Paint().apply {
+            this.color = android.graphics.Color.TRANSPARENT
+            setShadowLayer(
+                blur.toPx(),
+                0f, 0f, // x dan y offset
+                color.toArgb()
+            )
+        }
 
+        // 2. Convert kembali menjadi Compose Paint
+        val composePaint = nativePaint.asComposePaint()
+
+        // 3. Gambar di Canvas Compose
         val spreadPx = spread.toPx()
         canvas.drawRoundRect(
             left = -spreadPx,
@@ -295,8 +300,29 @@ fun Modifier.customShadow(
             bottom = size.height + spreadPx,
             radiusX = (size.width / 2) + spreadPx,
             radiusY = (size.height / 2) + spreadPx,
-            paint = paint
+            paint = composePaint // Gunakan paint hasil convert
         )
+
+//        val paint = Paint()
+//        val frameworkPaint = paint.asFrameworkPaint()
+//        frameworkPaint.color = Color.Transparent.toArgb()
+//
+//        frameworkPaint.setShadowLayer(
+//            blur.toPx(),
+//            0f, 0f, // x dan y offset = 0
+//            color.toArgb()
+//        )
+//
+//        val spreadPx = spread.toPx()
+//        canvas.drawRoundRect(
+//            left = -spreadPx,
+//            top = -spreadPx,
+//            right = size.width + spreadPx,
+//            bottom = size.height + spreadPx,
+//            radiusX = (size.width / 2) + spreadPx,
+//            radiusY = (size.height / 2) + spreadPx,
+//            paint = paint
+//        )
     }
 }
 

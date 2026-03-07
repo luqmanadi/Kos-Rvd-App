@@ -7,21 +7,22 @@ import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.relocation.BringIntoViewRequester
 import androidx.compose.foundation.relocation.bringIntoViewRequester
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.input.TextFieldLineLimits
 import androidx.compose.foundation.text.input.rememberTextFieldState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -30,10 +31,11 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshotFlow
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.onFocusEvent
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -63,11 +65,16 @@ fun BuatLaporanKeluhanScreen(
     descriptionShakeTrigger: Int,
     customToastHostState: CustomToastHostState,
 ) {
+    val keyboardController = LocalSoftwareKeyboardController.current
+
     Scaffold(
         topBar = {
             TopBarCenterTitle(
                 title = stringResource(R.string.make_a_complain_report),
-                onBackClick = { buatLaporanKeluhanActions(BuatLaporanKeluhanActions.NavigateUp) },
+                onBackClick = {
+                    keyboardController?.hide()
+                    buatLaporanKeluhanActions(BuatLaporanKeluhanActions.NavigateUp)
+                              },
                 containerColors = MaterialTheme.colorScheme.surfaceContainer,
                 fontWeight = FontWeight.Bold
             )
@@ -79,7 +86,8 @@ fun BuatLaporanKeluhanScreen(
             modifier = Modifier.padding(innerPadding),
             titleShakeTrigger = titleShakeTrigger,
             descriptionShakeTrigger = descriptionShakeTrigger,
-            customToastHostState = customToastHostState
+            customToastHostState = customToastHostState,
+            keyboardController = keyboardController
         )
     }
 }
@@ -92,7 +100,9 @@ private fun MainContent (
     titleShakeTrigger: Int,
     descriptionShakeTrigger: Int,
     customToastHostState: CustomToastHostState,
+    keyboardController: SoftwareKeyboardController?
 ) {
+    val scrollState = rememberScrollState()
     val photoPicker = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia()
     ) { contetUri ->
@@ -145,11 +155,13 @@ private fun MainContent (
     }
 
     Box(modifier = modifier.fillMaxSize()){
-        LazyColumn(
-            modifier = Modifier.fillMaxSize().imePadding(),
-            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 20.dp)
-        ) {
-            item {
+        Column(
+            Modifier.fillMaxSize().imePadding()
+        ){
+            Column(
+                modifier = Modifier.weight(1f).verticalScroll(scrollState).padding(horizontal = 16.dp, vertical = 20.dp),
+                verticalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
                 IconTextInfo(
                     modifier = Modifier,
                     text = stringResource(R.string.make_a_complain_report),
@@ -160,9 +172,6 @@ private fun MainContent (
                     spacing = 15.dp,
                     fontWeight = FontWeight.Bold
                 )
-            }
-            item { Spacer(Modifier.height(10.dp)) }
-            item {
                 GeneralTextField(
                     state = titleState,
                     isError = buatLaporanKeluhanUiState.isTitleError,
@@ -187,9 +196,6 @@ private fun MainContent (
                     lineLimits = TextFieldLineLimits.SingleLine,
                     focusRequester = titleFocus
                 )
-            }
-            item { Spacer(Modifier.height(10.dp)) }
-            item {
                 GeneralTextField(
                     state = descriptionState,
                     isError = buatLaporanKeluhanUiState.isDescriptionError,
@@ -217,18 +223,12 @@ private fun MainContent (
                     ),
                     focusRequester = descriptionFocus
                 )
-            }
-            item { Spacer(Modifier.height(10.dp)) }
-            item {
                 Text(
                     text = stringResource(R.string.proof_of_complain_optional),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onSurface
                 )
-            }
-            item { Spacer(Modifier.height(10.dp)) }
-            item {
                 BuktiFotoCard(
                     modifier = Modifier.fillMaxWidth(),
                     previewOnly = false,
@@ -247,15 +247,24 @@ private fun MainContent (
                     }
                 )
             }
+            Column {
+                HorizontalDivider(
+                    thickness = 1.dp,
+                    color = MaterialTheme.colorScheme.outline.copy(alpha = 0.2f)
+                )
+                ActionButton(
+                    text = stringResource(R.string.make_a_complain),
+                    onClick = {
+                        keyboardController?.hide()
+                        buatLaporanKeluhanActions(BuatLaporanKeluhanActions.BuatLaporanKeluhan)
+                              },
+                    modifier = Modifier.fillMaxWidth().padding(16.dp),
+                    enabled = !buatLaporanKeluhanUiState.isButtonLoading,
+                    isLoading = buatLaporanKeluhanUiState.isButtonLoading,
+                    shape = RoundedCornerShape(12.dp)
+                )
+            }
         }
-        ActionButton(
-            text = stringResource(R.string.make_a_complain),
-            onClick = { buatLaporanKeluhanActions(BuatLaporanKeluhanActions.BuatLaporanKeluhan) },
-            modifier = Modifier.fillMaxWidth().align(Alignment.BottomCenter).padding(start = 16.dp, end = 16.dp, bottom = 20.dp),
-            enabled = !buatLaporanKeluhanUiState.isButtonLoading,
-            isLoading = buatLaporanKeluhanUiState.isButtonLoading,
-            shape = RoundedCornerShape(12.dp)
-        )
 
         CustomToastHost(
             hostState = customToastHostState,

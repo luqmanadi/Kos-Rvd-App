@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.kosrvd.app.core.data.constant.Constant
@@ -25,7 +26,8 @@ fun BackgroundInfoText(
     maxLines: Int = Int.MAX_VALUE,
     overflow: TextOverflow = TextOverflow.Clip,
     textColor: Color = Color.Unspecified,
-    border: BorderStroke? = null
+    border: BorderStroke? = null,
+    textAlign: TextAlign? = null
 ) {
     Surface(
         shape = RoundedCornerShape(10.dp),
@@ -38,6 +40,7 @@ fun BackgroundInfoText(
             style = style,
             color = textColor,
             fontWeight = fontWeight,
+            textAlign = textAlign,
             modifier = Modifier
                 .padding(vertical = 6.dp, horizontal = 10.dp),
             maxLines = maxLines,
@@ -81,7 +84,8 @@ fun OutlineBackgroundInfoText(
 @Composable
 fun StatusBackgroundText (
     status: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    textAlign: TextAlign? = null
 ) {
     when (status) {
         Constant.MENUNGGU_VERIFIKASI -> {
@@ -90,7 +94,8 @@ fun StatusBackgroundText (
                 modifier = modifier,
                 colorBg = MaterialTheme.colorScheme.tertiary,
                 fontWeight = FontWeight.Bold,
-                style = MaterialTheme.typography.bodySmall
+                style = MaterialTheme.typography.bodySmall,
+                textAlign = textAlign
             )
         }
         Constant.BELUM_LUNAS -> {
@@ -99,7 +104,8 @@ fun StatusBackgroundText (
                 modifier = modifier,
                 colorBg = MaterialTheme.colorScheme.error,
                 fontWeight = FontWeight.Bold,
-                style = MaterialTheme.typography.bodySmall
+                style = MaterialTheme.typography.bodySmall,
+                textAlign = textAlign
             )
         }
 
@@ -109,7 +115,8 @@ fun StatusBackgroundText (
                 modifier = modifier,
                 colorBg = MaterialTheme.colorScheme.secondary,
                 fontWeight = FontWeight.Bold,
-                style = MaterialTheme.typography.bodySmall
+                style = MaterialTheme.typography.bodySmall,
+                textAlign = textAlign
             )
         }
 
@@ -119,17 +126,19 @@ fun StatusBackgroundText (
                 modifier = modifier,
                 colorBg = MaterialTheme.colorScheme.error,
                 fontWeight = FontWeight.Bold,
-                style = MaterialTheme.typography.bodySmall
+                style = MaterialTheme.typography.bodySmall,
+                textAlign = textAlign
             )
         }
 
         Constant.LUNAS -> {
            BackgroundInfoText(
-                text = status,
-                modifier = modifier,
-                colorBg = MaterialTheme.colorScheme.primary,
-                fontWeight = FontWeight.Bold,
-                style = MaterialTheme.typography.bodySmall
+               text = status,
+               modifier = modifier,
+               colorBg = MaterialTheme.colorScheme.primary,
+               fontWeight = FontWeight.Bold,
+               style = MaterialTheme.typography.bodySmall,
+               textAlign = textAlign
             )
         }
 
@@ -139,17 +148,19 @@ fun StatusBackgroundText (
                 modifier = modifier,
                 colorBg = MaterialTheme.colorScheme.tertiary,
                 fontWeight = FontWeight.Bold,
-                style = MaterialTheme.typography.bodySmall
+                style = MaterialTheme.typography.bodySmall,
+                textAlign = textAlign
             )
         }
 
         Constant.MENUNGGU_KONFIRMASI -> {
           BackgroundInfoText(
-                text = status,
-                modifier = modifier,
-                colorBg = MaterialTheme.colorScheme.error,
-                fontWeight = FontWeight.Bold,
-                style = MaterialTheme.typography.bodySmall
+              text = status,
+              modifier = modifier,
+              colorBg = MaterialTheme.colorScheme.error,
+              fontWeight = FontWeight.Bold,
+              style = MaterialTheme.typography.bodySmall,
+              textAlign = textAlign
             )
         }
 
@@ -159,7 +170,8 @@ fun StatusBackgroundText (
                 modifier = modifier,
                 colorBg = MaterialTheme.colorScheme.tertiary,
                 fontWeight = FontWeight.Bold,
-                style = MaterialTheme.typography.bodySmall
+                style = MaterialTheme.typography.bodySmall,
+                textAlign = textAlign
             )
         }
 
@@ -169,7 +181,8 @@ fun StatusBackgroundText (
                 modifier = modifier,
                 colorBg = MaterialTheme.colorScheme.primary,
                 fontWeight = FontWeight.Bold,
-                style = MaterialTheme.typography.bodySmall
+                style = MaterialTheme.typography.bodySmall,
+                textAlign = textAlign
             )
         }
         else -> {
@@ -178,7 +191,8 @@ fun StatusBackgroundText (
                 modifier = modifier,
                 colorBg = MaterialTheme.colorScheme.error,
                 fontWeight = FontWeight.Bold,
-                style = MaterialTheme.typography.bodySmall
+                style = MaterialTheme.typography.bodySmall,
+                textAlign = textAlign
             )
         }
     }

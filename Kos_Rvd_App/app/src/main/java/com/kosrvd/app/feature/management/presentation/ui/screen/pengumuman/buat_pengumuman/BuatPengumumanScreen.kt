@@ -31,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.onFocusEvent
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -55,11 +56,15 @@ fun BuatPengumumanScreen(
     buatPengumumanActions: (BuatPengumumanActions) -> Unit,
     customToastHostState: CustomToastHostState,
 ) {
+    val keyboardController = LocalSoftwareKeyboardController.current
     Scaffold(
         topBar = {
             TopBarLeftTitle(
                 title = stringResource(R.string.create_announcement),
-                onBackClick = { buatPengumumanActions(BuatPengumumanActions.NavigateBack) }
+                onBackClick = {
+                    keyboardController?.hide()
+                    buatPengumumanActions(BuatPengumumanActions.NavigateBack)
+                }
             )
         },
         modifier = Modifier.fillMaxSize()
@@ -71,7 +76,8 @@ fun BuatPengumumanScreen(
 
             BuatPengumumanContent(
                 buatPengumumanUiState = buatPengumumanUiState,
-                buatPengumumanActions = buatPengumumanActions
+                buatPengumumanActions = buatPengumumanActions,
+                keyboardController = keyboardController
             )
 
             CustomToastHost(
@@ -96,8 +102,8 @@ fun BuatPengumumanScreen(
 private fun BuatPengumumanContent(
     buatPengumumanUiState: BuatPengumumanUiState,
     buatPengumumanActions: (BuatPengumumanActions) -> Unit,
+    keyboardController:  SoftwareKeyboardController? = null
 ) {
-    val keyboardController = LocalSoftwareKeyboardController.current
     val titleState = rememberTextFieldState(buatPengumumanUiState.title)
     LaunchedEffect(titleState) {
         snapshotFlow { titleState.text.toString() }.collectLatest {

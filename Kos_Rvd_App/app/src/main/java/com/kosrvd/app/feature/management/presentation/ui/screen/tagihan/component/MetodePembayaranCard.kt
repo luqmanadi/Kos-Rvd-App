@@ -42,6 +42,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.firebase.Timestamp
@@ -466,18 +467,21 @@ fun MetodePembayaranCardV4(
                     Text(
                         text = stringResource(R.string.name_bank),
                         style = MaterialTheme.typography.bodyLarge,
+                        textAlign = TextAlign.End,
                         color = MaterialTheme.colorScheme.onSurface
                     )
                     Text(
                         text = stringResource(R.string.number_account_bank),
                         style = MaterialTheme.typography.bodyLarge,
                         fontWeight = FontWeight.Bold,
+                        textAlign = TextAlign.End,
                         color = MaterialTheme.colorScheme.onSurface
                     )
                     Text(
                         text = "a.n. ${stringResource(R.string.name_mother_kos)}",
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.secondary
+                        color = MaterialTheme.colorScheme.secondary,
+                        textAlign = TextAlign.End
                     )
                 }
             }
@@ -516,6 +520,7 @@ fun MetodePembayaranCardV4(
                     text = totalTransfer.toRupiahFormat(),
                     style = MaterialTheme.typography.bodyLarge,
                     fontWeight = FontWeight.Bold,
+                    textAlign = TextAlign.End,
                     color = MaterialTheme.colorScheme.primary
                 )
             }

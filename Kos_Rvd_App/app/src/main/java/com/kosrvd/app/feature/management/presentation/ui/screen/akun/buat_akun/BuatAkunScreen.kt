@@ -40,6 +40,8 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.onFocusEvent
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.capitalize
 import androidx.compose.ui.text.font.FontWeight
@@ -67,11 +69,16 @@ fun BuatAkunScreen(
     buatAkunActions: (BuatAkunActions) -> Unit,
     customToastHostState: CustomToastHostState
 ) {
+    val keyboardController = LocalSoftwareKeyboardController.current
+
     Scaffold(
         topBar = {
             TopBarLeftTitle(
                 title = stringResource(R.string.create_account),
-                onBackClick = { buatAkunActions(BuatAkunActions.NavigateBack) }
+                onBackClick = {
+                    keyboardController?.hide()
+                    buatAkunActions(BuatAkunActions.NavigateBack)
+                }
             )
         },
     ) { innerPadding ->
@@ -80,7 +87,8 @@ fun BuatAkunScreen(
         ) {
             ContentBuatAkun(
                 buatAkunUiState = buatAkunUiState,
-                buatAkunActions = buatAkunActions
+                buatAkunActions = buatAkunActions,
+                keyboardController = keyboardController
             )
             CustomToastHost(
                 hostState = customToastHostState,
@@ -103,7 +111,8 @@ fun BuatAkunScreen(
 @Composable
 fun ContentBuatAkun(
     buatAkunUiState: BuatAkunUiState,
-    buatAkunActions: (BuatAkunActions) -> Unit
+    buatAkunActions: (BuatAkunActions) -> Unit,
+    keyboardController: SoftwareKeyboardController?
 ) {
     val nameState = rememberTextFieldState(buatAkunUiState.name)
     LaunchedEffect(nameState) {
@@ -493,7 +502,10 @@ fun ContentBuatAkun(
                         centerHorizontallyTo(parent)
                     },
                 height = 43.dp,
-                onClick = { buatAkunActions(BuatAkunActions.AddAkun) },
+                onClick = {
+                    keyboardController?.hide()
+                    buatAkunActions(BuatAkunActions.AddAkun)
+                          },
                 text = stringResource(R.string.create_account),
                 shape = RoundedCornerShape(12.dp),
                 isLoading = buatAkunUiState.isButtonLoading

@@ -49,6 +49,8 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.onFocusEvent
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -80,6 +82,7 @@ fun BuatKamarScreen(
     buatKamarActions: (BuatKamarActions) -> Unit,
     customToastHostState: CustomToastHostState,
 ) {
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     val numberRoomState = rememberTextFieldState(buatKamarUiState.numberRoom)
     LaunchedEffect(numberRoomState) {
@@ -129,7 +132,10 @@ fun BuatKamarScreen(
         topBar = {
             TopBarLeftTitle(
                 title = stringResource(R.string.create_room),
-                onBackClick = { buatKamarActions(BuatKamarActions.NavigateBack) }
+                onBackClick = {
+                    keyboardController?.hide()
+                    buatKamarActions(BuatKamarActions.NavigateBack)
+                }
             )
         }
     ) { innerPadding ->
@@ -146,7 +152,8 @@ fun BuatKamarScreen(
                 tarifSatuOrangState = tarifSatuOrangState,
                 tarifDuaOrangState = tarifDuaOrangState,
                 namaFasilitasState = namaFasilitasState,
-                namaAlatElektronikState = namaAlatElektronikState
+                namaAlatElektronikState = namaAlatElektronikState,
+                keyboardController = keyboardController
             )
 
             CustomToastHost(
@@ -175,7 +182,8 @@ private fun BuatKamarMainContent(
     namaAlatElektronikState: TextFieldState,
     tarifSatuOrangState: TextFieldState,
     tarifDuaOrangState: TextFieldState,
-    namaFasilitasState: TextFieldState
+    namaFasilitasState: TextFieldState,
+    keyboardController: SoftwareKeyboardController?
 ) {
 
     val coroutineScope = rememberCoroutineScope()
@@ -315,6 +323,7 @@ private fun BuatKamarMainContent(
                 modifier = Modifier.fillMaxWidth(),
                 height = 43.dp,
                 onClick = {
+                    keyboardController?.hide()
                     buatKamarActions(BuatKamarActions.BuatKamarBaru)
                           },
                 text = stringResource(R.string.create_room),

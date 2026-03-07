@@ -10,6 +10,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -21,6 +23,7 @@ import com.kosrvd.app.core.presentation.designsystem.theme.KosRvdAppTheme
 @Composable
 fun StepperControlBar(
     modifier: Modifier = Modifier,
+    keyboardController: SoftwareKeyboardController? = null,
     currentStep: Int,
     totalSteps: Int,
     isNextEnabled: Boolean,
@@ -54,7 +57,12 @@ fun StepperControlBar(
         ActionButton(
             modifier = Modifier.weight(1f),
             height = 45.dp,
-            onClick = { if (currentStep < totalSteps) onNext() else onSubmit() },
+            onClick = {
+                if (currentStep < totalSteps){
+                    onNext()
+                    keyboardController?.hide()
+                } else onSubmit()
+                      },
             text = textButtonPrimary,
             shape = RoundedCornerShape(15.dp),
             isLoading = isButtonSubmitLoading,
@@ -76,7 +84,8 @@ private fun StepperControlBarPreview() {
             isButtonSubmitLoading = false,
             onBack = {},
             onNext = {},
-            onSubmit = {}
+            onSubmit = {},
+            keyboardController = LocalSoftwareKeyboardController.current
         )
     }
 }
