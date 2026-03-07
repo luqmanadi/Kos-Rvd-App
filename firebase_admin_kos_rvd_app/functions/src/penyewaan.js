@@ -4,6 +4,7 @@ const {
 } = require("firebase-functions/v2/firestore");
 const {getFirestore} = require("firebase-admin/firestore");
 const {info, error} = require("firebase-functions/logger");
+const utils = require("./utils");
 
 
 // 1. ON CREATE PENYEWAAN
@@ -77,6 +78,26 @@ exports.onPenyewaanUpdate = onDocumentUpdated("penyewaan/{penyewaanId}",
                 db.collection("zonaParkiran")
                     .doc(idZona).update({status: "Kosong"}),
             );
+          }
+
+          // 1c. Hapus data tagihan yang "Belum Lunas" berdasarkan idPenyewa
+          if (dataBefore.idPenyewa) {
+            const idPenyewa = dataBefore.idPenyewa;
+            const tagihanBelumLunasSnapshot = await db.collection("tagihan")
+                .where("idPenyewa", "==", idPenyewa)
+                .where("paymentStatus", "==", utils.BELUM_LUNAS)
+                .get();
+
+            if (!tagihanBelumLunasSnapshot.empty) {
+              let countDeleted = 0;
+              tagihanBelumLunasSnapshot.forEach((doc) => {
+                allPromises.push(doc.ref.delete());
+                countDeleted++;
+              });
+
+              info(`Menghapus ${countDeleted} tagihan Belum Lunas ` +
+                  `untuk penyewa: ${idPenyewa}`);
+            }
           }
         }
 
