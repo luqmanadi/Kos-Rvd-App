@@ -366,3 +366,60 @@ async function kirimGhostFCM(db, idAkun, title, content, tagihanId) {
     error(`Gagal kirim Ghost FCM ke ${idAkun}`, e);
   }
 }
+
+exports.hapusNotifikasiLama = onSchedule({
+  schedule: "0 2 * * *",
+  timeZone: "Asia/Jakarta",
+}, async (event) => {
+  try {
+    const db = getFirestore();
+
+    info("Mulai menjalankan pembersihan notifikasi lama...");
+
+    // 1. Hitung tanggal batas (Cut-off Date) -> 30 Hari yang lalu
+    const now = new Date();
+    // 30 hari * 24 jam * 60 menit * 60 detik * 1000 milidetik
+    const batasWaktuDate = new Date(now.getTime() - (30 * 24 * 60 * 60 * 1000));
+    const batasWaktuTs = Timestamp.fromDate(batasWaktuDate);
+
+    info(`Mencari notifikasi yang dibuat sebelum: `+
+        `${batasWaktuDate.toISOString()}`);
+
+    // 2. Query ke Firestore
+    // (Ambil max 500 dokumen karena batas batch Firestore)
+    // Kita filter berdasarkan field
+    // "date" yang lebih kecil (lebih lama) dari batas waktu
+    const snapshot = await db.collection("notifikasi")
+        .where("date", "<", batasWaktuTs)
+        .limit(300)
+        .get();
+
+    if (snapshot.empty) {
+      info("Database bersih. Tidak ada notifikasi berumur lebih dari 30 hari.");
+      return null;
+    }
+
+    // 3. Proses Penghapusan menggunakan
+    // Batch (Biar performa cepat dan hemat operasi)
+    const batch = db.batch();
+    let totalDihapus = 0;
+
+    snapshot.docs.forEach((doc) => {
+      batch.delete(doc.ref);
+      totalDihapus++;
+    });
+
+    // Eksekusi penghapusan
+    await batch.commit();
+
+    info(`Pembersihan Selesai! Berhasil menghapus `+
+        `${totalDihapus} notifikasi lama.`);
+
+    // Catatan: Jika kebetulan ada > 300 notif usang,
+    // sisanya akan otomatis terhapus pada jadwal pembersihan besok paginya.
+    return null;
+  } catch (e) {
+    error("Gagal menjalankan hapusNotifikasiLama:", e);
+    return null;
+  }
+});

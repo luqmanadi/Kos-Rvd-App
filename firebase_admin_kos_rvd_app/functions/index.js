@@ -71,3 +71,4 @@ exports.onPenyewaanUpdate = penyewaan.onPenyewaanUpdate;
 // Pengaturan
 exports.generateTagihanOtomatis = pengaturan.generateTagihanOtomatis;
 exports.pengingatTagihanHarian = pengaturan.pengingatTagihanHarian;
+exports.hapusNotifikasiLama = pengaturan.hapusNotifikasiLama;
