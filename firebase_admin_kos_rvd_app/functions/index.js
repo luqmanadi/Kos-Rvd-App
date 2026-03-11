@@ -33,9 +33,12 @@ exports.getDetailAkunPengguna = akun.getDetailAkunPengguna;
 exports.createAkunPengguna = akun.createAkunPengguna;
 exports.deactivateUserAccount = akun.deactivateUserAccount;
 exports.reactivateUserAccount = akun.reactivateUserAccount;
+exports.onAkunUpdate = akun.onAkunUpdate;
 
 // Kamar
 exports.onKamarUpdate = kamar.onKamarUpdate;
+exports.onKamarCreate = kamar.onKamarCreate;
+exports.onKamarDelete = kamar.onKamarDelete;
 
 // Tagihan
 exports.onTagihanUpdate = tagihan.onTagihanUpdate;

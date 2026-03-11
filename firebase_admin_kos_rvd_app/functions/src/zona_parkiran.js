@@ -62,7 +62,7 @@ exports.onZonaParkirUpdate = onDocumentUpdated("zonaParkiran/{zonaParkirId}",
           const updatePenyewaan = async () => {
             const penyewaanQuery = db.collection("penyewaan")
                 .where("rentalStatus", "==", "Aktif")
-                .where("pemakaianParkirMobil.zonaParkir.idZonaParkir",
+                .where("pemakaianParkirMobilBulanan.zonaParkir.idZonaParkir",
                     "==", zonaParkirId);
 
             const snapshot = await penyewaanQuery.get();
@@ -73,11 +73,15 @@ exports.onZonaParkirUpdate = onDocumentUpdated("zonaParkiran/{zonaParkirId}",
               const dataToUpdate = {};
 
               if (isZoneNameChanged) {
-                dataToUpdate["pemakaianParkirMobil.zonaParkir.zoneName"] =
+                dataToUpdate[
+                    "pemakaianParkirMobilBulanan.zonaParkir.zoneName"
+                ] =
                     dataAfter.zoneName;
               }
               if (monthlyFeeChanged) {
-                dataToUpdate["pemakaianParkirMobil.zonaParkir.monthlyFee"] =
+                dataToUpdate[
+                    "pemakaianParkirMobilBulanan.zonaParkir.monthlyFee"
+                ] =
                     dataAfter.monthlyFee;
               }
 

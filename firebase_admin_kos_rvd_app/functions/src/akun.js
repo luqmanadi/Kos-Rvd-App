@@ -1,4 +1,5 @@
 const {onRequest, HttpsError} = require("firebase-functions/v2/https");
+const {onDocumentUpdated} = require("firebase-functions/v2/firestore");
 const {getFirestore, Timestamp} = require("firebase-admin/firestore");
 const {getAuth} = require("firebase-admin/auth");
 const admin = require("firebase-admin");
@@ -128,15 +129,15 @@ exports.createAkunPengguna = onRequest(async (request, response) => {
         isAuthCreated = true;
 
         const accountData = {
-          name, photo: "", role, status: "Aktif",
+          name: name, photo: "", role: role, status: "Aktif",
           dateCreated: Timestamp.now(), fcmTokens: [],
+          numberOfUnreadNotification: 0,
           dataPenghuni: role === "penghuni" ? {
             address: address || "",
             phoneNumber: phoneNumber || "",
             photoKtp: photoKtp,
             numberRoom: null,
             finalBill: null,
-            numberOfUnreadNotification: 0,
           }: null,
         };
 
@@ -217,12 +218,9 @@ exports.deactivateUserAccount = onRequest(async (request, response) => {
           photo: "",
         });
       } else if (role === "penghuni") { // --- KASUS PENGHUNI ---
-        // 1. Cari Penyewaan (Solusi Array Contains)
-        // Ambil semua sewa aktif, filter manual
+        // 1. Cari Penyewaan Aktif yang memiliki penghuni ini
         const rentalSnapshot = await db.collection("penyewaan")
-            .where(
-                "rentalStatus",
-                "==", "Aktif") // Pastikan besar kecil huruf sama
+            .where("rentalStatus", "==", "Aktif")
             .get();
 
         let targetRentalDoc = null;
@@ -238,57 +236,40 @@ exports.deactivateUserAccount = onRequest(async (request, response) => {
           }
         }
 
-        // Jika ada penyewaan terikat
+        // 2. Jika ada penyewaan terikat
         if (targetRentalDoc) {
           const rentalData = targetRentalDoc.data();
           const rentalRef = targetRentalDoc.ref;
+          const currentResidents = rentalData.listResident || [];
 
-          // A. CEK ALAT ELEKTRONIK
-          if (rentalData.pemakaianAlatElektronik &&
-              rentalData.pemakaianAlatElektronik.idPakaiAlat) {
-            const idAlat = rentalData.pemakaianAlatElektronik.idPakaiAlat;
-            const alatRef = db
-                .collection("pemakaianAlatElektronik").doc(idAlat);
+          if (currentResidents.length > 1) {
+            // KASUS: Ada lebih dari 1 penghuni
+            // -> Hapus penghuni ini dari listResident saja
+            // -> Penyewaan tetap aktif untuk penghuni lainnya
+            const updatedResidents = currentResidents.filter(
+                (res) => res.idAkun !== idAkun,
+            );
 
-            batch.update(alatRef, {
-              status: "Tidak Aktif",
-              completionDate: timestampNow,
+            batch.update(rentalRef, {
+              listResident: updatedResidents,
             });
+
+            logger.info(`Penghuni ${idAkun} dihapus dari penyewaan, ` +
+                    `sisa ${updatedResidents.length} penghuni`);
+          } else {
+            // KASUS: Hanya 1 penghuni (penghuni terakhir)
+            // -> Nonaktifkan penyewaan sepenuhnya
+            batch.update(rentalRef, {
+              rentalStatus: "Tidak Aktif",
+              rentalCompletionDate: timestampNow,
+            });
+
+            logger.info(`Penyewaan ${targetRentalDoc.id} dinonaktifkan ` +
+                  `karena penghuni terakhir dinonaktifkan`);
           }
-
-          // B. CEK PARKIR MOBIL
-          if (rentalData.pemakaianParkirMobil &&
-              rentalData.pemakaianParkirMobil.idPakaiParkir) {
-            const parkirRef = db
-                .collection("pemakaianParkiranMobil")
-                .doc(rentalData.pemakaianParkirMobil.idPakaiParkir);
-            batch.update(parkirRef,
-                {status: "Tidak Aktif", completionDate: timestampNow});
-
-            const parkirSnap = await parkirRef.get();
-            if (parkirSnap.exists && parkirSnap.data().idZonaParkir) {
-              batch.update(db
-                  .collection("zonaParkiran")
-                  .doc(parkirSnap.data().idZonaParkir), {status: "Kosong"});
-            }
-          }
-
-          // C. UPDATE KAMAR (Jadi Kosong)
-          if (rentalData.idKamar) {
-            const kamarRef = db.collection("kamar").doc(rentalData.idKamar);
-            batch.update(kamarRef, {status: "Kosong"});
-          }
-
-          // D. UPDATE PENYEWAAN (Jadi Tidak Aktif)
-          batch.update(rentalRef, {
-            rentalStatus: "Tidak Aktif",
-            rentalCompletionDate: timestampNow,
-          });
         }
 
-        // E. UPDATE AKUN PENGHUNI
-        // Dilakukan di luar blok 'if targetRentalDoc'
-        // karena akun tetap harus dinonaktifkan meski tidak punya sewa
+        // 3. UPDATE AKUN PENGHUNI (selalu dilakukan)
         const akunRef = db.collection("akun").doc(idAkun);
         batch.update(akunRef, {
           "status": "Tidak Aktif",
@@ -346,4 +327,86 @@ exports.reactivateUserAccount = onRequest(async (request, response) => {
       handleError(response, error);
     }
   });
+});
+
+// ==================================================================
+// 4. Trigger onUpdated collection akun
+// ==================================================================
+
+exports.onAkunUpdate = onDocumentUpdated("akun/{akunId}", async (event) => {
+  try {
+    if (!event.data) return null;
+
+    const idAkun = event.params["akunId"];
+    const dataBefore = event.data.before.data();
+    const dataAfter = event.data.after.data();
+
+    const oldName = dataBefore.name;
+    const newName = dataAfter.name;
+
+    // 1. Cek apakah nama berubah
+    if (oldName === newName) {
+      // Tidak perlu log jika tidak ada perubahan (mengurangi noise di log)
+      return null;
+    }
+
+    // 2. Cek apakah role penghuni (admin tidak perlu sync ke penyewaan)
+    if (dataAfter.role !== "penghuni") {
+      logger.info(`Nama akun ${idAkun} berubah, `+
+          `tapi role bukan penghuni. Skip.`);
+      return null;
+    }
+
+    const db = getFirestore();
+
+    // 3. Cari Penyewaan Aktif yang memiliki penghuni ini
+    const dataRental = await db.collection("penyewaan")
+        .where("rentalStatus", "==", "Aktif")
+        .get();
+
+    let targetRentalDoc = null;
+
+    for (const doc of dataRental.docs) {
+      const data = doc.data();
+      const residents = data.listResident || [];
+      if (residents.some((res) => res.idAkun === idAkun)) {
+        targetRentalDoc = doc;
+        break;
+      }
+    }
+
+    // 4. Jika tidak ada penyewaan terikat, skip
+    if (!targetRentalDoc) {
+      logger.info(`Nama penghuni ${idAkun} berubah, `+
+          `tapi tidak ada penyewaan aktif.`);
+      return null;
+    }
+
+    // 5. Update listResident dengan nama baru
+    const rentalData = targetRentalDoc.data();
+    const currentResidents = rentalData.listResident || [];
+
+    const updatedResidents = currentResidents.map((resident) => {
+      if (resident.idAkun === idAkun) {
+        return {
+          idAkun: resident.idAkun,
+          name: newName,
+        };
+      }
+      return resident;
+    });
+
+    await targetRentalDoc.ref.update({
+      listResident: updatedResidents,
+    });
+
+    logger.info(`Nama penghuni ${idAkun} diupdate di penyewaan ` +
+          `${targetRentalDoc.id}: "${oldName}" -> "${newName}"`);
+
+    return null;
+  } catch (e) {
+    logger.error(`Gagal update data akun dengan id `+
+        `${event.params["akunId"]}`, e);
+    return null;
+  }
 });

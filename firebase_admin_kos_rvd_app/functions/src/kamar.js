@@ -1,4 +1,8 @@
-const {onDocumentUpdated} = require("firebase-functions/v2/firestore");
+const {
+  onDocumentUpdated,
+  onDocumentDeleted,
+  onDocumentCreated,
+} = require("firebase-functions/v2/firestore");
 const {getFirestore, FieldValue} = require("firebase-admin/firestore");
 const {info, error} = require("firebase-functions/logger");
 const utils = require("./utils");
@@ -69,7 +73,7 @@ exports.onKamarUpdate = onDocumentUpdated("kamar/{kamarId}", async (event) => {
           if (isFreeServiceChanged) {
             // Logic: Gabungkan Add-On lama user +
             // Service Gratis baru dari kamar
-            const currentList = rentalData.pemakaianAlatElektronik || [];
+            const currentList = rentalData.pemakaianAlatElektronikBulanan || [];
 
             // Filter: Ambil item yang origin-nya "ADD_ON" (barang bawaan user)
             const saveAddOns = currentList.filter(
@@ -78,7 +82,7 @@ exports.onKamarUpdate = onDocumentUpdated("kamar/{kamarId}", async (event) => {
 
             const newFreeServices = dataAfter.freeService || [];
 
-            updates["pemakaianAlatElektronik"] =
+            updates["pemakaianAlatElektronikBulanan"] =
                 [...saveAddOns, ...newFreeServices];
           }
 
@@ -133,6 +137,64 @@ exports.onKamarUpdate = onDocumentUpdated("kamar/{kamarId}", async (event) => {
     return null;
   } catch (e) {
     error(`GAGAL Update Kamar ${event.params["kamarId"]}`, e);
+    return null;
+  }
+});
+
+
+exports.onKamarCreate = onDocumentCreated("kamar/{kamarId}", async (event) => {
+  try {
+    if (!event.data) return null;
+
+    const db = getFirestore();
+    const kamarId = event.params["kamarId"];
+
+    const data = event.data.data();
+
+    if (data.status !== "Kosong") {
+      info(`Kamar ${kamarId} dibuat dengan status ${data.status}. `+
+          `Skip update statistik kamar kosong.`);
+      return null;
+    }
+
+    await utils.updateAdminDashboardStat(db, {
+      numberOfEmptyRooms: FieldValue.increment(1),
+    });
+
+    info(`Kamar ${kamarId} berhasil dibuat. `+
+        `Update statistik dashboard jumlah kamar kosong selesai.`);
+    return null;
+  } catch (e) {
+    error(`GAGAL Create Kamar ${event.params["kamarId"]}`, e);
+    return null;
+  }
+});
+
+
+exports.onKamarDelete = onDocumentDeleted("kamar/{kamarId}", async (event) => {
+  try {
+    if (!event.data) return null;
+
+    const db = getFirestore();
+    const kamarId = event.params["kamarId"];
+
+    const data = event.data.data();
+
+    if (data.status !== "Kosong") {
+      info(`Kamar ${kamarId} dihapus dengan status ${data.status}. `+
+          `Skip update statistik kamar kosong.`);
+      return null;
+    }
+
+    await utils.updateAdminDashboardStat(db, {
+      numberOfEmptyRooms: FieldValue.increment(-1),
+    });
+
+    info(`Kamar ${kamarId} berhasil dihapus. `+
+        `Update statistik dashboard jumlah kamar kosong selesai.`);
+    return null;
+  } catch (e) {
+    error(`GAGAL Delete Kamar ${event.params["kamarId"]}`, e);
     return null;
   }
 });
