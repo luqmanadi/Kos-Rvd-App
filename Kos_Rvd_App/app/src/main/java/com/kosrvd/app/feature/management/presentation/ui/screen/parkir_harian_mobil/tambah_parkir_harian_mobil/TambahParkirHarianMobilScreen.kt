@@ -64,10 +64,10 @@ import com.kosrvd.app.core.presentation.utils.shimmerEffect
 import com.kosrvd.app.feature.management.domain.model.ZonaParkiran
 import com.kosrvd.app.feature.management.presentation.designsystem.utils.ZonaParkirFormatter
 import com.kosrvd.app.feature.management.presentation.ui.screen.parkir_harian_mobil.component.DateRangePickerParkirHarianMobilCard
-import com.kosrvd.app.feature.management.presentation.ui.screen.parkir_harian_mobil.component.EmptyListZoneParkingCard
+import com.kosrvd.app.feature.management.presentation.designsystem.component.card.EmptyDataListCard
 import com.kosrvd.app.feature.management.presentation.ui.screen.parkir_harian_mobil.component.KonfirmasiDataTambahParkirHarianMobilCard
-import com.kosrvd.app.feature.management.presentation.ui.screen.parkir_harian_mobil.component.MultiStepIndicator
-import com.kosrvd.app.feature.management.presentation.ui.screen.parkir_harian_mobil.component.StepperControlBar
+import com.kosrvd.app.feature.management.presentation.designsystem.organism.MultiStepIndicator
+import com.kosrvd.app.feature.management.presentation.designsystem.organism.StepperControlBar
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -164,14 +164,15 @@ fun TambahParkirHarianMobilScreen(
                 onBack = { tambahParkirHarianMobilActions(TambahParkirHarianMobilActions.BackPage)},
                 onNext = { tambahParkirHarianMobilActions(TambahParkirHarianMobilActions.NextPage)},
                 onSubmit = { tambahParkirHarianMobilActions(TambahParkirHarianMobilActions.TambahParkirHarianMobil)},
-                keyboardController = keyboardController
+                keyboardController = keyboardController,
+                lastTextButton = R.string.add_wearer
             )
         }
     }
 }
 
 @Composable
-fun StepOneSelectDate(
+private fun StepOneSelectDate(
     modifier: Modifier = Modifier,
     tambahParkirHarianMobilUiState: TambahParkirHarianMobilUiState,
     tambahParkirHarianMobilActions: (TambahParkirHarianMobilActions) -> Unit
@@ -266,7 +267,9 @@ private fun StepTwoSelectZone(
                 }
             }
             else -> {
-                EmptyListZoneParkingCard()
+                EmptyDataListCard(
+                    title = R.string.title_empty_list_zone_parking
+                )
             }
 
         }

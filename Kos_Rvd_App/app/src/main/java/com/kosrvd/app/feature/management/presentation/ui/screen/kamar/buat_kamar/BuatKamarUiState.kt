@@ -8,7 +8,7 @@ data class BuatKamarUiState(
     val numberRoom: String = "",
     val numberRoomError: UiText? = null,
     val isnumberRoomError: Boolean = false,
-    val ukuranKamar: String = "Pilih Ukuran",
+    val ukuranKamar: String? = "Pilih Ukuran",
     val jumlahOrang: Int = 1,
     val tarifSatuOrang: String = "",
     val tarifSatuOrangError: UiText? = null,

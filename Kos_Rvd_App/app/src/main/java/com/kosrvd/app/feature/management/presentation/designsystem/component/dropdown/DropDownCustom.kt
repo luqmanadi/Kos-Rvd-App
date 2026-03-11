@@ -1,5 +1,6 @@
 package com.kosrvd.app.feature.management.presentation.designsystem.component.dropdown
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -34,10 +35,12 @@ import com.kosrvd.app.core.presentation.designsystem.theme.KosRvdAppTheme
 @Composable
 fun <T> DropDownCustomV1(
     modifier: Modifier = Modifier,
-    items: List<T>,
+    items: List<T?>,
     selectedItem: T?,
-    onItemSelected: (T) -> Unit,
+    onItemSelected: (T?) -> Unit,
     itemToString: (T?) -> String,
+    @StringRes textNoData: Int,
+    itemEnabled: (T?) -> Boolean = { true }
 ) {
     // State untuk mengontrol apakah menu dropdown sedang ditampilkan atau tidak
     var isExpanded by remember { mutableStateOf(false) }
@@ -79,7 +82,9 @@ fun <T> DropDownCustomV1(
             // Membuat item untuk setiap string dalam 'items'
             if(items.isNotEmpty()){
                 items.forEach { item ->
+                    val isEnabled = item == null || itemEnabled(item)
                     DropdownMenuItem(
+                        enabled = isEnabled,
                         modifier = Modifier.background(color = if (selectedItem == item) MaterialTheme.colorScheme.surfaceVariant else MaterialTheme.colorScheme.surfaceContainer),
                         trailingIcon = {
                             if (item == selectedItem){
@@ -89,7 +94,12 @@ fun <T> DropDownCustomV1(
                                 )
                             }
                         },
-                        text = { Text(text = itemToString(item)) },
+                        text = { 
+                            Text(
+                                text = itemToString(item),
+                                color = if (isEnabled) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f)
+                            ) 
+                        },
                         onClick = {
                             onItemSelected(item) // Memanggil callback saat item dipilih
                             isExpanded = false // Menutup menu setelah item dipilih
@@ -98,7 +108,7 @@ fun <T> DropDownCustomV1(
                 }
             } else {
                 Text(
-                    text = stringResource(R.string.no_data_rental),
+                    text = stringResource(textNoData),
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(16.dp),
@@ -140,7 +150,8 @@ private fun DropDownMenuV1Preview() {
                         "Pilih seorang penghuni"
                     }
                 },
-                onItemSelected = { selectedItem = it }
+                onItemSelected = { selectedItem = it },
+                textNoData = R.string.no_data_rental
             )
         }
     }

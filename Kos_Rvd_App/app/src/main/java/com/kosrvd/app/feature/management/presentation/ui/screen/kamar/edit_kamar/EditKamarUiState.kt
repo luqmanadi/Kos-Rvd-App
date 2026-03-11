@@ -13,7 +13,7 @@ data class EditKamarUiState(
     val numberRoom: String = "",
     val numberRoomError: UiText? = null,
     val isnumberRoomError: Boolean = false,
-    val ukuranKamar: String = "",
+    val ukuranKamar: String? = "",
     val enableEditCapacity: Boolean = true,
     val oldJumlahOrang: Int = 1,
     val jumlahOrang: Int = 1,

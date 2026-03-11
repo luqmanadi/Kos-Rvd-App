@@ -18,4 +18,5 @@ interface KamarRepository {
     suspend fun updateTarifKamar(idKamar: String, tarifKamarBaru: Harga): Result<Unit, DataError>
     suspend fun updateLayananAlatElektronikGratis(idKamar: String, layananAlatElektronikGratisBaru: List<AlatElektronik>): Result<Unit, DataError>
     suspend fun updateFasilitasKamar(idKamar: String, fasilitasKamarBaru: List<String>): Result<Unit, DataError>
+    suspend fun getAllKamarStatusKosong(): Result<List<Kamar>, DataError>
 }

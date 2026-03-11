@@ -18,6 +18,7 @@
 
     // Data Kosong
     <string name="no_data_residents_kos">Belum ada data penghuni kos</string>
+    <string name="no_data_resident">Belum ada data penghuni</string>
     <string name="no_data_announcement">Belum ada data Pengumuman</string>
     <string name="no_data_notif">Belum ada data notifikasi</string>
     <string name="no_bill_kos">Tidak Ada Tagihan Kos</string>
@@ -36,6 +37,7 @@
     <string name="no_data_using_electronic_tools">Belum ada data pemakai alat elektronik</string>
     <string name="no_data_use_tools">Tidak ada data pemakaian alat</string>
     <string name="no_data_parking_zone">Belum ada data zona parkiran mobil</string>
+    <string name="no_data_parking_empty">Tidak ada zona parking yang kosong</string>
     <string name="no_data_room">Belum ada data kamar</string>
     <string name="list_room_empty">Belum ada data kamar</string>
     <string name="empty_data_account">Belum ada data daftar akun pada aplikasi RVD</string>
@@ -282,6 +284,7 @@
     <string name="edit_usage_tools">Edit Pemakaian Alat</string>
     <string name="list_usage_tools">Daftar Alat Yang Dipakai</string>
     <string name="name_tools_price">Nama Alat - Harga Sewa</string>
+    <string name="parking_zone_price">Zona Parkir - Harga Sewa</string>
     <string name="electronic_device_content_and_price_to_used">Isi Alat Elektronik &amp; Harga Yang Mau Dipakai</string>
     <string name="enter_name_tools">Masukkan Nama Alat</string>
     <string name="enter_price_tools">Masukkan Harga Sewa</string>
@@ -316,6 +319,7 @@
     <string name="zone_parking_and_price_rental">Zona Parkir &amp; Harga Sewa</string>
     <string name="move_zone">Pindah Zona</string>
     <string name="fill_data_transportation">Isi Data Kendaraan</string>
+    <string name="notes_for_usage_parking_car_monthly">Catatan Pemakaian Parkiran Mobil (Opsional)</string>
     <string name="name_car">Nama Mobil</string>
     <string name="brand_car">Merk Mobil</string>
     <string name="number_police">Plat Nomor</string>
@@ -472,6 +476,17 @@
     <string name="choose_period_bill">Pilih Periode Tagihan</string>
     <string name="add_usage_parking_card">Tambah Pemakaian Parkiran</string>
     <string name="confirmation_data">Konfirmasi Data</string>
+    <string name="title_page_2_add_rental">Pilih Penghuni</string>
+    <string name="title_page_1_add_rental">Pilih Kamar</string>
+    <string name="title_page_3_add_rental">Pemakaian Alat Elektronik Daya Tinggi</string>
+    <string name="title_page_4_add_rental">Pemakaian Parkir Mobil Bulanan</string>
+    <string name="title_page_5_add_rental">Ringkasan</string>
+    <string name="subtitle_page_1_add_rental">Tentukan kamar yang akan ditempati oleh penyewa baru.</string>
+    <string name="subtitle_page_2_add_rental">Silakan pilih penghuni yang akan menempati unit ini.</string>
+    <string name="subtitle_page_3_add_rental">Tambahkan pemakaian alat elektronik daya tinggi yang akan dipakai oleh penghuni kamar (Optional)</string>
+    <string name="subtitle_page_4_add_rental">Lengkapi data kendaraan dan zona parkir untuk pemakaian parkir mobil bulanan (Optional)</string>
+    <string name="subtitle_page_5_add_rental">Silakan tinjau ulang data yang dimasukkan.</string>
+
 
     // New Strings for RincianBiayaCard
     <string name="biaya_bulanan_reguler">Biaya bulanan reguler</string>
@@ -495,6 +510,7 @@
     <string name="nama_penyewa_tidak_boleh_kosong">Nama penyewa tidak boleh kosong</string>
     <string name="plat_nomor_tidak_boleh_kosong">Plat nomor tidak boleh kosong</string>
     <string name="title_empty_list_zone_parking">Mohon maaf, semua zona parkir sudah penuh pada tanggal yang di pilih.</string>
+    <string name="title_empty_list_kamar_for_rental">Mohon maaf, semua kamar sudah dihuni oleh penyewa kos.</string>
     <string name="pengaturan_tagihan">Pengaturan Otomatisasi Tagihan</string>
     <string name="title_pengaturan_tagihan_1">Pengingat Pembayaran Otomatis</string>
     <string name="description_pengaturan_tagihan_1">Kirim pengingat notifikasi otomatis setiap jam 09:00 WIB untuk pembayaran tagihan yang belum lunas.</string>
@@ -529,6 +545,7 @@
     <string name="nominal_admin_fees">Rp 50.000</string>
     <string name="processed">Diproses</string>
     <string name="no_data_rental">Tidak ada data penyewaan</string>
+    <string name="no_data_size_room">Tidak ada data Ukuran Kamar</string>
 
 
     // no fill edit text

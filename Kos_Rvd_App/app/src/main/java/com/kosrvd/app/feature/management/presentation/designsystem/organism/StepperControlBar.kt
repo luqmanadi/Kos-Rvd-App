@@ -1,5 +1,6 @@
-package com.kosrvd.app.feature.management.presentation.ui.screen.parkir_harian_mobil.component
+package com.kosrvd.app.feature.management.presentation.designsystem.organism
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -23,6 +24,7 @@ import com.kosrvd.app.core.presentation.designsystem.theme.KosRvdAppTheme
 @Composable
 fun StepperControlBar(
     modifier: Modifier = Modifier,
+    @StringRes lastTextButton: Int,
     keyboardController: SoftwareKeyboardController? = null,
     currentStep: Int,
     totalSteps: Int,
@@ -32,7 +34,9 @@ fun StepperControlBar(
     onNext: () -> Unit,
     onSubmit: () -> Unit
 ) {
-    val textButtonPrimary = if (currentStep < totalSteps) stringResource(R.string.next) else stringResource(R.string.add_wearer)
+    val textButtonPrimary = if (currentStep < totalSteps) stringResource(R.string.next) else stringResource(
+        lastTextButton
+    )
     val disableContainerColorButtonPrimary = if (currentStep < totalSteps) MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f) else MaterialTheme.colorScheme.primary
     val disableContentColorButtonPrimary = if (currentStep < totalSteps) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onPrimary
 
@@ -43,10 +47,13 @@ fun StepperControlBar(
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        if (currentStep > 1){
+        if (currentStep > 1) {
             ActionOutlineButton(
                 modifier = Modifier.weight(1f),
-                onClick =  onBack,
+                onClick = {
+                    onBack()
+                    keyboardController?.hide()
+                          },
                 enabled = !isButtonSubmitLoading,
                 text = stringResource(R.string.back),
                 shape = RoundedCornerShape(15.dp),
@@ -58,13 +65,13 @@ fun StepperControlBar(
             modifier = Modifier.weight(1f),
             height = 45.dp,
             onClick = {
-                if (currentStep < totalSteps){
+                if (currentStep < totalSteps) {
                     onNext()
                     keyboardController?.hide()
                 } else onSubmit()
-                      },
+            },
             text = textButtonPrimary,
-            shape = RoundedCornerShape(15.dp),
+            shape = androidx.compose.foundation.shape.RoundedCornerShape(15.dp),
             isLoading = isButtonSubmitLoading,
             enabled = isNextEnabled,
             disableContainerColor = disableContainerColorButtonPrimary,
@@ -85,7 +92,8 @@ private fun StepperControlBarPreview() {
             onBack = {},
             onNext = {},
             onSubmit = {},
-            keyboardController = LocalSoftwareKeyboardController.current
+            keyboardController = LocalSoftwareKeyboardController.current,
+            lastTextButton = R.string.add_wearer
         )
     }
 }

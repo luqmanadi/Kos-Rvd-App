@@ -1,5 +1,6 @@
 package com.kosrvd.app.feature.management.data.repository
 
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.toObject
@@ -84,10 +85,14 @@ class PenyewaanRepositoryImpl @Inject constructor(
     }
 
     override suspend fun endPenyewaan(idPenyewaan: String): Result<Unit, DataError> {
+        val dataUpdate = hashMapOf(
+            Constant.RENTAL_STATUS_FIELD to Constant.NON_ACTIVE,
+            Constant.RENTAL_COMPLETION_DATE_FIELD to FieldValue.serverTimestamp()
+        )
         return safeCall {
             db.collection(Constant.PENYEWAAN_COLLECTION)
                 .document(idPenyewaan)
-                .update(Constant.RENTAL_STATUS_FIELD, Constant.NON_ACTIVE)
+                .update(dataUpdate)
                 .await()
         }
     }

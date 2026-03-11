@@ -67,8 +67,8 @@ fun BuatPenyewaan.toPenyewaan(idPenyewaan: String): Penyewaan{
         rentalStartDate = this.rentalStartDate,
         rentalCompletionDate = this.rentalCompletionDate,
         rentalStatus = this.rentalStatus,
-        pemakaianAlatElektronikBulanan = this.pemakaianAlatElektronik,
-        pemakaianParkirMobilBulanan = this.pemakaianParkirMobil
+        pemakaianAlatElektronikBulanan = this.pemakaianAlatElektronikBulanan,
+        pemakaianParkirMobilBulanan = this.pemakaianParkirMobilBulanan
     )
 }
 

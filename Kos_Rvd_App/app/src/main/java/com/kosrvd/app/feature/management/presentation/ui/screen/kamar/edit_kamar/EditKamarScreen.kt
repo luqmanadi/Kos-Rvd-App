@@ -38,6 +38,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -139,7 +140,7 @@ fun EditKamarScreen(
         }
     }
 
-    val initialTarifSatuOrangText = remember(editKamarUiState.tarifSatuOrang) {
+    val initialTarifSatuOrangText = rememberSaveable(editKamarUiState.tarifSatuOrang) {
         RupiahFormatter.format(editKamarUiState.tarifSatuOrang)
     }
     Log.d("TAG", "EditKamarScreen: $initialTarifSatuOrangText")
@@ -151,7 +152,7 @@ fun EditKamarScreen(
         }
     }
 
-    val initialTarifDuaOrangText = remember(editKamarUiState.tarifDuaOrang) {
+    val initialTarifDuaOrangText = rememberSaveable(editKamarUiState.tarifDuaOrang) {
         RupiahFormatter.format(editKamarUiState.tarifDuaOrang ?: "")
     }
     val tarifDuaOrangState = rememberTextFieldState(initialTarifDuaOrangText)
@@ -710,7 +711,8 @@ private fun EditUkuranKamarContent(
         onItemSelected = { editKamarActions(EditKamarActions.UpdateUkuranKamar(it))},
         itemToString = { ukuranKamar ->
             ukuranKamar ?: "Pilih Ukuran"
-        }
+        },
+        textNoData = R.string.no_data_size_room
     )
 
 }

@@ -153,3 +153,31 @@ fun Long.toEndOfDay(): Long {
         .toInstant()
         .toEpochMilli()
 }
+
+/**
+ * Mengambil waktu sekarang (Today) dengan jam diatur ke 23:59:59 zona Jakarta.
+ */
+fun getNowEndOfDay(): Timestamp {
+    val instant = Instant.now()
+        .atZone(JAKARTA_ZONE_ID)
+        .withHour(23)
+        .withMinute(59)
+        .withSecond(59)
+        .withNano(0)
+        .toInstant()
+    return Timestamp(instant.epochSecond, instant.nano)
+}
+
+/**
+ * Mengubah Timestamp yang ada menjadi akhir hari (23:59:59) di zona Jakarta.
+ */
+fun Timestamp.toEndOfDay(): Timestamp {
+    val instant = this.toDate().toInstant()
+        .atZone(JAKARTA_ZONE_ID)
+        .withHour(23)
+        .withMinute(59)
+        .withSecond(59)
+        .withNano(0)
+        .toInstant()
+    return Timestamp(instant.epochSecond, instant.nano)
+}

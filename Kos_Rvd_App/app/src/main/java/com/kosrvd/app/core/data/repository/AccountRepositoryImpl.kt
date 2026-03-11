@@ -50,6 +50,20 @@ class AccountRepositoryImpl @Inject constructor(
         return auth.currentUser?.getIdToken(true)?.await()?.token.orEmpty()
     }
 
+    override suspend fun getAllAccountRolePenghuniStatusAktifAndNomorKamarNull(): Result<List<Account>, DataError> {
+        return safeCall {
+            db.collection(Constant.AKUN_COLLECTION)
+                .whereEqualTo(Constant.ROLE_FIELD, Constant.PENGHUNI_ROLE)
+                .whereEqualTo(Constant.STATUS_FIELD, Constant.ACTIVE)
+                .whereEqualTo(Constant.NUMBER_ROOM_FROM_DATA_PENGHUNI_FIELD, null)
+                .get()
+                .await()
+                .toObjectListOrThrow<AccountDto>(
+                    mappingErrorMessage = ErrorMessages.ACCOUNT_MAPPING_ERROR
+                )
+        }.map { it.toListAccount() }
+    }
+
     override suspend fun getDetailAkunPengguna(idAkun: String): Result<DetailAkunPengguna, DataError> {
         return safeCallApi<DetailAkunPenggunaDto> {
             httpClient.get(

@@ -38,7 +38,7 @@ sealed interface EditKamarEvents {
 sealed interface EditKamarActions {
     data object NavigateBack: EditKamarActions
     data class UpdateNumberRoom(val numberRoom: String): EditKamarActions
-    data class UpdateUkuranKamar(val ukuranKamar: String): EditKamarActions
+    data class UpdateUkuranKamar(val ukuranKamar: String?): EditKamarActions
     data class UpdateTarifSatuOrang(val tarifSatuOrang: String): EditKamarActions
     data class UpdateTarifDuaOrang(val tarifDuaOrang: String): EditKamarActions
     data class UpdateSelectJumlahOrang(val jumlahOrang: Int): EditKamarActions
@@ -91,7 +91,7 @@ class EditKamarViewModel @Inject constructor(
         }
     }
 
-    private fun updateUkuranKamar(ukuranKamar: String) {
+    private fun updateUkuranKamar(ukuranKamar: String?) {
         _state.update { it.copy(ukuranKamar = ukuranKamar) }
     }
 
@@ -193,7 +193,7 @@ class EditKamarViewModel @Inject constructor(
                 }
                 TypeEditKamar.EDIT_UKURAN_KAMAR -> {
                     val ukuranKamar = _state.value.ukuranKamar
-                    if (ukuranKamar.isBlank()){
+                    if (ukuranKamar.isNullOrBlank()){
                         _events.send(
                             EditKamarEvents.ShowSnackBarError("Ukuran kamar belum dipilih")
                         )

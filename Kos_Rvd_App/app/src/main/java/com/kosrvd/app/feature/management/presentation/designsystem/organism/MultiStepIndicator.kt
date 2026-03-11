@@ -1,4 +1,4 @@
-package com.kosrvd.app.feature.management.presentation.ui.screen.parkir_harian_mobil.component
+package com.kosrvd.app.feature.management.presentation.designsystem.organism
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -32,11 +32,11 @@ import com.kosrvd.app.core.presentation.utils.customShadow
 
 @Composable
 fun MultiStepIndicator(
+    modifier: Modifier = Modifier,
     listNamePage: List<String>,
     currentStep: Int,
-    modifier: Modifier = Modifier
 ) {
-    
+
     val activeColor = MaterialTheme.colorScheme.primary
     val inactiveColor = MaterialTheme.colorScheme.outlineVariant
     val onActiveColor = MaterialTheme.colorScheme.onPrimary
@@ -127,7 +127,7 @@ private fun StepCircle(
                         blur = 5.dp,
                         spread = 2.dp
                     )
-                } else Modifier
+                } else Modifier.Companion
             )
             .clip(CircleShape)
             .background(if (isCompleted || isActive) activeColor else Color.Transparent)
@@ -136,7 +136,7 @@ private fun StepCircle(
                     1.dp,
                     inactiveColor,
                     CircleShape
-                ) else Modifier
+                ) else Modifier.Companion
             ),
         contentAlignment = Alignment.Center
     ) {
@@ -149,6 +149,7 @@ private fun StepCircle(
                     modifier = Modifier.size(20.dp)
                 )
             }
+
             isActive -> {
                 Text(
                     text = stepNumber.toString(),
@@ -157,6 +158,7 @@ private fun StepCircle(
                     fontSize = 16.sp
                 )
             }
+
             else -> {
                 Text(
                     text = stepNumber.toString(),
@@ -173,11 +175,26 @@ private fun StepCircle(
 @Composable
 fun MultiStepIndicatorPreview() {
     KosRvdAppTheme {
-        Column(verticalArrangement = Arrangement.spacedBy(32.dp), modifier = Modifier.padding(24.dp)) {
-            MultiStepIndicator(currentStep = 1, listNamePage = listOf("Tanggal", "Zona", "Kendaraan", "Konfirmasi"))
-            MultiStepIndicator(currentStep = 2, listNamePage = listOf("Tanggal", "Zona", "Kendaraan", "Konfirmasi"))
-            MultiStepIndicator(currentStep = 3, listNamePage = listOf("Tanggal", "Zona", "Kendaraan", "Konfirmasi"))
-            MultiStepIndicator(currentStep = 4, listNamePage = listOf("Tanggal", "Zona", "Kendaraan", "Konfirmasi"))
+        Column(
+            verticalArrangement = Arrangement.spacedBy(32.dp),
+            modifier = Modifier.padding(24.dp)
+        ) {
+            MultiStepIndicator(
+                currentStep = 1,
+                listNamePage = listOf("Kamar", "Penghuni", "Elektronik", "Parkir", "Konfirmasi")
+            )
+            MultiStepIndicator(
+                currentStep = 2,
+                listNamePage = listOf("Tanggal", "Zona", "Kendaraan", "Konfirmasi")
+            )
+            MultiStepIndicator(
+                currentStep = 3,
+                listNamePage = listOf("Tanggal", "Zona", "Kendaraan", "Konfirmasi")
+            )
+            MultiStepIndicator(
+                currentStep = 4,
+                listNamePage = listOf("Tanggal", "Zona", "Kendaraan", "Konfirmasi")
+            )
         }
     }
 }

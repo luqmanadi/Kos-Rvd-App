@@ -24,6 +24,17 @@ import javax.inject.Inject
 class KamarRepositoryImpl @Inject constructor(
     private val db: FirebaseFirestore
 ): KamarRepository {
+    override suspend fun getAllKamarStatusKosong(): Result<List<Kamar>, DataError> {
+        return safeCall {
+            db.collection(Constant.KAMAR_COLLECTION)
+                .whereEqualTo(Constant.STATUS_FIELD, Constant.KOSONG)
+                .get()
+                .await()
+                .toObjectListOrThrow<KamarDto>(
+                    mappingErrorMessage = ErrorMessages.KAMAR_MAPPING_ERROR
+                )
+        }.map { it.toListKamar() }
+    }
     override suspend fun getAllKamar(): Result<List<Kamar>, DataError> {
         return safeCall {
             db.collection(Constant.KAMAR_COLLECTION)

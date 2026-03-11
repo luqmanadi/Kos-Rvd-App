@@ -52,6 +52,7 @@ import com.kosrvd.app.core.presentation.designsystem.component.text.CustomToastH
 import com.kosrvd.app.core.presentation.utils.shimmerEffect
 import com.kosrvd.app.feature.management.presentation.designsystem.component.card.InfoSectionCard
 import com.kosrvd.app.feature.management.presentation.designsystem.utils.CardAction
+import com.kosrvd.app.feature.management.presentation.designsystem.utils.ZonaParkirFormatter
 import com.kosrvd.app.feature.management.presentation.designsystem.utils.toDayMonthAndYear
 import com.kosrvd.app.feature.management.presentation.designsystem.utils.toRupiahFormat
 import com.kosrvd.app.feature.management.presentation.ui.models.PenyewaUi
@@ -75,17 +76,19 @@ fun DetailPenyewaanScreen(
             modifier = Modifier
                 .padding(innerPadding)
                 .fillMaxSize()
-        ){
-            when{
+        ) {
+            when {
                 detailPenyewaanUiState.isLoading -> {
                     LoadingDetailPenyewa()
                 }
+
                 detailPenyewaanUiState.loadError != null -> {
                     ErrorCard(
                         message = detailPenyewaanUiState.loadError,
                         onRetry = { detailPenyewaActions(DetailPenyewaActions.TryAgain) }
                     )
                 }
+
                 detailPenyewaanUiState.penyewaUi != null -> {
                     DetailPenyewaMainContent(
                         penyewaUi = detailPenyewaanUiState.penyewaUi,
@@ -111,7 +114,7 @@ fun DetailPenyewaanScreen(
             )
         }
 
-        if (detailPenyewaanUiState.showDialogEndRental){
+        if (detailPenyewaanUiState.showDialogEndRental) {
             GeneralDialogConfirmationDanger(
                 onConfirm = {
                     detailPenyewaActions(DetailPenyewaActions.EndRental)
@@ -152,7 +155,7 @@ private fun LoadingDetailPenyewa() {
 private fun DetailPenyewaMainContent(
     penyewaUi: PenyewaUi,
     detailPenyewaActions: (DetailPenyewaActions) -> Unit
-){
+) {
     val sumTentant = penyewaUi.listResident.size
     val iconPeople = if (sumTentant > 1) Icons.Filled.Group else Icons.Filled.Person
     LazyColumn(
@@ -160,14 +163,15 @@ private fun DetailPenyewaMainContent(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
-        item(key = "Info Penghuni Kamar Card"){
+        item(key = "Info Penghuni Kamar Card") {
             InfoSectionCard(
                 icon = iconPeople,
                 title = stringResource(R.string.resident_room),
                 action = CardAction.None,
                 content = {
                     Text(
-                        text = penyewaUi.listResident.map { it.name }.fastJoinToString(separator = " & "),
+                        text = penyewaUi.listResident.map { it.name }
+                            .fastJoinToString(separator = " & "),
                         style = MaterialTheme.typography.bodyMedium,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.onSurface
@@ -182,7 +186,8 @@ private fun DetailPenyewaMainContent(
                 action = CardAction.None,
                 content = {
                     val cost = if (sumTentant > 1 &&
-                        penyewaUi.infoKamar.currentRoomRentalCost.twoPersons != null) {
+                        penyewaUi.infoKamar.currentRoomRentalCost.twoPersons != null
+                    ) {
                         penyewaUi.infoKamar.currentRoomRentalCost.twoPersons
                     } else {
                         penyewaUi.infoKamar.currentRoomRentalCost.onePerson
@@ -198,7 +203,7 @@ private fun DetailPenyewaMainContent(
         }
         item(key = "Info Pemakaian Alat Elektronik Card") {
             val usageElectronic = penyewaUi.pemakaianAlatElektronikBulanan
-            val action = if (penyewaUi.rentalStatus == Constant.ACTIVE){
+            val action = if (penyewaUi.rentalStatus == Constant.ACTIVE) {
                 CardAction.NavigationIconFooter {
 
                 }
@@ -210,10 +215,11 @@ private fun DetailPenyewaMainContent(
                 title = stringResource(R.string.monthly_electronic_device_use),
                 action = action,
                 content = {
-                    if (usageElectronic.isNotEmpty()){
+                    if (usageElectronic.isNotEmpty()) {
                         usageElectronic.fastForEachIndexed { index, electronic ->
                             val isGratis = electronic.cost == 0L
-                            val textFront = if (isGratis) "${electronic.toolName} Gratis" else electronic.toolName
+                            val textFront =
+                                if (isGratis) "${electronic.toolName} Gratis" else electronic.toolName
                             Text(
                                 text = "${index + 1}. $textFront - ${electronic.cost.toRupiahFormat()}",
                                 style = MaterialTheme.typography.bodyMedium,
@@ -230,40 +236,44 @@ private fun DetailPenyewaMainContent(
                         )
                     }
                 },
-                footer = {
-                    if (usageElectronic.isEmpty() && penyewaUi.rentalStatus == Constant.ACTIVE){
-                        Row(
-                            modifier = Modifier,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Text(
-                                text = "Tambah Pemakaian",
-                                style = MaterialTheme.typography.bodyMedium
-                            )
-                            Spacer(Modifier.width(10.dp))
-                            Icon(
-                                imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
-                                contentDescription = "Detail",
-                                tint = MaterialTheme.colorScheme.onSurface
-                            )
-                        }
-                    } else if (usageElectronic.isNotEmpty() && penyewaUi.rentalStatus == Constant.ACTIVE) {
-                        Row(
-                            modifier = Modifier,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Text(
-                                text = "Edit Pemakaian",
-                                style = MaterialTheme.typography.bodyMedium
-                            )
-                            Spacer(Modifier.width(10.dp))
-                            Icon(
-                                imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
-                                contentDescription = "Detail",
-                                tint = MaterialTheme.colorScheme.onSurface
-                            )
+                footer = if (penyewaUi.rentalStatus == Constant.ACTIVE) {
+                    {
+                        if (usageElectronic.isEmpty()) {
+                            Row(
+                                modifier = Modifier,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text(
+                                    text = "Tambah Pemakaian",
+                                    style = MaterialTheme.typography.bodyMedium
+                                )
+                                Spacer(Modifier.width(10.dp))
+                                Icon(
+                                    imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                                    contentDescription = "Detail",
+                                    tint = MaterialTheme.colorScheme.onSurface
+                                )
+                            }
+                        } else {
+                            Row(
+                                modifier = Modifier,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text(
+                                    text = "Edit Pemakaian",
+                                    style = MaterialTheme.typography.bodyMedium
+                                )
+                                Spacer(Modifier.width(10.dp))
+                                Icon(
+                                    imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                                    contentDescription = "Detail",
+                                    tint = MaterialTheme.colorScheme.onSurface
+                                )
+                            }
                         }
                     }
+                } else {
+                    null
                 }
             )
         }
@@ -272,19 +282,19 @@ private fun DetailPenyewaMainContent(
             val contentText = if (usageParking != null) {
                 buildString {
                     append(usageParking.carBrand)
-                    append("")
+                    append(" ")
                     append(usageParking.carName)
-                    append("")
+                    append(" ")
                     append("(${usageParking.numberPlate})")
                     append(" - ")
-                    append(usageParking.zonaParkir.zoneName)
+                    append(ZonaParkirFormatter.format(usageParking.zonaParkir.zoneName))
                     append(" - ")
                     append("${usageParking.zonaParkir.monthlyFee.toRupiahFormat()}/bulan")
                 }
             } else {
                 stringResource(R.string.no_parking_usage)
             }
-            val action = if (penyewaUi.rentalStatus == Constant.ACTIVE){
+            val action = if (penyewaUi.rentalStatus == Constant.ACTIVE) {
                 CardAction.NavigationIconFooter {
 
                 }
@@ -303,40 +313,44 @@ private fun DetailPenyewaMainContent(
                         color = MaterialTheme.colorScheme.onSurface
                     )
                 },
-                footer = {
-                    if (usageParking == null && penyewaUi.rentalStatus == Constant.ACTIVE){
-                        Row(
-                            modifier = Modifier,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Text(
-                                text = "Tambah Pemakaian",
-                                style = MaterialTheme.typography.bodyMedium
-                            )
-                            Spacer(Modifier.width(10.dp))
-                            Icon(
-                                imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
-                                contentDescription = "Detail",
-                                tint = MaterialTheme.colorScheme.onSurface
-                            )
-                        }
-                    } else if (usageParking != null && penyewaUi.rentalStatus == Constant.ACTIVE) {
-                        Row(
-                            modifier = Modifier,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Text(
-                                text = "Edit Pemakaian",
-                                style = MaterialTheme.typography.bodyMedium
-                            )
-                            Spacer(Modifier.width(10.dp))
-                            Icon(
-                                imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
-                                contentDescription = "Detail",
-                                tint = MaterialTheme.colorScheme.onSurface
-                            )
+                footer = if (penyewaUi.rentalStatus == Constant.ACTIVE) {
+                    {
+                        if (usageParking == null) {
+                            Row(
+                                modifier = Modifier,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text(
+                                    text = "Tambah Pemakaian",
+                                    style = MaterialTheme.typography.bodyMedium
+                                )
+                                Spacer(Modifier.width(10.dp))
+                                Icon(
+                                    imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                                    contentDescription = "Detail",
+                                    tint = MaterialTheme.colorScheme.onSurface
+                                )
+                            }
+                        } else {
+                            Row(
+                                modifier = Modifier,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text(
+                                    text = "Edit Pemakaian",
+                                    style = MaterialTheme.typography.bodyMedium
+                                )
+                                Spacer(Modifier.width(10.dp))
+                                Icon(
+                                    imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                                    contentDescription = "Detail",
+                                    tint = MaterialTheme.colorScheme.onSurface
+                                )
+                            }
                         }
                     }
+                } else {
+                    null
                 }
             )
         }
@@ -346,7 +360,8 @@ private fun DetailPenyewaMainContent(
                 title = stringResource(R.string.capacity_room),
                 action = CardAction.None,
                 content = {
-                    val capacityRoom = if (penyewaUi.infoKamar.currentRoomRentalCost.twoPersons != null) 2 else 1
+                    val capacityRoom =
+                        if (penyewaUi.infoKamar.currentRoomRentalCost.twoPersons != null) 2 else 1
                     Text(
                         text = "$capacityRoom Orang",
                         style = MaterialTheme.typography.bodyMedium,
@@ -408,7 +423,7 @@ private fun DetailPenyewaMainContent(
                 title = stringResource(R.string.end_rental_date),
                 action = CardAction.None,
                 content = {
-                    val tanggalAkhir = if (penyewaUi.rentalCompletionDate != null){
+                    val tanggalAkhir = if (penyewaUi.rentalCompletionDate != null) {
                         penyewaUi.rentalCompletionDate.toDayMonthAndYear()
                     } else {
                         "-"
@@ -422,7 +437,7 @@ private fun DetailPenyewaMainContent(
                 }
             )
         }
-        if (penyewaUi.rentalStatus == Constant.ACTIVE){
+        if (penyewaUi.rentalStatus == Constant.ACTIVE) {
             item(key = "Button Akhiri Sewa") {
                 ActionDangerButton(
                     modifier = Modifier.fillMaxWidth(),

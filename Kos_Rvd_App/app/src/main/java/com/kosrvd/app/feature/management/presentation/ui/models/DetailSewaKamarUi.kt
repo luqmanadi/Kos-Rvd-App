@@ -30,7 +30,7 @@ fun Penyewaan.toDetailSewaKamarUi(): DetailSewaKamarUi {
         pemakaianAlatElektronik = this.pemakaianAlatElektronikBulanan,
         pemakaianParkirMobil = this.pemakaianParkirMobilBulanan,
         totalMonthlyBill = calculateTotalBill(
-            this.infoKamar.currentRoomRentalCost.onePerson,
+            if (this.listResident.size == 2 && this.infoKamar.currentRoomRentalCost.twoPersons != null) this.infoKamar.currentRoomRentalCost.twoPersons else this.infoKamar.currentRoomRentalCost.onePerson,
             this.pemakaianParkirMobilBulanan?.zonaParkir?.monthlyFee,
             this.pemakaianAlatElektronikBulanan
         ).toRupiahFormat()

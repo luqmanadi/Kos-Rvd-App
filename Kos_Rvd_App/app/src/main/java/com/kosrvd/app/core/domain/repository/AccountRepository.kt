@@ -10,6 +10,7 @@ import com.kosrvd.app.core.domain.utils.Result
 import kotlinx.coroutines.flow.Flow
 
 interface AccountRepository {
+    suspend fun getAllAccountRolePenghuniStatusAktifAndNomorKamarNull(): Result<List<Account>, DataError>
     suspend fun getAccountById(idAkun: String): Result<Account, DataError>
 
     fun getAccountByIdWithFlow(idAkun: String): Flow<Result<Account, DataError>>

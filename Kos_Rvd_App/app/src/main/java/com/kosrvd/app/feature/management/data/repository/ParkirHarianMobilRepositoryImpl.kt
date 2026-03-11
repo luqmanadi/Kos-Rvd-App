@@ -15,12 +15,26 @@ import com.kosrvd.app.feature.management.data.repository.dto.ParkirHarianMobilDt
 import com.kosrvd.app.feature.management.domain.model.ParkirHarianMobil
 import com.kosrvd.app.feature.management.domain.model.TambahParkirHarianMobil
 import com.kosrvd.app.feature.management.domain.repository.ParkirHarianMobilRepository
+import com.kosrvd.app.feature.management.presentation.designsystem.utils.getNowEndOfDay
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 class ParkirHarianMobilRepositoryImpl @Inject constructor (
     private val db: FirebaseFirestore
 ): ParkirHarianMobilRepository {
+    override suspend fun getAllParkirHarianMobilCancelledFalseAndCompletionDateGreaterThan(): Result<List<ParkirHarianMobil>, DataError> {
+        val timeNow = getNowEndOfDay()
+        return safeCall {
+            db.collection(Constant.PARKIR_HARIAN_MOBIL_COLLECTION)
+                .whereEqualTo(Constant.CANCELLED_STATUS_FIELD, false)
+                .whereGreaterThan(Constant.COMPLETION_DATE_FIELD, timeNow)
+                .get()
+                .await()
+                .toObjectListOrThrow<ParkirHarianMobilDto>(
+                    mappingErrorMessage = ErrorMessages.PARKIR_HARIAN_MOBIL_MAPPING_ERROR
+                )
+        }.map { it.toListOfParkirHarianMobil() }
+    }
     override suspend fun getAllParkirHarianMobilCancelledStatusFalse(): Result<List<ParkirHarianMobil>, DataError> {
         return safeCall {
             db.collection(Constant.PARKIR_HARIAN_MOBIL_COLLECTION)

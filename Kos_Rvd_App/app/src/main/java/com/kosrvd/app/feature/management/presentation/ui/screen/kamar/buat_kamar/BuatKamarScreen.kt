@@ -491,7 +491,8 @@ fun UkuranKamarSection(
             onItemSelected = { buatKamarActions(BuatKamarActions.UpdateUkuranKamar(it))},
             itemToString = { ukuranKamar ->
                 ukuranKamar ?: "Pilih Ukuran"
-            }
+            },
+            textNoData = R.string.no_data_size_room
         )
     }
 }

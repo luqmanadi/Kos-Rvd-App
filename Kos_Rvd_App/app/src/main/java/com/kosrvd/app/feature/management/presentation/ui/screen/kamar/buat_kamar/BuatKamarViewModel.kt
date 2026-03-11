@@ -31,7 +31,7 @@ sealed interface BuatKamarActions {
     data object NavigateBack: BuatKamarActions
     data object BuatKamarBaru: BuatKamarActions
     data class UpdateNumberRoom(val numberRoom: String): BuatKamarActions
-    data class UpdateUkuranKamar(val ukuranKamar: String): BuatKamarActions
+    data class UpdateUkuranKamar(val ukuranKamar: String?): BuatKamarActions
     data class UpdateTarifSatuOrang(val tarifSatuOrang: String): BuatKamarActions
     data class UpdateTarifDuaOrang(val tarifDuaOrang: String): BuatKamarActions
     data class UpdateSelectJumlahOrang(val jumlahOrang: Int): BuatKamarActions
@@ -71,7 +71,7 @@ class BuatKamarViewModel @Inject constructor(
         }
     }
 
-    private fun updateUkuranKamar(ukuranKamar: String) {
+    private fun updateUkuranKamar(ukuranKamar: String?) {
         _state.update { it.copy(ukuranKamar = ukuranKamar) }
     }
 
@@ -202,7 +202,7 @@ class BuatKamarViewModel @Inject constructor(
                 return@launch
             }
 
-            if (ukuranKamar.isEmpty()){
+            if (ukuranKamar.isNullOrEmpty()){
                 _state.update {
                     it.copy(
                         isButtonLoading = false

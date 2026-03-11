@@ -1,6 +1,7 @@
 package com.kosrvd.app.core.navigation.graph
 
 import android.net.Uri
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
@@ -178,7 +179,7 @@ fun RootNavGraph(
                                 resultCreatePenyewaan = null
                             )
                         ) {
-                            popUpTo(NavigationScreen.DetailTagihan(idTagihan)) {
+                            popUpTo<NavigationScreen.DetailTagihan> {
                                 inclusive = true
                             }
                         }
@@ -227,7 +228,7 @@ fun RootNavGraph(
                                 resultTagihan = event.resultBuatTagihan
                             )
                         ) {
-                            popUpTo(NavigationScreen.BuatTagihanScreen) {
+                            popUpTo<NavigationScreen.BuatTagihanScreen> {
                                 inclusive = true
                             }
                         }
@@ -364,13 +365,16 @@ fun RootNavGraph(
             val result = backStackEntry.toRoute<NavigationScreen.ResultScreen>()
 
             val navigateToDetailPenyewaan = {
-                navController.navigate(
-                    NavigationScreen.DetailPenyewaanScreen(
-                        result.resultCreatePenyewaan?.idPenyewaan ?: ""
-                    )
-                ) {
-                    popUpTo(NavigationScreen.ResultScreen) {
-                        inclusive = true
+                if (result.resultCreatePenyewaan != null){
+                    Log.d("TAG", "ResultScreen: ${result.resultCreatePenyewaan}")
+                    navController.navigate(
+                        NavigationScreen.DetailPenyewaanScreen(
+                            result.resultCreatePenyewaan.idPenyewaan
+                        )
+                    ) {
+                        popUpTo<NavigationScreen.ResultScreen> {
+                            inclusive = true
+                        }
                     }
                 }
             }
@@ -382,7 +386,7 @@ fun RootNavGraph(
                 navigateToDetailPenyewaan = navigateToDetailPenyewaan,
                 navigateToDashboard = {
                     navController.navigate(NavigationGraph.MainGraph) {
-                        popUpTo(NavigationGraph.MainGraph) {
+                        popUpTo<NavigationGraph.MainGraph> {
                             inclusive = true
                         }
                     }
@@ -644,7 +648,7 @@ fun RootNavGraph(
                                 resultLaporanKeluhan = events.keluhanResult
                             )
                         ) {
-                            popUpTo(NavigationScreen.DetailKeluhanScreen(idKeluhan)) {
+                            popUpTo<NavigationScreen.DetailKeluhanScreen> {
                                 inclusive = true
                             }
                         }
@@ -701,7 +705,7 @@ fun RootNavGraph(
                                 resultLaporanKeluhan = event.resultLaporanKeluhan,
                             )
                         ) {
-                            popUpTo(NavigationScreen.BuatKeluhanScreen) {
+                            popUpTo<NavigationScreen.BuatKeluhanScreen> {
                                 inclusive = true
                             }
                         }

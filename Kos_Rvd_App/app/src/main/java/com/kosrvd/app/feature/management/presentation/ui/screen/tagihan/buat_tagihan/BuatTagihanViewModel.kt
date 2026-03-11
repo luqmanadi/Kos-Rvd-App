@@ -34,7 +34,7 @@ sealed interface BuatTagihanEvents{
 
 sealed interface BuatTagihanActions{
     data object BuatTagihan: BuatTagihanActions
-    data class UpdateItemSelected(val item: Penyewaan): BuatTagihanActions
+    data class UpdateItemSelected(val item: Penyewaan?): BuatTagihanActions
     data class UpdateAdminFees(val adminFees: Boolean): BuatTagihanActions
     data object NavigateBack: BuatTagihanActions
     data object TryAgain: BuatTagihanActions
@@ -193,7 +193,7 @@ class BuatTagihanViewModel @Inject constructor(
         calculateLivePreview()
     }
 
-    private fun updateItemSelected(item: Penyewaan) {
+    private fun updateItemSelected(item: Penyewaan?) {
         _state.update {
             it.copy(
                 itemSelected = item

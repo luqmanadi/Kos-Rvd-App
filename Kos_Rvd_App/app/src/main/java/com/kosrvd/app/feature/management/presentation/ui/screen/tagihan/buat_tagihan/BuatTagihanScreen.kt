@@ -191,7 +191,8 @@ private fun BuatTagihanContent(
                         } else {
                             "Pilih Penyewa Kamar"
                         }
-                    }
+                    },
+                    textNoData = R.string.no_data_rental
                 )
 
                 // radio button choose admin fees

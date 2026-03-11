@@ -21,6 +21,10 @@ import com.kosrvd.app.core.presentation.utils.CustomToastResultConfig
 import com.kosrvd.app.core.presentation.utils.ObserveAsEvents
 import com.kosrvd.app.core.presentation.utils.ObserveCustomToastResults
 import com.kosrvd.app.core.presentation.utils.navigateBackWithSendKey
+import com.kosrvd.app.feature.management.presentation.designsystem.utils.TypeResult
+import com.kosrvd.app.feature.management.presentation.ui.screen.penyewaan.buat_penyewaan.BuatPenyewaanEvents
+import com.kosrvd.app.feature.management.presentation.ui.screen.penyewaan.buat_penyewaan.BuatPenyewaanScreen
+import com.kosrvd.app.feature.management.presentation.ui.screen.penyewaan.buat_penyewaan.BuatPenyewaanViewModel
 import com.kosrvd.app.feature.management.presentation.ui.screen.penyewaan.detail_penyewaan.DetailPenyewaEvents
 import com.kosrvd.app.feature.management.presentation.ui.screen.penyewaan.detail_penyewaan.DetailPenyewaanScreen
 import com.kosrvd.app.feature.management.presentation.ui.screen.penyewaan.detail_penyewaan.DetailPenyewaanViewModel
@@ -119,7 +123,41 @@ fun NavGraphBuilder.penyewaanGraph(
             )
         }
         composable<NavigationScreen.BuatPenyewaanScreen> {
-            // TODO: Kerjakan Bagian Buat Penyewaan ini
+            val buatPenyewaanViewModel = hiltViewModel<BuatPenyewaanViewModel>()
+            val buatPenyewaanUiState by buatPenyewaanViewModel.state.collectAsStateWithLifecycle()
+            val customToastHostState = rememberCustomToastHostState()
+            val scope = rememberCoroutineScope()
+
+            ObserveAsEvents(buatPenyewaanViewModel.events) { events ->
+                when(events){
+                    BuatPenyewaanEvents.NavigateBack -> {
+                        navController.navigateUp()
+                    }
+                    is BuatPenyewaanEvents.NavigateToResultScreen -> {
+                        navController.navigate(
+                            NavigationScreen.ResultScreen(
+                                typeResult = TypeResult.BUAT_PENYEWAAN,
+                                resultCreatePenyewaan =events.resultCreatePenyewaan
+                            )
+                        ){
+                            popUpTo<NavigationScreen.BuatPenyewaanScreen>{
+                                inclusive = true
+                            }
+                        }
+                    }
+                    is BuatPenyewaanEvents.ShowSnackBarError -> {
+                        scope.launch {
+                            customToastHostState.showToast(events.message)
+                        }
+                    }
+                }
+            }
+
+            BuatPenyewaanScreen(
+                buatPenyewaanUiState = buatPenyewaanUiState,
+                buatPenyewaanActions = buatPenyewaanViewModel::onActions,
+                customToastHostState = customToastHostState
+            )
         }
         composable<NavigationScreen.EditPemakaianAlatEleketronikScreen> { navBackStackEntry ->
             val arguments = navBackStackEntry.toRoute<NavigationScreen.EditPemakaianAlatEleketronikScreen>()
