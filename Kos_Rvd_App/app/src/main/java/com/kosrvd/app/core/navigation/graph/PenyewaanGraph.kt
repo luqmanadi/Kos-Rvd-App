@@ -102,6 +102,23 @@ fun NavGraphBuilder.penyewaanGraph(
                             customToastHostState.showToast(events.message)
                         }
                     }
+
+                    is DetailPenyewaEvents.NavigateToEditPemakaianElektronik -> {
+                        navController.navigate(
+                            NavigationScreen.EditPemakaianAlatEleketronikScreen(
+                                idPenyewaan = events.idPenyewa,
+                                listAlatElektronik = events.pemakaianAlatElektronikBulanan
+                            )
+                        )
+                    }
+                    is DetailPenyewaEvents.NavigateToEditPemakaianParkirMobil -> {
+                        navController.navigate(
+                            NavigationScreen.EditPemakaianParkirMobilBulananScreen(
+                                idPenyewaan = events.idPenyewa,
+                                pemakaianParkirMobilBulanan = events.pemakaianParkirMobilBulanan
+                            )
+                        )
+                    }
                 }
             }
 

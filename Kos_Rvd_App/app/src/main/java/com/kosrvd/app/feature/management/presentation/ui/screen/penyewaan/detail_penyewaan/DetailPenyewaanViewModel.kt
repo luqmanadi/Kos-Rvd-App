@@ -7,6 +7,9 @@ import androidx.navigation.toRoute
 import com.kosrvd.app.core.domain.utils.onError
 import com.kosrvd.app.core.domain.utils.onSuccess
 import com.kosrvd.app.core.navigation.NavigationScreen
+import com.kosrvd.app.core.navigation.models.AlatElektronikSerialize
+import com.kosrvd.app.core.navigation.models.InfoPakaiParkirMobilBulananSerialize
+import com.kosrvd.app.core.navigation.models.toInfoPakaiParkirMobilBulananSerialize
 import com.kosrvd.app.feature.management.domain.repository.PenyewaanRepository
 import com.kosrvd.app.feature.management.presentation.ui.models.toPenyewaUi
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,6 +26,8 @@ import javax.inject.Inject
 sealed interface DetailPenyewaEvents {
     data object NavigateBack: DetailPenyewaEvents
     data object NavigateBackToSendEndedRental: DetailPenyewaEvents
+    data class NavigateToEditPemakaianParkirMobil(val idPenyewa: String, val pemakaianParkirMobilBulanan: InfoPakaiParkirMobilBulananSerialize?): DetailPenyewaEvents
+    data class NavigateToEditPemakaianElektronik(val idPenyewa: String, val pemakaianAlatElektronikBulanan: List<AlatElektronikSerialize>): DetailPenyewaEvents
     data class ShowSnackBarError(val message: String): DetailPenyewaEvents
 }
 
@@ -32,6 +37,8 @@ sealed interface DetailPenyewaActions {
     data object EndRental: DetailPenyewaActions
     data object ShowDialogEndRental: DetailPenyewaActions
     data object DismissDialogEndRental: DetailPenyewaActions
+    data object NavigateToEditPemakaianParkirMobil: DetailPenyewaActions
+    data object NavigateToEditPemakaianElektronik: DetailPenyewaActions
 }
 
 @HiltViewModel
@@ -58,6 +65,40 @@ class DetailPenyewaanViewModel @Inject constructor(
             DetailPenyewaActions.ShowDialogEndRental -> showDialogEndRental()
             DetailPenyewaActions.EndRental -> endRental()
             DetailPenyewaActions.TryAgain -> loadDetailPenyewa()
+            DetailPenyewaActions.NavigateToEditPemakaianElektronik -> navigateToEditPemakaianElektronik()
+            DetailPenyewaActions.NavigateToEditPemakaianParkirMobil -> navigateToEditPemakaianParkirMobil()
+        }
+    }
+
+    private fun navigateToEditPemakaianParkirMobil() {
+        viewModelScope.launch {
+            val idPenyewa = _state.value.penyewaUi?.idPenyewa ?: ""
+            val pemakaianParkirMobilBulanan = _state.value.penyewaUi?.pemakaianParkirMobilBulanan?.toInfoPakaiParkirMobilBulananSerialize()
+            _events.send(
+                DetailPenyewaEvents.NavigateToEditPemakaianParkirMobil(
+                    idPenyewa = idPenyewa,
+                    pemakaianParkirMobilBulanan = pemakaianParkirMobilBulanan
+                )
+            )
+        }
+    }
+
+    private fun navigateToEditPemakaianElektronik() {
+        viewModelScope.launch {
+            val idPenyewa = _state.value.penyewaUi?.idPenyewa ?: ""
+            val pemakaianAlatElektronikBulanan = _state.value.penyewaUi?.pemakaianAlatElektronikBulanan?.map {
+                AlatElektronikSerialize(
+                    toolName = it.toolName,
+                    cost = it.cost,
+                    origin = it.origin
+                )
+            } ?: emptyList()
+            _events.send(
+                DetailPenyewaEvents.NavigateToEditPemakaianElektronik(
+                    idPenyewa = idPenyewa,
+                    pemakaianAlatElektronikBulanan = pemakaianAlatElektronikBulanan
+                )
+            )
         }
     }
 

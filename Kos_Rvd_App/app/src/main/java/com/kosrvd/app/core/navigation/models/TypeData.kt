@@ -1,5 +1,6 @@
 package com.kosrvd.app.core.navigation.models
 
+import com.kosrvd.app.feature.management.domain.model.InfoPakaiParkirMobilBulanan
 import com.kosrvd.app.feature.management.domain.model.InfoZonaParkir
 import kotlinx.serialization.Serializable
 
@@ -102,6 +103,24 @@ data class InfoZonaParkirSerialize(
 
 fun InfoZonaParkirSerialize.toInfoZonaParkir(): InfoZonaParkir {
     return InfoZonaParkir(
+        idZonaParkir = this.idZonaParkir,
+        zoneName = this.zoneName,
+        monthlyFee = this.monthlyFee
+    )
+}
+
+fun InfoPakaiParkirMobilBulanan.toInfoPakaiParkirMobilBulananSerialize(): InfoPakaiParkirMobilBulananSerialize {
+    return InfoPakaiParkirMobilBulananSerialize(
+        carName = this.carName,
+        numberPlate = this.numberPlate,
+        carBrand = this.carBrand,
+        notes = this.notes,
+        zonaParkir = this.zonaParkir.toInfoZonaParkirSerialize()
+    )
+}
+
+fun InfoZonaParkir.toInfoZonaParkirSerialize(): InfoZonaParkirSerialize {
+    return InfoZonaParkirSerialize(
         idZonaParkir = this.idZonaParkir,
         zoneName = this.zoneName,
         monthlyFee = this.monthlyFee

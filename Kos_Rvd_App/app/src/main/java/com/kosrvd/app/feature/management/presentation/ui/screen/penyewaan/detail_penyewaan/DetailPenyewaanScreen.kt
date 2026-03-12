@@ -205,7 +205,7 @@ private fun DetailPenyewaMainContent(
             val usageElectronic = penyewaUi.pemakaianAlatElektronikBulanan
             val action = if (penyewaUi.rentalStatus == Constant.ACTIVE) {
                 CardAction.NavigationIconFooter {
-
+                    detailPenyewaActions(DetailPenyewaActions.NavigateToEditPemakaianElektronik)
                 }
             } else {
                 CardAction.None
@@ -296,7 +296,7 @@ private fun DetailPenyewaMainContent(
             }
             val action = if (penyewaUi.rentalStatus == Constant.ACTIVE) {
                 CardAction.NavigationIconFooter {
-
+                    detailPenyewaActions(DetailPenyewaActions.NavigateToEditPemakaianParkirMobil)
                 }
             } else {
                 CardAction.None
