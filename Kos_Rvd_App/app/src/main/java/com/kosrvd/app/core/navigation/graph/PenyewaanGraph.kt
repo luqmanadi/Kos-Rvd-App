@@ -12,7 +12,6 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
-import androidx.navigation.toRoute
 import com.kosrvd.app.core.data.constant.Constant
 import com.kosrvd.app.core.domain.utils.rememberCustomToastHostState
 import com.kosrvd.app.core.navigation.NavigationGraph
@@ -28,6 +27,12 @@ import com.kosrvd.app.feature.management.presentation.ui.screen.penyewaan.buat_p
 import com.kosrvd.app.feature.management.presentation.ui.screen.penyewaan.detail_penyewaan.DetailPenyewaEvents
 import com.kosrvd.app.feature.management.presentation.ui.screen.penyewaan.detail_penyewaan.DetailPenyewaanScreen
 import com.kosrvd.app.feature.management.presentation.ui.screen.penyewaan.detail_penyewaan.DetailPenyewaanViewModel
+import com.kosrvd.app.feature.management.presentation.ui.screen.penyewaan.edit_pemakaian_elektronik.EditPemakaianElektronikEvents
+import com.kosrvd.app.feature.management.presentation.ui.screen.penyewaan.edit_pemakaian_elektronik.EditPemakaianElektronikScreen
+import com.kosrvd.app.feature.management.presentation.ui.screen.penyewaan.edit_pemakaian_elektronik.EditPemakaianElektronikViewModel
+import com.kosrvd.app.feature.management.presentation.ui.screen.penyewaan.edit_pemakaian_parkir_mobil.EditPemakaianParkirMobilEvents
+import com.kosrvd.app.feature.management.presentation.ui.screen.penyewaan.edit_pemakaian_parkir_mobil.EditPemakaianParkirMobilScreen
+import com.kosrvd.app.feature.management.presentation.ui.screen.penyewaan.edit_pemakaian_parkir_mobil.EditPemakaianParkirMobilViewModel
 import com.kosrvd.app.feature.management.presentation.ui.screen.penyewaan.list_penyewaan.ListPenyewaanEvents
 import com.kosrvd.app.feature.management.presentation.ui.screen.penyewaan.list_penyewaan.ListPenyewaanScreen
 import com.kosrvd.app.feature.management.presentation.ui.screen.penyewaan.list_penyewaan.ListPenyewaanViewModel
@@ -159,13 +164,61 @@ fun NavGraphBuilder.penyewaanGraph(
                 customToastHostState = customToastHostState
             )
         }
-        composable<NavigationScreen.EditPemakaianAlatEleketronikScreen> { navBackStackEntry ->
-            val arguments = navBackStackEntry.toRoute<NavigationScreen.EditPemakaianAlatEleketronikScreen>()
-            // TODO: Kerjakan Bagian Edit atau Tambah Pemakaian alat elektronik ini
+        composable<NavigationScreen.EditPemakaianAlatEleketronikScreen> {
+            val editPemakaianAlatEleketronikViewModel = hiltViewModel<EditPemakaianElektronikViewModel>()
+            val editPemakaianAlatEleketronikUiState by editPemakaianAlatEleketronikViewModel.state.collectAsStateWithLifecycle()
+            val scope = rememberCoroutineScope()
+            val customToastHostState = rememberCustomToastHostState()
+
+            ObserveAsEvents(editPemakaianAlatEleketronikViewModel.events) { events ->
+                when(events){
+                    EditPemakaianElektronikEvents.NavigateBack -> {
+                        navController.navigateUp()
+                    }
+                    EditPemakaianElektronikEvents.NavigateBackSuccessEditPemakaianElektronik -> {
+                        navController.navigateBackWithSendKey(Constant.UPDATE_PEMAKAIAN_ALAT_ELEKTRONIK_KEY)
+                    }
+                    is EditPemakaianElektronikEvents.ShowSnackBarError -> {
+                        scope.launch {
+                            customToastHostState.showToast(events.message)
+                        }
+                    }
+                }
+            }
+
+            EditPemakaianElektronikScreen(
+                editPemakaianElektronikUiState = editPemakaianAlatEleketronikUiState,
+                editPemakaianElektronikActions = editPemakaianAlatEleketronikViewModel::onActions,
+                customToastHostState = customToastHostState
+            )
         }
-        composable<NavigationScreen.EditPemakaianParkirMobilBulananScreen> { navBackStackEntry ->
-            val arguments = navBackStackEntry.toRoute<NavigationScreen.EditPemakaianParkirMobilBulananScreen>()
-            // TODO: Kerjakan Bagian Edit atau tambah pemakaian parkir mobil ini
+        composable<NavigationScreen.EditPemakaianParkirMobilBulananScreen> {
+            val editPemakaianParkirMobilBulananViewModel = hiltViewModel<EditPemakaianParkirMobilViewModel>()
+            val editPemakaianParkirMobilBulananUiState by editPemakaianParkirMobilBulananViewModel.state.collectAsStateWithLifecycle()
+            val scope = rememberCoroutineScope()
+            val customToastHostState = rememberCustomToastHostState()
+
+            ObserveAsEvents(editPemakaianParkirMobilBulananViewModel.events) { events ->
+                when(events){
+                    EditPemakaianParkirMobilEvents.NavigateBack -> {
+                        navController.navigateUp()
+                    }
+                    EditPemakaianParkirMobilEvents.NavigateBackSuccessEditPemakaianParkirMobil -> {
+                        navController.navigateBackWithSendKey(Constant.UPDATE_PEMAKAIAN_PARKIR_MOBIL_BULANAN_KEY)
+                    }
+                    is EditPemakaianParkirMobilEvents.ShowSnackBarError -> {
+                        scope.launch {
+                            customToastHostState.showToast(events.message)
+                        }
+                    }
+                }
+            }
+
+            EditPemakaianParkirMobilScreen(
+                editPemakaianParkirMobilUiState = editPemakaianParkirMobilBulananUiState,
+                editPemakaianParkirMobilActions = editPemakaianParkirMobilBulananViewModel::onActions,
+                customToastHostState = customToastHostState
+            )
         }
     }
 }
