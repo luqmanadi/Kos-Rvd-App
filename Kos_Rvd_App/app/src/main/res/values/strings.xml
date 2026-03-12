@@ -580,6 +580,9 @@
     <string name="keterangan_tidak_boleh_kosong">Keterangan tidak boleh kosong</string>
     <string name="nominal_persen_diskon_harus_angka">Nominal persen diskon harus angka</string>
     <string name="nominal_persen_diskon_tidak_boleh_kosong">Nominal persen diskon tidak boleh kosong</string>
+    <string name="harga_sewa_tidak_boleh_kosong">Harga sewa tidak boleh kosong</string>
+    <string name="harga_sewa_harus_angka">Harga sewa harus berupa angka</string>
+    <string name="nama_elektronik_tidak_boleh_kosong">Nama elektronik tidak boleh kosong</string>
 
     // notification channel id
     <string name="kos_rvd_channel_id">kos_rvd_channel_id</string>

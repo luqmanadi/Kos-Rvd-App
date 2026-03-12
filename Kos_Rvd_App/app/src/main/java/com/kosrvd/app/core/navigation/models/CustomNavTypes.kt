@@ -184,4 +184,54 @@ object CustomNavTypes {
             return Uri.encode(Json.encodeToString(value))
         }
     }
+
+    val listAlatElektronik = object : NavType<List<AlatElektronikSerialize>>(isNullableAllowed = false){
+        override fun put(
+            bundle: SavedState,
+            key: String,
+            value: List<AlatElektronikSerialize>
+        ) {
+            bundle.putString(key, Json.encodeToString(value))
+        }
+
+        override fun get(
+            bundle: SavedState,
+            key: String
+        ): List<AlatElektronikSerialize>? {
+            return Json.Default.decodeFromString(bundle.getString(key) ?: return null)
+        }
+
+        override fun parseValue(value: String): List<AlatElektronikSerialize> {
+            return Json.Default.decodeFromString(Uri.decode(value))
+        }
+
+        override fun serializeAsValue(value: List<AlatElektronikSerialize>): String {
+            return Uri.encode(Json.encodeToString(value))
+        }
+    }
+
+    val infoPemakaianParkirMobilBulanan = object : NavType<InfoPakaiParkirMobilBulananSerialize?>(isNullableAllowed = true){
+        override fun put(
+            bundle: SavedState,
+            key: String,
+            value: InfoPakaiParkirMobilBulananSerialize?
+        ) {
+            bundle.putString(key, Json.encodeToString(value))
+        }
+
+        override fun get(
+            bundle: SavedState,
+            key: String
+        ): InfoPakaiParkirMobilBulananSerialize? {
+            return Json.Default.decodeFromString(bundle.getString(key) ?: return null)
+        }
+
+        override fun parseValue(value: String): InfoPakaiParkirMobilBulananSerialize? {
+            return Json.Default.decodeFromString(Uri.decode(value))
+        }
+
+        override fun serializeAsValue(value: InfoPakaiParkirMobilBulananSerialize?): String {
+            return Uri.encode(Json.encodeToString(value))
+        }
+    }
 }

@@ -1,5 +1,6 @@
 package com.kosrvd.app.core.navigation.models
 
+import com.kosrvd.app.feature.management.domain.model.InfoZonaParkir
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -82,3 +83,27 @@ data class AlatElektronikSerialize(
     val cost: Long,
     val origin: String
 )
+
+@Serializable
+data class InfoPakaiParkirMobilBulananSerialize(
+    val carName: String,
+    val numberPlate: String,
+    val carBrand: String,
+    val notes: String?,
+    val zonaParkir: InfoZonaParkirSerialize
+)
+
+@Serializable
+data class InfoZonaParkirSerialize(
+    val idZonaParkir: String,
+    val zoneName: String,
+    val monthlyFee: Long
+)
+
+fun InfoZonaParkirSerialize.toInfoZonaParkir(): InfoZonaParkir {
+    return InfoZonaParkir(
+        idZonaParkir = this.idZonaParkir,
+        zoneName = this.zoneName,
+        monthlyFee = this.monthlyFee
+    )
+}

@@ -16,7 +16,9 @@ import com.kosrvd.app.core.domain.utils.map
 import com.kosrvd.app.feature.management.data.mappers.toListPenyewaan
 import com.kosrvd.app.feature.management.data.mappers.toPenyewaan
 import com.kosrvd.app.feature.management.data.repository.dto.PenyewaanDto
+import com.kosrvd.app.feature.management.domain.model.AlatElektronik
 import com.kosrvd.app.feature.management.domain.model.BuatPenyewaan
+import com.kosrvd.app.feature.management.domain.model.InfoPakaiParkirMobilBulanan
 import com.kosrvd.app.feature.management.domain.model.Penyewaan
 import com.kosrvd.app.feature.management.domain.repository.PenyewaanRepository
 import kotlinx.coroutines.flow.Flow
@@ -93,6 +95,39 @@ class PenyewaanRepositoryImpl @Inject constructor(
             db.collection(Constant.PENYEWAAN_COLLECTION)
                 .document(idPenyewaan)
                 .update(dataUpdate)
+                .await()
+        }
+    }
+
+    override suspend fun editPemakaianElektronikBulanan(
+        idPenyewaan: String,
+        listAlatElektronik: List<AlatElektronik>
+    ): Result<Unit, DataError> {
+        return safeCall {
+            db.collection(Constant.PENYEWAAN_COLLECTION)
+                .document(idPenyewaan)
+                .update(Constant.PEMAKAIAN_ALAT_ELEKTRONIK_BULANAN_FIELD, listAlatElektronik)
+                .await()
+        }
+    }
+
+    override suspend fun editPemakaianParkirMobilBulanan(
+        idPenyewaan: String,
+        pakaiParkirMobilBulanan: InfoPakaiParkirMobilBulanan
+    ): Result<Unit, DataError> {
+        return safeCall {
+            db.collection(Constant.PENYEWAAN_COLLECTION)
+                .document(idPenyewaan)
+                .update(Constant.PEMAKAIAN_PARKIR_MOBIL_BULANAN_FIELD, pakaiParkirMobilBulanan)
+                .await()
+        }
+    }
+
+    override suspend fun endRentalPemakaianParkirMobilBulanan(idPenyewaan: String): Result<Unit, DataError> {
+        return safeCall {
+            db.collection(Constant.PENYEWAAN_COLLECTION)
+                .document(idPenyewaan)
+                .update(Constant.PEMAKAIAN_PARKIR_MOBIL_BULANAN_FIELD, null)
                 .await()
         }
     }

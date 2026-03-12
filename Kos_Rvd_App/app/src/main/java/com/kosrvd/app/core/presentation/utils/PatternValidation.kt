@@ -96,6 +96,29 @@ object PatternValidation {
         return numberPlate.isNotBlank()
     }
 
+    fun isHargaSewaValid(hargaSewa: String): Boolean {
+        return hargaSewa.isNotBlank() && hargaSewa.isDigitsOnly()
+    }
+
+    fun isNamaElektronikValid(namaElektronik: String): Boolean {
+        return namaElektronik.isNotBlank()
+    }
+
+    fun getNamaElektronikError(namaElektronik: String): UiText {
+        return when {
+            namaElektronik.isBlank() -> UiText.StringResource(R.string.nama_elektronik_tidak_boleh_kosong)
+            else -> UiText.DynamicString("")
+        }
+    }
+
+    fun getHargaSewaError(hargaSewa: String): UiText {
+        return when {
+            hargaSewa.isBlank() -> UiText.StringResource(R.string.harga_sewa_tidak_boleh_kosong)
+            !hargaSewa.isDigitsOnly() -> UiText.StringResource(R.string.harga_sewa_harus_angka)
+            else -> UiText.DynamicString("")
+        }
+    }
+
     fun getCarBrandError(carBrand: String): UiText {
         return when {
             carBrand.isBlank() -> UiText.StringResource(R.string.merk_mobil_tidak_boleh_kosong)

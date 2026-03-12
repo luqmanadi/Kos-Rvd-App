@@ -33,36 +33,44 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 sealed interface BuatPenyewaanEvents {
-    data object NavigateBack: BuatPenyewaanEvents
-    data class NavigateToResultScreen(val resultCreatePenyewaan: ResultCreatePenyewaan): BuatPenyewaanEvents
-    data class ShowSnackBarError(val message: String): BuatPenyewaanEvents
+    data object NavigateBack : BuatPenyewaanEvents
+    data class NavigateToResultScreen(val resultCreatePenyewaan: ResultCreatePenyewaan) :
+        BuatPenyewaanEvents
+
+    data class ShowSnackBarError(val message: String) : BuatPenyewaanEvents
 }
 
 sealed interface BuatPenyewaanActions {
-    data object NavigateBack: BuatPenyewaanActions
-    data object AddPenyewaan: BuatPenyewaanActions
-    data object NextPage: BuatPenyewaanActions
-    data object BackPage: BuatPenyewaanActions
-    data object TryAgain: BuatPenyewaanActions
-    data class OnNumberPlateChange(val numberPlate: String): BuatPenyewaanActions
-    data class OnCarBrandChange(val carBrand: String): BuatPenyewaanActions
-    data class OnCarNameChange(val carName: String): BuatPenyewaanActions
-    data class OnNotesChange(val notes: String): BuatPenyewaanActions
-    data class OnSelectedKamarChange(val selectedKamar: Kamar): BuatPenyewaanActions
-    data class OnSelectedPenghuniPertamaChange(val selectedPenghuniPertama: Account?): BuatPenyewaanActions
-    data class OnSelectedPenghuniKeduaChange(val selectedPenghuniKedua: Account?): BuatPenyewaanActions
-    data class OnSelectedZoneParkingChange(val selectedZoneParking: ZonaParkiran?): BuatPenyewaanActions
-    data class OnUpdateNamaAlatElektronik(val namaAlatElektronik: String): BuatPenyewaanActions
-    data class OnUpdatePriceAlatElektronik(val priceAlatElektronik: String): BuatPenyewaanActions
-    data object AddAlatElektronik: BuatPenyewaanActions
-    data class RemoveAlatElektronik(val index: Int): BuatPenyewaanActions
+    data object NavigateBack : BuatPenyewaanActions
+    data object AddPenyewaan : BuatPenyewaanActions
+    data object NextPage : BuatPenyewaanActions
+    data object BackPage : BuatPenyewaanActions
+    data object TryAgain : BuatPenyewaanActions
+    data class OnNumberPlateChange(val numberPlate: String) : BuatPenyewaanActions
+    data class OnCarBrandChange(val carBrand: String) : BuatPenyewaanActions
+    data class OnCarNameChange(val carName: String) : BuatPenyewaanActions
+    data class OnNotesChange(val notes: String) : BuatPenyewaanActions
+    data class OnSelectedKamarChange(val selectedKamar: Kamar) : BuatPenyewaanActions
+    data class OnSelectedPenghuniPertamaChange(val selectedPenghuniPertama: Account?) :
+        BuatPenyewaanActions
+
+    data class OnSelectedPenghuniKeduaChange(val selectedPenghuniKedua: Account?) :
+        BuatPenyewaanActions
+
+    data class OnSelectedZoneParkingChange(val selectedZoneParking: ZonaParkiran?) :
+        BuatPenyewaanActions
+
+    data class OnUpdateNamaAlatElektronik(val namaAlatElektronik: String) : BuatPenyewaanActions
+    data class OnUpdatePriceAlatElektronik(val priceAlatElektronik: String) : BuatPenyewaanActions
+    data object AddAlatElektronik : BuatPenyewaanActions
+    data class RemoveAlatElektronik(val index: Int) : BuatPenyewaanActions
 }
 
 @HiltViewModel
 class BuatPenyewaanViewModel @Inject constructor(
     private val getDataInitalBuatPenyewaanUseCase: GetDataInitalBuatPenyewaanUseCase,
     private val penyewaanRepository: PenyewaanRepository
-): ViewModel() {
+) : ViewModel() {
     private val _state = MutableStateFlow(BuatPenyewaanUiState())
     val state = _state
         .onStart { loadInitalDataPenyewaan() }
@@ -75,8 +83,8 @@ class BuatPenyewaanViewModel @Inject constructor(
     private val _events = Channel<BuatPenyewaanEvents>()
     val events = _events.receiveAsFlow()
 
-    fun onActions(actions: BuatPenyewaanActions){
-        when(actions){
+    fun onActions(actions: BuatPenyewaanActions) {
+        when (actions) {
             BuatPenyewaanActions.AddAlatElektronik -> addAlatElektronik()
             BuatPenyewaanActions.AddPenyewaan -> addPenyewaan()
             BuatPenyewaanActions.NavigateBack -> navigateBack()
@@ -88,11 +96,23 @@ class BuatPenyewaanViewModel @Inject constructor(
             is BuatPenyewaanActions.OnNotesChange -> onNotesChange(actions.notes)
             is BuatPenyewaanActions.OnNumberPlateChange -> onNumberPlateChange(actions.numberPlate)
             is BuatPenyewaanActions.OnSelectedKamarChange -> onSelectedKamarChange(actions.selectedKamar)
-            is BuatPenyewaanActions.OnSelectedPenghuniKeduaChange -> onSelectedPenghuniKeduaChange(actions.selectedPenghuniKedua)
-            is BuatPenyewaanActions.OnSelectedPenghuniPertamaChange -> onSelectedPenghuniPertamaChange(actions.selectedPenghuniPertama)
-            is BuatPenyewaanActions.OnSelectedZoneParkingChange -> onSelectedZoneParkingChange(actions.selectedZoneParking)
+            is BuatPenyewaanActions.OnSelectedPenghuniKeduaChange -> onSelectedPenghuniKeduaChange(
+                actions.selectedPenghuniKedua
+            )
+
+            is BuatPenyewaanActions.OnSelectedPenghuniPertamaChange -> onSelectedPenghuniPertamaChange(
+                actions.selectedPenghuniPertama
+            )
+
+            is BuatPenyewaanActions.OnSelectedZoneParkingChange -> onSelectedZoneParkingChange(
+                actions.selectedZoneParking
+            )
+
             is BuatPenyewaanActions.OnUpdateNamaAlatElektronik -> onUpdateNamaAlatElektronik(actions.namaAlatElektronik)
-            is BuatPenyewaanActions.OnUpdatePriceAlatElektronik -> onUpdatePriceAlatElektronik(actions.priceAlatElektronik)
+            is BuatPenyewaanActions.OnUpdatePriceAlatElektronik -> onUpdatePriceAlatElektronik(
+                actions.priceAlatElektronik
+            )
+
             is BuatPenyewaanActions.RemoveAlatElektronik -> removeAlatElektronik(actions.index)
         }
     }
@@ -100,8 +120,8 @@ class BuatPenyewaanViewModel @Inject constructor(
     private fun backPage() {
         val currentState = _state.value
         val currentPage = currentState.currentPage
-        if (currentPage > 1){
-            _state.update { 
+        if (currentPage > 1) {
+            _state.update {
                 var newState = it.copy(currentPage = currentPage - 1)
                 // Reset input elektronik jika meninggalkan halaman 3
                 if (currentPage == 3) {
@@ -124,7 +144,7 @@ class BuatPenyewaanViewModel @Inject constructor(
         val currentState = _state.value
         val sizePage = currentState.listNamePage.size
         val currentPage = currentState.currentPage
-        if (currentPage < sizePage){
+        if (currentPage < sizePage) {
             _state.update {
                 var newState = it.copy(currentPage = currentPage + 1)
                 // Reset input elektronik jika meninggalkan halaman 3
@@ -133,7 +153,7 @@ class BuatPenyewaanViewModel @Inject constructor(
                         namaAlatElektronik = "",
                         priceAlatElektronik = ""
                     )
-                } else if (currentPage == 2){
+                } else if (currentPage == 2) {
                     val names = mutableListOf<String>()
                     // Penghuni pertama (Wajib)
                     currentState.selectedPenghuniPertama?.let { p1 -> names.add(p1.name) }
@@ -154,32 +174,36 @@ class BuatPenyewaanViewModel @Inject constructor(
     }
 
     private fun BuatPenyewaanUiState.updateRoomPrice(): BuatPenyewaanUiState {
-        val price = if (this.selectedPenghuniKedua != null && this.selectedKamar?.price?.twoPersons != null) {
-            this.selectedKamar.price.twoPersons
-        } else {
-            this.selectedKamar?.price?.onePerson ?: 0L
-        }
+        val price =
+            if (this.selectedPenghuniKedua != null && this.selectedKamar?.price?.twoPersons != null) {
+                this.selectedKamar.price.twoPersons
+            } else {
+                this.selectedKamar?.price?.onePerson ?: 0L
+            }
         return this.copy(roomPrice = price)
     }
 
     private fun updateButtonNextEnabled() {
         val currentState = _state.value
-        val isEnabled = when(currentState.currentPage){
+        val isEnabled = when (currentState.currentPage) {
             1 -> currentState.selectedKamar != null
-            2 -> currentState.selectedPenghuniPertama != null
+            2 -> {
+                currentState.selectedPenghuniPertama != null &&
+                        currentState.selectedPenghuniPertama != currentState.selectedPenghuniKedua
+            }
+
             3 -> true
             4 -> {
-                if (currentState.selectedZoneParking != null){
-                    currentState.carName.isNotEmpty() && 
-                    currentState.carBrand.isNotEmpty() && 
-                    currentState.numberPlate.isNotEmpty() &&
-                    !currentState.isCarNameError &&
-                    !currentState.isCarBrandError &&
-                    !currentState.isNumberPlateError
-                } else {
-                    true
-                }
+                if (currentState.selectedZoneParking != null) {
+                    currentState.carName.isNotBlank() &&
+                            currentState.carBrand.isNotBlank() &&
+                            currentState.numberPlate.isNotBlank() &&
+                            !currentState.isCarNameError &&
+                            !currentState.isCarBrandError &&
+                            !currentState.isNumberPlateError
+                } else true
             }
+
             5 -> true // Halaman Konfirmasi
             else -> false
         }
@@ -187,15 +211,58 @@ class BuatPenyewaanViewModel @Inject constructor(
     }
 
     private fun onUpdatePriceAlatElektronik(priceAlatElektronik: String) {
-        _state.update { it.copy(priceAlatElektronik = priceAlatElektronik) }
+        val isError =
+            if (priceAlatElektronik.isEmpty()) false else !PatternValidation.isHargaSewaValid(
+                priceAlatElektronik
+            )
+        val errorText =
+            if (priceAlatElektronik.isEmpty()) null else PatternValidation.getHargaSewaError(
+                priceAlatElektronik
+            )
+        _state.update {
+            it.copy(
+                priceAlatElektronik = priceAlatElektronik,
+                isPriceAlatElektronikError = isError,
+                priceAlatElektronikError = errorText
+            )
+        }
+        buttonAddAlatElektronikEnabled()
     }
 
     private fun onUpdateNamaAlatElektronik(namaAlatElektronik: String) {
-        _state.update { it.copy(namaAlatElektronik = namaAlatElektronik) }
+        val isError =
+            if (namaAlatElektronik.isEmpty()) false else !PatternValidation.isNamaElektronikValid(
+                namaAlatElektronik
+            )
+        val errorText =
+            if (namaAlatElektronik.isEmpty()) null else PatternValidation.getNamaElektronikError(
+                namaAlatElektronik
+            )
+        _state.update {
+            it.copy(
+                namaAlatElektronik = namaAlatElektronik,
+                isNamaAlatElektronikError = isError,
+                namaAlatElektronikError = errorText
+            )
+        }
+        buttonAddAlatElektronikEnabled()
+    }
+
+    private fun buttonAddAlatElektronikEnabled() {
+        val currentState = _state.value
+        val isEnabled = currentState.namaAlatElektronik.isNotEmpty() &&
+                !currentState.isNamaAlatElektronikError &&
+                currentState.priceAlatElektronik.isNotEmpty() &&
+                !currentState.isPriceAlatElektronikError
+        _state.update {
+            it.copy(
+                isButtonAddAlatElektronikEnabled = isEnabled
+            )
+        }
     }
 
     private fun onSelectedZoneParkingChange(selectedZoneParking: ZonaParkiran?) {
-        _state.update { 
+        _state.update {
             var newState = it.copy(selectedZoneParking = selectedZoneParking)
             // Reset data mobil jika zona parkir dipilih null
             if (selectedZoneParking == null) {
@@ -230,11 +297,13 @@ class BuatPenyewaanViewModel @Inject constructor(
     private fun onSelectedKamarChange(selectedKamar: Kamar) {
         _state.update { currentState ->
             // Filter listAlatElektronik yang sudah ada, ambil yang tipenya ADD_ON saja
-            val currentAddOns = currentState.listAlatElektronik.filter { it.origin == Constant.ADD_ON }
-            
+            val currentAddOns =
+                currentState.listAlatElektronik.filter { it.origin == Constant.ADD_ON }
+
             // Gabungkan freeService dari kamar baru dengan ADD_ON yang sudah ada
-            val updatedListElektronik = selectedKamar.freeService.map { it.copy(origin = Constant.ORIGIN_KAMAR_DEFAULT) } + currentAddOns
-            
+            val updatedListElektronik =
+                selectedKamar.freeService.map { it.copy(origin = Constant.ORIGIN_KAMAR_DEFAULT) } + currentAddOns
+
             currentState.copy(
                 selectedKamar = selectedKamar,
                 listAlatElektronik = updatedListElektronik
@@ -245,20 +314,19 @@ class BuatPenyewaanViewModel @Inject constructor(
     }
 
     private fun removeAlatElektronik(index: Int) {
-        val dataAlatElektronik = _state.value.listAlatElektronik
-        val dataAlatElektronikBaru = dataAlatElektronik.toMutableList()
-        dataAlatElektronikBaru.removeAt(index)
-        _state.update {
-            it.copy(
-                listAlatElektronik = dataAlatElektronikBaru
-            )
+        val currentList = _state.value.listAlatElektronik
+        if (index in currentList.indices) {
+            val newList = currentList.toMutableList().apply { removeAt(index) }
+            _state.update { it.copy(listAlatElektronik = newList) }
+            calculateBill()
         }
-        calculateBill()
     }
 
     private fun onNumberPlateChange(numberPlate: String) {
-        val isError = if (numberPlate.isEmpty()) false else !PatternValidation.isNumberPlateValid(numberPlate)
-        val errorText = if (numberPlate.isEmpty()) null else PatternValidation.getNumberPlateError(numberPlate)
+        val isError =
+            if (numberPlate.isEmpty()) false else !PatternValidation.isNumberPlateValid(numberPlate)
+        val errorText =
+            if (numberPlate.isEmpty()) null else PatternValidation.getNumberPlateError(numberPlate)
         _state.update {
             it.copy(
                 numberPlate = numberPlate,
@@ -287,8 +355,10 @@ class BuatPenyewaanViewModel @Inject constructor(
     }
 
     private fun onCarBrandChange(carBrand: String) {
-        val isError = if (carBrand.isEmpty()) false else !PatternValidation.isCarBrandValid(carBrand)
-        val errorText = if (carBrand.isEmpty()) null else PatternValidation.getCarBrandError(carBrand)
+        val isError =
+            if (carBrand.isEmpty()) false else !PatternValidation.isCarBrandValid(carBrand)
+        val errorText =
+            if (carBrand.isEmpty()) null else PatternValidation.getCarBrandError(carBrand)
         _state.update {
             it.copy(
                 carBrand = carBrand,
@@ -319,8 +389,13 @@ class BuatPenyewaanViewModel @Inject constructor(
 
             // 1. Persiapan List Resident (InfoPenghuni)
             val listResident = mutableListOf<InfoPenghuni>()
-            listResident.add(InfoPenghuni(idAkun = currentState.selectedPenghuniPertama.idAkun, name = currentState.selectedPenghuniPertama.name))
-            currentState.selectedPenghuniKedua?.let { 
+            listResident.add(
+                InfoPenghuni(
+                    idAkun = currentState.selectedPenghuniPertama.idAkun,
+                    name = currentState.selectedPenghuniPertama.name
+                )
+            )
+            currentState.selectedPenghuniKedua?.let {
                 listResident.add(InfoPenghuni(idAkun = it.idAkun, name = it.name))
             }
 
@@ -361,19 +436,22 @@ class BuatPenyewaanViewModel @Inject constructor(
             penyewaanRepository.buatPenyewaan(buatPenyewaanModel)
                 .onSuccess { penyewaan ->
                     _state.update { it.copy(isButtonSubmitLoading = false) }
-                    _events.send(BuatPenyewaanEvents.NavigateToResultScreen(
-                        ResultCreatePenyewaan(
-                            idPenyewaan = penyewaan.idPenyewa,
-                            status = penyewaan.rentalStatus,
-                            nomorKamar = penyewaan.infoKamar.numberRoom,
-                            penghuni = penyewaan.listResident.map { it.name }.fastJoinToString(separator = " & "),
-                            totalTagihan = calculateTotalBill(
-                                hargaSewaKamar = if (penyewaan.listResident.size == 2 && penyewaan.infoKamar.currentRoomRentalCost.twoPersons != null) penyewaan.infoKamar.currentRoomRentalCost.twoPersons else penyewaan.infoKamar.currentRoomRentalCost.onePerson,
-                                hargaSewaParkirMobil = penyewaan.pemakaianParkirMobilBulanan?.zonaParkir?.monthlyFee,
-                                hargaPemakaianElektronik = penyewaan.pemakaianAlatElektronikBulanan
+                    _events.send(
+                        BuatPenyewaanEvents.NavigateToResultScreen(
+                            ResultCreatePenyewaan(
+                                idPenyewaan = penyewaan.idPenyewa,
+                                status = penyewaan.rentalStatus,
+                                nomorKamar = penyewaan.infoKamar.numberRoom,
+                                penghuni = penyewaan.listResident.map { it.name }
+                                    .fastJoinToString(separator = " & "),
+                                totalTagihan = calculateTotalBill(
+                                    hargaSewaKamar = if (penyewaan.listResident.size == 2 && penyewaan.infoKamar.currentRoomRentalCost.twoPersons != null) penyewaan.infoKamar.currentRoomRentalCost.twoPersons else penyewaan.infoKamar.currentRoomRentalCost.onePerson,
+                                    hargaSewaParkirMobil = penyewaan.pemakaianParkirMobilBulanan?.zonaParkir?.monthlyFee,
+                                    hargaPemakaianElektronik = penyewaan.pemakaianAlatElektronikBulanan
+                                )
                             )
                         )
-                    ))
+                    )
                 }
                 .onError { error ->
                     _state.update { it.copy(isButtonSubmitLoading = false) }
@@ -386,14 +464,15 @@ class BuatPenyewaanViewModel @Inject constructor(
         val dataAlatElektronik = _state.value.listAlatElektronik
         val dataAlatElektronikBaru = AlatElektronik(
             toolName = _state.value.namaAlatElektronik,
-            cost = _state.value.priceAlatElektronik.toLong(),
+            cost = _state.value.priceAlatElektronik.toLongOrNull() ?: 0L,
             origin = Constant.ADD_ON
         )
         _state.update {
             it.copy(
                 listAlatElektronik = dataAlatElektronik + dataAlatElektronikBaru,
                 namaAlatElektronik = "",
-                priceAlatElektronik = ""
+                priceAlatElektronik = "",
+                isButtonAddAlatElektronikEnabled = false // Reset setelah tambah
             )
         }
         calculateBill()

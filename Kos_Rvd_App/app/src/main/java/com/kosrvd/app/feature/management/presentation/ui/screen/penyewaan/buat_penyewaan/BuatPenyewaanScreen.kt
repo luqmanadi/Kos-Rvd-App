@@ -561,7 +561,7 @@ private fun StepThreeAddElectronicUsage(
                 text = stringResource(R.string.add_tool),
                 shape = RoundedCornerShape(12.dp),
                 height = 43.dp,
-                enabled = buatPenyewaanUiState.namaAlatElektronik.isNotEmpty() && buatPenyewaanUiState.priceAlatElektronik.isNotEmpty(),
+                enabled = buatPenyewaanUiState.isButtonAddAlatElektronikEnabled,
                 leadingIcon = {
                     Icon(
                         imageVector = Icons.Filled.Add,

@@ -13,17 +13,13 @@ import javax.inject.Inject
 class GetDataInitalBuatPenyewaanUseCase @Inject constructor(
     private val kamarRepository: KamarRepository,
     private val accountRepository: AccountRepository,
-    private val zonaParkiranMobilRepository: ZonaParkiranMobilRepository,
-    private val parkirHarianMobilRepository: ParkirHarianMobilRepository
+    private val getDataZonaParkirAvailableForMonthlyParkingUsageUseCase: GetDataZonaParkirAvailableForMonthlyParkingUsageUseCase
 ) {
     suspend operator fun invoke(): Result<InitialBuatPenyewaan, DataError> {
         // get data kamar status kosong
         val resultKamar = kamarRepository.getAllKamarStatusKosong().getOrElse { return Result.Error(it) }
         val resultPenghuni = accountRepository.getAllAccountRolePenghuniStatusAktifAndNomorKamarNull().getOrElse { return Result.Error(it) }
-        val resultZonaParkiranKosong = zonaParkiranMobilRepository.getAllZonaParkiranMobilStatusKosong().getOrElse { return Result.Error(it) }
-        val busyDailyZones = parkirHarianMobilRepository.getAllParkirHarianMobilCancelledFalseAndCompletionDateGreaterThan().getOrElse { return Result.Error(it) }
-        val busyZoneIds = busyDailyZones.map { it.idZonaParkir }.toSet()
-        val availableZonesForMonthly = resultZonaParkiranKosong.filter { it.idZonaParkir !in busyZoneIds }
+        val availableZonesForMonthly = getDataZonaParkirAvailableForMonthlyParkingUsageUseCase().getOrElse { return Result.Error(it) }
 
         val initialBuatPenyewaan = InitialBuatPenyewaan(
             listKamar = resultKamar,
