@@ -245,7 +245,6 @@ exports.onTagihanCreate = onDocumentCreated("tagihan/{tagihanId}",
           // ==========================================
           const finalBillUpdate = {
             idTagihan: tagihanId,
-            idPenyewa: dataTagihanBaru.idPenyewa || null,
             total: dataTagihanBaru.billAmount || 0,
             paymentStatus: dataTagihanBaru.paymentStatus || utils.BELUM_LUNAS,
             periodStart: dataTagihanBaru.periodStart || null, // Perubahan
@@ -362,7 +361,6 @@ exports.onTagihanDelete = onDocumentDeleted("tagihan/{tagihanId}",
 
                       const fallbackBill = {
                         idTagihan: prevTagihanDoc.id,
-                        idPenyewa: prevTagihanData.idPenyewa || null,
                         total: prevTagihanData.billAmount || 0,
                         paymentStatus: prevTagihanData.paymentStatus ||
                             utils.BELUM_LUNAS,

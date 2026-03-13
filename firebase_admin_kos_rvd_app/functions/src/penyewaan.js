@@ -30,6 +30,24 @@ exports.onPenyewaanCreate = onDocumentCreated("penyewaan/{penyewaanId}",
           allPromises.push(zonaParkirRef.update({status: "Dipakai"}));
         }
 
+        // Skenario 3: Update dataPenghuni pada akun setiap resident
+        const penyewaanId = event.params["penyewaanId"];
+        if (Array.isArray(data.listResident) && data.listResident.length > 0) {
+          const numberRoom = data.infoKamar?.numberRoom ?? null;
+
+          for (const resident of data.listResident) {
+            if (resident.idAkun) {
+              const akunRef = db.collection("akun").doc(resident.idAkun);
+              allPromises.push(
+                  akunRef.update({
+                    "dataPenghuni.numberRoom": numberRoom,
+                    "dataPenghuni.idPenyewa": penyewaanId,
+                  }),
+              );
+            }
+          }
+        }
+
         if (allPromises.length > 0) {
           await Promise.all(allPromises);
           info(`Berhasil inisialisasi status Kamar & `+
@@ -97,6 +115,22 @@ exports.onPenyewaanUpdate = onDocumentUpdated("penyewaan/{penyewaanId}",
 
               info(`Menghapus ${countDeleted} tagihan Belum Lunas ` +
                   `untuk penyewa: ${idPenyewa}`);
+            }
+          }
+
+          // Reset dataPenghuni di akun setiap resident saat checkout
+          const listResident = dataBefore.listResident;
+          if (Array.isArray(listResident) && listResident.length > 0) {
+            for (const resident of listResident) {
+              if (resident.idAkun) {
+                const akunRef = db.collection("akun").doc(resident.idAkun);
+                allPromises.push(
+                    akunRef.update({
+                      "dataPenghuni.numberRoom": null,
+                      "dataPenghuni.idPenyewa": "",
+                    }),
+                );
+              }
             }
           }
         }

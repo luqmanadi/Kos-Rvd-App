@@ -137,6 +137,7 @@ exports.createAkunPengguna = onRequest(async (request, response) => {
             phoneNumber: phoneNumber || "",
             photoKtp: photoKtp,
             numberRoom: null,
+            idPenyewa: "",
             finalBill: null,
           }: null,
         };
