@@ -25,6 +25,7 @@ data class DetailPenghuniDto(
     val address: String = "",
     val phoneNumber: String = "",
     val photoKtp: String = "",
+    val idPenyewa: String = "",
     val finalBill: TagihanTerakhirDto? = null
 )
 
@@ -32,7 +33,6 @@ data class DetailPenghuniDto(
 @Keep
 data class TagihanTerakhirDto(
     val idTagihan: String = "",
-    val idPenyewa: String = "",
     val periodStart: Timestamp = Timestamp.now(),
     val periodEnd: Timestamp = Timestamp.now(),
     val dueDate: Timestamp = Timestamp.now(),

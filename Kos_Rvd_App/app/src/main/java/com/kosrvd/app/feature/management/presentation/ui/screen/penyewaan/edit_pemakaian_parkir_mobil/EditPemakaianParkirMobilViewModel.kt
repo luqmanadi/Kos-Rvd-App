@@ -9,6 +9,7 @@ import com.kosrvd.app.core.domain.utils.onSuccess
 import com.kosrvd.app.core.navigation.NavigationScreen
 import com.kosrvd.app.core.navigation.models.CustomNavTypes
 import com.kosrvd.app.core.navigation.models.InfoPakaiParkirMobilBulananSerialize
+import com.kosrvd.app.core.navigation.models.InfoZonaParkirSerialize
 import com.kosrvd.app.core.navigation.models.toInfoZonaParkir
 import com.kosrvd.app.core.presentation.utils.PatternValidation
 import com.kosrvd.app.feature.management.domain.model.InfoPakaiParkirMobilBulanan
@@ -40,7 +41,7 @@ sealed interface EditPemakaianParkirMobilActions {
     data class OnCarBrandChange(val carBrand: String) : EditPemakaianParkirMobilActions
     data class OnCarNameChange(val carName: String) : EditPemakaianParkirMobilActions
     data class OnNotesChange(val notes: String) : EditPemakaianParkirMobilActions
-    data class OnSelectedZoneParkingChange(val selectedZoneParking: ZonaParkiran) :
+    data class OnSelectedZoneParkingChange(val selectedZoneParking: ZonaParkiran?) :
         EditPemakaianParkirMobilActions
 }
 
@@ -60,7 +61,9 @@ class EditPemakaianParkirMobilViewModel @Inject constructor(
         // Ambil objek argument dari savedStateHandle
         val arguments =
             savedStateHandle.toRoute<NavigationScreen.EditPemakaianParkirMobilBulananScreen>(
-                typeMap = mapOf(typeOf<InfoPakaiParkirMobilBulananSerialize>() to CustomNavTypes.infoPemakaianParkirMobilBulanan)
+                typeMap = mapOf(
+                    typeOf<InfoPakaiParkirMobilBulananSerialize?>() to CustomNavTypes.infoPemakaianParkirMobilBulanan,
+                )
             )
 
         initialData(arguments.idPenyewaan, arguments.pemakaianParkirMobilBulanan)
@@ -143,7 +146,7 @@ class EditPemakaianParkirMobilViewModel @Inject constructor(
         buttonSubmitEnabled()
     }
 
-    private fun onSelectedZoneParkingChange(selectedZoneParking: ZonaParkiran) {
+    private fun onSelectedZoneParkingChange(selectedZoneParking: ZonaParkiran?) {
         _state.update { it.copy(newSelectedZoneParking = selectedZoneParking) }
         buttonSubmitEnabled()
     }

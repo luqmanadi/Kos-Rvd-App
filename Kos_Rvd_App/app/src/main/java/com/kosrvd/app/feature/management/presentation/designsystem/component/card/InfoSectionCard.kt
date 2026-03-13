@@ -85,7 +85,7 @@ fun InfoSectionCard(
     ) {
         Row(
             Modifier.padding(start = 16.dp, top = 16.dp, bottom = bottomPadding, end = 16.dp),
-            verticalAlignment = Alignment.Top
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
                 imageVector = icon,
@@ -97,6 +97,7 @@ fun InfoSectionCard(
                         shape = RoundedCornerShape(10.dp)
                     )
                     .padding(8.dp)
+                    .align(Alignment.Top)
             )
             Spacer(Modifier.width(16.dp))
             Column(
@@ -170,11 +171,11 @@ private fun InfoSectionCardPreview() {
             Modifier.padding(20.dp),
             icon = Icons.Filled.Group,
             title = "Kapasitas Penghuni",
-            action = CardAction.None,
-            footer = footer,
+            action = CardAction.NavigationIconSide{},
+            footer = null,
             content = {
                 Text(
-                    text = "2 Orang",
+                    text = "2 Orang, 2 Orang, 2 Orang, 2 Orang, 2 Orang",
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.Bold
                 )

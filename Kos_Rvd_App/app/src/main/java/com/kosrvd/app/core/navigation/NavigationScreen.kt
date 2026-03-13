@@ -173,14 +173,16 @@ sealed interface NavigationScreen {
     }
     @Serializable
     data class EditPemakaianAlatEleketronikScreen(
-        val idPenyewaan: String, val listAlatElektronik: List<AlatElektronikSerialize> = emptyList()
+        val idPenyewaan: String,
+        val listAlatElektronik: List<AlatElektronikSerialize> = emptyList()
     ) : NavigationScreen {
         override val route: String = "edit_atau_tambah_pemakaian_alat_elektronik"
     }
 
     @Serializable
     data class EditPemakaianParkirMobilBulananScreen(
-        val idPenyewaan: String, val pemakaianParkirMobilBulanan: InfoPakaiParkirMobilBulananSerialize? = null
+        val idPenyewaan: String,
+        val pemakaianParkirMobilBulanan: InfoPakaiParkirMobilBulananSerialize? = null
     ) : NavigationScreen {
         override val route: String = "edit_atau_tambah_pemakaian_parkir_mobil"
     }

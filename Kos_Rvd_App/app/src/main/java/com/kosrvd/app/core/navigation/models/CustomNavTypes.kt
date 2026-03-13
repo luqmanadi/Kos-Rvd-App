@@ -234,4 +234,29 @@ object CustomNavTypes {
             return Uri.encode(Json.encodeToString(value))
         }
     }
+
+    val infoZonaParkirSerialize = object : NavType<InfoZonaParkirSerialize>(isNullableAllowed = false){
+        override fun put(
+            bundle: SavedState,
+            key: String,
+            value: InfoZonaParkirSerialize
+        ) {
+            bundle.putString(key, Json.encodeToString(value))
+        }
+
+        override fun get(
+            bundle: SavedState,
+            key: String
+        ): InfoZonaParkirSerialize? {
+            return Json.Default.decodeFromString(bundle.getString(key) ?: return null)
+        }
+
+        override fun parseValue(value: String): InfoZonaParkirSerialize {
+            return Json.Default.decodeFromString(Uri.decode(value))
+        }
+
+        override fun serializeAsValue(value: InfoZonaParkirSerialize): String {
+            return Uri.encode(Json.encodeToString(value))
+        }
+    }
 }

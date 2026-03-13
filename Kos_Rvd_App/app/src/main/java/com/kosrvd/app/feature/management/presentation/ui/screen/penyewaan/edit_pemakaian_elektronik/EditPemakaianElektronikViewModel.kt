@@ -10,6 +10,7 @@ import com.kosrvd.app.core.domain.utils.onSuccess
 import com.kosrvd.app.core.navigation.NavigationScreen
 import com.kosrvd.app.core.navigation.models.AlatElektronikSerialize
 import com.kosrvd.app.core.navigation.models.CustomNavTypes
+import com.kosrvd.app.core.navigation.models.InfoZonaParkirSerialize
 import com.kosrvd.app.core.presentation.utils.PatternValidation
 import com.kosrvd.app.feature.management.domain.model.AlatElektronik
 import com.kosrvd.app.feature.management.domain.repository.PenyewaanRepository

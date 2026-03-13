@@ -23,7 +23,7 @@ class GetDetailProfileUseCase @Inject constructor(
                         val account = accountResult.data
                         val detailProfileUi = DetailProfileUi(
                             idAkun = account.idAkun,
-                            idPenyewa = account.dataPenghuni?.finalBill?.idPenyewa,
+                            idPenyewa = account.dataPenghuni?.idPenyewa,
                             photoProfile = account.photo,
                             name = account.name,
                             email = email,

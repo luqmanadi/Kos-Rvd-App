@@ -16,6 +16,10 @@ import com.kosrvd.app.core.data.constant.Constant
 import com.kosrvd.app.core.domain.utils.rememberCustomToastHostState
 import com.kosrvd.app.core.navigation.NavigationGraph
 import com.kosrvd.app.core.navigation.NavigationScreen
+import com.kosrvd.app.core.navigation.models.AlatElektronikSerialize
+import com.kosrvd.app.core.navigation.models.CustomNavTypes
+import com.kosrvd.app.core.navigation.models.InfoPakaiParkirMobilBulananSerialize
+import com.kosrvd.app.core.navigation.models.InfoZonaParkirSerialize
 import com.kosrvd.app.core.presentation.utils.CustomToastResultConfig
 import com.kosrvd.app.core.presentation.utils.ObserveAsEvents
 import com.kosrvd.app.core.presentation.utils.ObserveCustomToastResults
@@ -37,6 +41,7 @@ import com.kosrvd.app.feature.management.presentation.ui.screen.penyewaan.list_p
 import com.kosrvd.app.feature.management.presentation.ui.screen.penyewaan.list_penyewaan.ListPenyewaanScreen
 import com.kosrvd.app.feature.management.presentation.ui.screen.penyewaan.list_penyewaan.ListPenyewaanViewModel
 import kotlinx.coroutines.launch
+import kotlin.reflect.typeOf
 
 fun NavGraphBuilder.penyewaanGraph(
     navController: NavHostController
@@ -181,7 +186,9 @@ fun NavGraphBuilder.penyewaanGraph(
                 customToastHostState = customToastHostState
             )
         }
-        composable<NavigationScreen.EditPemakaianAlatEleketronikScreen> {
+        composable<NavigationScreen.EditPemakaianAlatEleketronikScreen>(
+            typeMap = mapOf(typeOf<List<AlatElektronikSerialize>>() to CustomNavTypes.listAlatElektronik)
+        ) {
             val editPemakaianAlatEleketronikViewModel = hiltViewModel<EditPemakaianElektronikViewModel>()
             val editPemakaianAlatEleketronikUiState by editPemakaianAlatEleketronikViewModel.state.collectAsStateWithLifecycle()
             val scope = rememberCoroutineScope()
@@ -209,7 +216,11 @@ fun NavGraphBuilder.penyewaanGraph(
                 customToastHostState = customToastHostState
             )
         }
-        composable<NavigationScreen.EditPemakaianParkirMobilBulananScreen> {
+        composable<NavigationScreen.EditPemakaianParkirMobilBulananScreen>(
+            typeMap = mapOf(
+                typeOf<InfoPakaiParkirMobilBulananSerialize?>() to CustomNavTypes.infoPemakaianParkirMobilBulanan,
+            )
+        ) {
             val editPemakaianParkirMobilBulananViewModel = hiltViewModel<EditPemakaianParkirMobilViewModel>()
             val editPemakaianParkirMobilBulananUiState by editPemakaianParkirMobilBulananViewModel.state.collectAsStateWithLifecycle()
             val scope = rememberCoroutineScope()

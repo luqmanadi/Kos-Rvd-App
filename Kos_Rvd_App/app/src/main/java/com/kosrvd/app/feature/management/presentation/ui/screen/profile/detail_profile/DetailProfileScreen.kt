@@ -282,7 +282,7 @@ private fun DetailProfileContent(
                     InfoSectionCard(
                         icon = Icons.Filled.AirlineSeatFlat,
                         title = stringResource(R.string.rent),
-                        action = if (detailProfileUi.numberRoom != null) CardAction.NavigationIconSide(
+                        action = if (detailProfileUi.numberRoom != null && !detailProfileUi.idPenyewa.isNullOrEmpty()) CardAction.NavigationIconSide(
                             onClick = {
                                 detailProfileActions(DetailProfileActions.NavigateToDetailSewa)
                             }

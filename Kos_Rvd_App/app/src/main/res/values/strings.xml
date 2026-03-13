@@ -306,7 +306,8 @@
     <string name="description_dialog_confirmation_lease_end_usage_tools_part_3">penyewaan ini. Apakah Anda yakin?</string>
     <string name="ya_with_quotation_mark">"Ya"</string>
     <string name="success_lease_end_usage_tools">Berhasil Akhiri Sewa Pemakaian Alat</string>
-    <string name="add_usage_tools">Tambah Pemakaian Alat</string>
+    <string name="add_usage_tools_electronic">Tambah Pemakaian Alat</string>
+    <string name="edit_usage_tools_electronic">Edit Pemakaian Alat</string>
     <string name="active">Aktif</string>
     <string name="not_active">Tidak Aktif</string>
     <string name="empty">Kosong</string>
@@ -314,7 +315,7 @@
     <string name="description_dialog_confirmation_lease_end_usage_tools_part_press_button_part_1">Anda yakin ingin </string>
     <string name="description_dialog_confirmation_lease_end_usage_tools_part_press_button_part_2">mengakhiri sewa semua alat elektronik? </string>
     <string name="description_dialog_confirmation_lease_end_usage_tools_part_press_button_part_3">Tindakan ini tidak dapat dibatalkan.</string>
-    <string name="edit_usage_parking_car">Edit Pemakaian Parkiran Mobil</string>
+    <string name="edit_usage_parking_car">Edit Pemakaian Parkir Mobil</string>
     <string name="parking_car_zone_usage">Zona Sewa Bulanan Parkiran Mobil Yang Dipakai</string>
     <string name="zone_parking_and_price_rental">Zona Parkir &amp; Harga Sewa</string>
     <string name="move_zone">Pindah Zona</string>
@@ -474,7 +475,7 @@
     <string name="enter_information_discount">Masukkan Keterangan Diskon</string>
     <string name="choose_date_range">Pilih Rentang Tanggal</string>
     <string name="choose_period_bill">Pilih Periode Tagihan</string>
-    <string name="add_usage_parking_card">Tambah Pemakaian Parkiran</string>
+    <string name="add_usage_parking_card">Tambah Pemakaian Parkir Mobil</string>
     <string name="confirmation_data">Konfirmasi Data</string>
     <string name="title_page_2_add_rental">Pilih Penghuni</string>
     <string name="title_page_1_add_rental">Pilih Kamar</string>
@@ -486,6 +487,7 @@
     <string name="subtitle_page_3_add_rental">Tambahkan pemakaian alat elektronik daya tinggi yang akan dipakai oleh penghuni kamar (Optional)</string>
     <string name="subtitle_page_4_add_rental">Lengkapi data kendaraan dan zona parkir untuk pemakaian parkir mobil bulanan (Optional)</string>
     <string name="subtitle_page_5_add_rental">Silakan tinjau ulang data yang dimasukkan.</string>
+    <string name="title_edit_usage_tool_electronic">Isi Alat Elektronik &amp; Harga Yang Mau Dipakai</string>
 
 
     // New Strings for RincianBiayaCard
@@ -518,7 +520,9 @@
     <string name="description_pengaturan_tagihan_2">Generate tagihan otomatis setiap tanggal 10 pukul 07:00 WIB.</string>
     <string name="title_otomatisasi_delete_notif">Notifikasi akan terhapus otomatis dalam 30 hari setelah dikirim</string>
     <string name="detail_rent">Detail Penyewa</string>
-
+    <string name="title_if_have_rental_parking">Zona Parkir Baru Jika Pindah Tempat</string>
+    <string name="title_if_no_have_rental_parking">Zona Parkir Yang Mau Ditempati</string>
+    <string name="title_parking_zone_usage">Zona Parkir Sekarang</string>
 
     // Menu
     <string name="announcement">Pengumuman</string>

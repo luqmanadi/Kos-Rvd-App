@@ -37,6 +37,7 @@ fun DetailPenghuniDto.toDetailPenghuni(): DetailPenghuni {
         phoneNumber = this.phoneNumber,
         photoKtp = this.photoKtp,
         numberRoom = this.numberRoom,
+        idPenyewa = this.idPenyewa,
         finalBill = this.finalBill?.toTagihanTerakhir(),
     )
 }
@@ -45,7 +46,6 @@ fun DetailPenghuniDto.toDetailPenghuni(): DetailPenghuni {
 fun TagihanTerakhirDto.toTagihanTerakhir(): TagihanTerakhir {
     return TagihanTerakhir(
         idTagihan = this.idTagihan,
-        idPenyewa = this.idPenyewa,
         total = this.total,
         paymentStatus = this.paymentStatus,
         periodStart = this.periodStart,

@@ -22,6 +22,9 @@ data class PenyewaUi(
 )
 
 fun Penyewaan.toPenyewaUi(): PenyewaUi{
+    val hargaSewaKamar = if (this.listResident.size == 2 && this.infoKamar.currentRoomRentalCost.twoPersons != null){
+        this.infoKamar.currentRoomRentalCost.twoPersons
+    } else this.infoKamar.currentRoomRentalCost.onePerson
     return PenyewaUi(
         idPenyewa = this.idPenyewa,
         listResident = this.listResident,
@@ -32,9 +35,9 @@ fun Penyewaan.toPenyewaUi(): PenyewaUi{
         rentalCompletionDate = this.rentalCompletionDate,
         rentalStatus = this.rentalStatus,
         totalMonthlyBill = calculateTotalBill(
-            this.infoKamar.currentRoomRentalCost.onePerson,
-            this.pemakaianParkirMobilBulanan?.zonaParkir?.monthlyFee,
-            this.pemakaianAlatElektronikBulanan
+            hargaSewaKamar = hargaSewaKamar,
+            hargaSewaParkirMobil = this.pemakaianParkirMobilBulanan?.zonaParkir?.monthlyFee,
+            hargaPemakaianElektronik = this.pemakaianAlatElektronikBulanan
         ).toRupiahFormat()
     )
 }

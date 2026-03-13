@@ -37,12 +37,12 @@ data class DetailPenghuni(
     val phoneNumber: String,
     val photoKtp: String,
     val numberRoom: Int? = null,
+    val idPenyewa: String,
     val finalBill: TagihanTerakhir? = null,
 )
 
 data class TagihanTerakhir(
     val idTagihan: String,
-    val idPenyewa: String,
     val total: Long,
     val paymentStatus: String,
     val periodStart: Timestamp,

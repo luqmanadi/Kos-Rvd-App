@@ -10,7 +10,6 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
-import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -50,6 +49,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.onFocusEvent
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
@@ -108,10 +108,10 @@ fun BuatPenyewaanScreen(
     customToastHostState: CustomToastHostState
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
-    val scrollState = rememberScrollState()
 
     val coroutineScope = rememberCoroutineScope()
     val nameElectronicRequester = remember { BringIntoViewRequester() }
+    val nameElectronicFocus = remember { FocusRequester() }
     val priceElectronicRequester = remember { BringIntoViewRequester() }
     val carNameRequester = remember { BringIntoViewRequester() }
     val carBrandRequester = remember { BringIntoViewRequester() }
@@ -208,27 +208,24 @@ fun BuatPenyewaanScreen(
                         1 -> StepOneSelectKamar(
                             buatPenyewaanUiState = buatPenyewaanUiState,
                             buatPenyewaanActions = buatPenyewaanActions,
-                            scrollState = scrollState
                         )
                         2 -> StepTwoSelectPenghuni(
                             buatPenyewaanUiState = buatPenyewaanUiState,
                             buatPenyewaanActions = buatPenyewaanActions,
-                            scrollState = scrollState
                         )
                         3 -> StepThreeAddElectronicUsage(
                             buatPenyewaanUiState = buatPenyewaanUiState,
                             buatPenyewaanActions = buatPenyewaanActions,
-                            scrollState = scrollState,
                             coroutineScope = coroutineScope,
                             nameElectronicRequester = nameElectronicRequester,
                             priceElectronicRequester = priceElectronicRequester,
                             nameElectronicState = nameElectronicState,
-                            priceElectronicState = priceElectronicState
+                            priceElectronicState = priceElectronicState,
+                            nameElectronicFocus = nameElectronicFocus
                         )
                         4 -> StepFourAddParkingCarUsage(
                             buatPenyewaanUiState = buatPenyewaanUiState,
                             buatPenyewaanActions = buatPenyewaanActions,
-                            scrollState = scrollState,
                             coroutineScope = coroutineScope,
                             carNameRequester = carNameRequester,
                             carBrandRequester = carBrandRequester,
@@ -241,7 +238,6 @@ fun BuatPenyewaanScreen(
                         )
                         5 -> StepFiveSummary(
                             buatPenyewaanUiState = buatPenyewaanUiState,
-                            scrollState = scrollState
                         )
                     }
                 }
@@ -296,8 +292,8 @@ private fun StepOneSelectKamar(
     modifier: Modifier = Modifier,
     buatPenyewaanUiState: BuatPenyewaanUiState,
     buatPenyewaanActions: (BuatPenyewaanActions) -> Unit,
-    scrollState: ScrollState
 ) {
+    val scrollState = rememberScrollState()
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -379,8 +375,8 @@ private fun StepTwoSelectPenghuni(
     modifier: Modifier = Modifier,
     buatPenyewaanUiState: BuatPenyewaanUiState,
     buatPenyewaanActions: (BuatPenyewaanActions) -> Unit,
-    scrollState: ScrollState
 ) {
+    val scrollState = rememberScrollState()
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -473,13 +469,14 @@ private fun StepThreeAddElectronicUsage(
     modifier: Modifier = Modifier,
     buatPenyewaanUiState: BuatPenyewaanUiState,
     buatPenyewaanActions: (BuatPenyewaanActions) -> Unit,
-    scrollState: ScrollState,
     coroutineScope: CoroutineScope,
+    nameElectronicFocus: FocusRequester,
     nameElectronicRequester: BringIntoViewRequester,
     priceElectronicRequester: BringIntoViewRequester,
     nameElectronicState: TextFieldState,
     priceElectronicState: TextFieldState
 ) {
+    val scrollState = rememberScrollState()
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -524,7 +521,8 @@ private fun StepThreeAddElectronicUsage(
                     keyboardType = KeyboardType.Text,
                     capitalization = KeyboardCapitalization.Words
                 ),
-                lineLimits = TextFieldLineLimits.SingleLine
+                lineLimits = TextFieldLineLimits.SingleLine,
+                focusRequester = nameElectronicFocus
             )
             GeneralTextField(
                 modifier = Modifier
@@ -555,6 +553,7 @@ private fun StepThreeAddElectronicUsage(
                     .bringIntoViewRequester(nameElectronicRequester),
                 onClick = {
                     buatPenyewaanActions(BuatPenyewaanActions.AddAlatElektronik)
+                    nameElectronicFocus.requestFocus()
                     nameElectronicState.clearText()
                     priceElectronicState.clearText()
                 },
@@ -623,7 +622,6 @@ private fun StepFourAddParkingCarUsage(
     modifier: Modifier = Modifier,
     buatPenyewaanUiState: BuatPenyewaanUiState,
     buatPenyewaanActions: (BuatPenyewaanActions) -> Unit,
-    scrollState: ScrollState,
     coroutineScope: CoroutineScope,
     carNameRequester: BringIntoViewRequester,
     carBrandRequester: BringIntoViewRequester,
@@ -634,6 +632,7 @@ private fun StepFourAddParkingCarUsage(
     numberPlateState: TextFieldState,
     notesState: TextFieldState
 ) {
+    val scrollState = rememberScrollState()
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -667,7 +666,7 @@ private fun StepFourAddParkingCarUsage(
                         val priceZone = buatPenyewaanUiState.selectedZoneParking.monthlyFee.toRupiahFormat()
                         "$nameZone - $priceZone"
                     } else {
-                        "Belum Pilih Zona Parkir Mobil"
+                        "Belum Memilih Zona Parkir Mobil"
                     }
                     Text(
                         text = textBody,
@@ -826,8 +825,8 @@ private fun StepFourAddParkingCarUsage(
 private fun StepFiveSummary(
     modifier: Modifier = Modifier,
     buatPenyewaanUiState: BuatPenyewaanUiState,
-    scrollState: ScrollState
 ) {
+    val scrollState = rememberScrollState()
     Column(
         modifier = modifier
             .fillMaxSize()
