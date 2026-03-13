@@ -52,7 +52,7 @@ exports.onKeluhanDelete = keluhan.onKeluhanDelete;
 
 // Pengumuman
 exports.onDocumentCreatedPengumuman = pengumuman.onDocumentCreatedPengumuman;
-exports.onDucumentDeletedPengumuman = pengumuman.onDucumentDeletedPengumuman;
+exports.onDocumentDeletedPengumuman = pengumuman.onDocumentDeletedPengumuman;
 
 // Notifikasi
 exports.onNotifikasiCreate = notifikasi.onNotifikasiCreate;
@@ -64,8 +64,8 @@ exports.onZonaParkirUpdate = zonaParkiran.onZonaParkirUpdate;
 
 // Parkir Harian
 exports.onParkirHarianMobilUpdate = parkirHarian.onParkirHarianMobilUpdate;
-exports.onDucumentDeletedParkirHarianMobil =
-    parkirHarian.onDucumentDeletedParkirHarianMobil;
+exports.onDocumentDeletedParkirHarianMobil =
+    parkirHarian.onDocumentDeletedParkirHarianMobil;
 
 // Penyewaan
 exports.onPenyewaanCreate = penyewaan.onPenyewaanCreate;

@@ -58,7 +58,7 @@ exports.onParkirHarianMobilUpdate =
         });
 
 
-exports.onDucumentDeletedParkirHarianMobil = onDocumentDeleted(
+exports.onDocumentDeletedParkirHarianMobil = onDocumentDeleted(
     "parkirHarianMobil/{parkirHarianMobilId}", async (event) => {
       try {
         const parkirHarianMobilId = event.params["parkirHarianMobilId"];

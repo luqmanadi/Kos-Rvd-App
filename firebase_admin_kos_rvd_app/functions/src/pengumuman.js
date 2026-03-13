@@ -51,7 +51,7 @@ exports.onDocumentCreatedPengumuman =
     });
 
 
-exports.onDucumentDeletedPengumuman =
+exports.onDocumentDeletedPengumuman =
     onDocumentDeleted("pengumuman/{pengumumanId}", async (event) => {
       try {
         if (!event.data) return null;
