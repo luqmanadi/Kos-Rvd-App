@@ -166,6 +166,12 @@ exports.pengingatTagihanHarian = onSchedule({
 
     info("Mulai menjalankan pengingatTagihanHarian...");
 
+    // CEK PENGATURAN GATEKEEPER
+    const configDoc =
+        await db.collection("pengaturan").doc("otomatisasi").get();
+    if (!configDoc.exists) return null;
+    if (configDoc.data().useAutoReminder !== true) return null;
+
     // 1. Ambil waktu saat ini dalam WIB
     const nowWib = new Date(
         new Date().toLocaleString("en-US", {timeZone: "Asia/Jakarta"}));
