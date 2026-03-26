@@ -19,6 +19,7 @@ import com.kosrvd.app.core.data.networking.HttpClientFactory
 import com.kosrvd.app.core.data.repository.AccountRepositoryImpl
 import com.kosrvd.app.core.data.repository.AuthRepositoryImpl
 import com.kosrvd.app.core.data.repository.DeviceInfoProviderImpl
+import com.kosrvd.app.core.data.repository.PengaturanRepositoryImpl
 import com.kosrvd.app.core.data.repository.StorageRepositoryImpl
 import com.kosrvd.app.core.data.repository.dto.AuthInfoDto
 import com.kosrvd.app.core.data.source.local.AuthInfoSerializer
@@ -27,6 +28,7 @@ import com.kosrvd.app.core.data.source.local.SessionStorageImpl
 import com.kosrvd.app.core.domain.repository.AccountRepository
 import com.kosrvd.app.core.domain.repository.AuthRepository
 import com.kosrvd.app.core.domain.repository.DeviceInfoProvider
+import com.kosrvd.app.core.domain.repository.PengaturanRepository
 import com.kosrvd.app.core.domain.repository.StorageRepository
 import dagger.Binds
 import dagger.Module
@@ -36,7 +38,6 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.okhttp.OkHttp
-import io.ktor.http.ContentDisposition.Companion.File
 import okhttp3.Cache
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.OkHttpClient
@@ -75,6 +76,10 @@ abstract class CoreModule {
     @Binds
     @Singleton
     abstract fun bindStorageRepository(storageRepositoryImpl: StorageRepositoryImpl): StorageRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindPengaturanRepository(pengaturanRepositoryImpl: PengaturanRepositoryImpl): PengaturanRepository
 
 
     companion object{

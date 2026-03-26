@@ -52,8 +52,7 @@ import androidx.navigation.NavHostController
 import com.google.firebase.Timestamp
 import com.kosrvd.app.BuildConfig
 import com.kosrvd.app.core.di.laptopIp
-import com.kosrvd.app.feature.management.domain.model.AlatElektronik
-import com.kosrvd.app.feature.management.presentation.designsystem.utils.INDONESIAN_LOCALE
+import com.kosrvd.app.core.domain.models.AlatElektronik
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
@@ -67,7 +66,6 @@ import java.util.TimeZone
  * Modifier kustom untuk menganimasikan efek "shake" (getar) pada Composable.
  * * @param trigger Angka integer yang akan memicu animasi saat nilainya berubah.
  * @param intensity Kekuatan getaran (seberapa jauh pergeserannya dalam Dp).
- * @param durationMillis Durasi total animasi dalam milidetik.
  */
 fun Modifier.shake(
     trigger: Int,

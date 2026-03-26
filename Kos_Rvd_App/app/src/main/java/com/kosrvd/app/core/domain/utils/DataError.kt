@@ -1,7 +1,6 @@
 package com.kosrvd.app.core.domain.utils
 
 import com.kosrvd.app.core.data.constant.ErrorMessages
-import com.kosrvd.app.core.data.constant.ErrorMessages.PARKIR_HARIAN_MOBIL_MAPPING_ERROR
 import com.kosrvd.app.core.data.constant.LocalErrorMessages
 import com.kosrvd.app.core.data.constant.NetworkErrorsMessages
 import com.kosrvd.app.core.data.constant.SystemErrorsMessages

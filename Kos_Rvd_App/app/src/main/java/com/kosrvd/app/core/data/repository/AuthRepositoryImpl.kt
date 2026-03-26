@@ -82,7 +82,7 @@ class AuthRepositoryImpl @Inject constructor(
         }
     }.shareIn(
         scope = CoroutineScope(Dispatchers.IO),
-        started = SharingStarted.Companion.WhileSubscribed(5000),
+        started = SharingStarted.WhileSubscribed(5000),
         replay = 1
     )
 

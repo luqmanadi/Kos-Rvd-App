@@ -4,8 +4,8 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.navigation.NavBackStackEntry
-import com.kosrvd.app.feature.management.presentation.designsystem.component.snackbar.SnackbarType
-import com.kosrvd.app.feature.management.presentation.designsystem.component.snackbar.showCustomSnackbar
+import com.kosrvd.app.core.presentation.designsystem.component.snackbar.SnackbarType
+import com.kosrvd.app.core.presentation.designsystem.component.snackbar.showCustomSnackbar
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map

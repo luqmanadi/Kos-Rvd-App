@@ -8,7 +8,7 @@ import androidx.core.app.NotificationCompat
 import com.google.firebase.Timestamp
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-import com.kosrvd.app.MainActivity
+import com.kosrvd.app.presentation.main.MainActivity
 import com.kosrvd.app.R
 import com.kosrvd.app.core.domain.models.FcmToken
 import com.kosrvd.app.core.domain.repository.AccountRepository

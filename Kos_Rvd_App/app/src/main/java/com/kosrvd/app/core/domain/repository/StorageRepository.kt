@@ -4,7 +4,7 @@ import android.net.Uri
 import com.kosrvd.app.core.domain.models.KtpFormatResult
 import com.kosrvd.app.core.domain.utils.DataError
 import com.kosrvd.app.core.domain.utils.Result
-import com.kosrvd.app.feature.management.domain.model.CompressedResult
+import com.kosrvd.app.core.domain.models.CompressedResult
 
 interface StorageRepository {
 

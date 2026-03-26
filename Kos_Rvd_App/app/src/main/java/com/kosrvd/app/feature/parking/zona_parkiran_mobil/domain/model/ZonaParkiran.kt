@@ -1,0 +1,9 @@
+package com.kosrvd.app.feature.parking.zona_parkiran_mobil.domain.model
+
+data class ZonaParkiran(
+    val idZonaParkir: String,
+    val zoneName: String,
+    val monthlyFee: Long,
+    val dailyCosts: Long,
+    val status: String
+)

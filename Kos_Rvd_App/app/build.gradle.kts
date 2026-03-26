@@ -13,6 +13,8 @@ plugins {
     alias(libs.plugins.hilt.android)
     // google services plugin
     alias(libs.plugins.google.gms.google.services)
+    // firebase crashlytics
+    alias(libs.plugins.firebase.crashlytics)
 }
 
 val localProperties = Properties()
@@ -64,7 +66,6 @@ android {
             signingConfig = signingConfigs.getByName("release")
             isDebuggable = false
             isJniDebuggable = false
-            versionNameSuffix = ".release"
         }
         debug {
             versionNameSuffix = ".debug"
@@ -97,6 +98,8 @@ android {
         compose = true
         buildConfig = true
     }
+    ndkVersion = "30.0.14904198 rc1"
+    buildToolsVersion = "36.0.0"
 }
 
 composeCompiler {
@@ -192,6 +195,7 @@ dependencies {
     implementation(libs.firebase.appcheck.playintegrity)
     implementation(libs.firebase.appcheck.debug)
     implementation(libs.firebase.functions)
+    implementation(libs.firebase.crashlytics)
 
 
     // Data Store

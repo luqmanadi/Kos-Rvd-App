@@ -32,8 +32,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kosrvd.app.core.presentation.designsystem.theme.KosRvdAppTheme
-import com.kosrvd.app.feature.management.domain.model.ZonaParkiran
-import com.kosrvd.app.feature.management.presentation.designsystem.utils.ZonaParkirFormatter
+import com.kosrvd.app.feature.parking.zona_parkiran_mobil.domain.model.ZonaParkiran
+import com.kosrvd.app.core.presentation.utils.ZonaParkirFormatter
 
 @Composable
 fun CustomRadioButtonV2(

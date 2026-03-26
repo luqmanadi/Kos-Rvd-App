@@ -1,6 +1,5 @@
 package com.kosrvd.app.core.domain.usecase
 
-import com.kosrvd.app.core.data.networking.safeCall
 import com.kosrvd.app.core.data.source.local.SessionStorage
 import com.kosrvd.app.core.domain.repository.AuthRepository
 import com.kosrvd.app.core.domain.utils.DataError
@@ -8,8 +7,6 @@ import com.kosrvd.app.core.domain.utils.Result
 import com.kosrvd.app.core.domain.utils.onError
 import com.kosrvd.app.core.domain.utils.onSuccess
 import javax.inject.Inject
-import kotlin.invoke
-import kotlin.onSuccess
 
 class CheckSessionUseCase @Inject constructor(
     private val authRepository: AuthRepository,

@@ -7,7 +7,7 @@ import com.kosrvd.app.core.domain.repository.StorageRepository
 import com.kosrvd.app.core.domain.utils.DataError
 import com.kosrvd.app.core.domain.utils.Result
 import com.kosrvd.app.core.domain.utils.getOrElse
-import com.kosrvd.app.feature.management.domain.model.CompressedResult
+import com.kosrvd.app.core.domain.models.CompressedResult
 import java.util.UUID
 import javax.inject.Inject
 

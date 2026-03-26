@@ -10,4 +10,6 @@ plugins {
     alias(libs.plugins.hilt.android) apply false
     // google services plugin
     alias(libs.plugins.google.gms.google.services) apply false
+    // firebase crashlytics
+    alias(libs.plugins.firebase.crashlytics) apply false
 }

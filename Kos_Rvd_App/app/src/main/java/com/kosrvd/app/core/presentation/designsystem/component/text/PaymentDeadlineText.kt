@@ -9,7 +9,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import com.google.firebase.Timestamp
-import com.kosrvd.app.feature.management.presentation.designsystem.utils.toFullIndonesianDateTime
+import com.kosrvd.app.core.presentation.utils.toFullIndonesianDateTime
 
 @Composable
 fun PaymentDeadlineText(

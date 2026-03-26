@@ -11,7 +11,7 @@ import com.kosrvd.app.core.domain.models.KtpFormatResult
 import com.kosrvd.app.core.domain.repository.StorageRepository
 import com.kosrvd.app.core.domain.utils.DataError
 import com.kosrvd.app.core.domain.utils.Result
-import com.kosrvd.app.feature.management.domain.model.CompressedResult
+import com.kosrvd.app.core.domain.models.CompressedResult
 import kotlinx.coroutines.tasks.await
 import java.net.URLDecoder
 import java.util.UUID

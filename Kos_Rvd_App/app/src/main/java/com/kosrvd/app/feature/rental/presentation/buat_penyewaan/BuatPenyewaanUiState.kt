@@ -1,0 +1,45 @@
+package com.kosrvd.app.feature.rental.presentation.buat_penyewaan
+
+import com.kosrvd.app.core.domain.models.Account
+import com.kosrvd.app.core.presentation.utils.UiText
+import com.kosrvd.app.core.domain.models.AlatElektronik
+import com.kosrvd.app.feature.room.domain.model.Kamar
+import com.kosrvd.app.feature.parking.zona_parkiran_mobil.domain.model.ZonaParkiran
+
+
+data class BuatPenyewaanUiState(
+    val isListKamarLoading: Boolean = true,
+    val loadKamarError: String? = null,
+    val listKamar: List<Kamar> = emptyList(),
+    val selectedKamar: Kamar? = null,
+    val listPenghuni: List<Account?> = emptyList(),
+    val selectedPenghuniPertama: Account? = null,
+    val selectedPenghuniKedua: Account? = null,
+    val listZoneParking: List<ZonaParkiran?> = emptyList(),
+    val selectedZoneParking: ZonaParkiran? = null,
+    val namaAlatElektronik: String = "",
+    val isNamaAlatElektronikError: Boolean = false,
+    val namaAlatElektronikError: UiText? = null,
+    val priceAlatElektronik: String = "",
+    val isPriceAlatElektronikError: Boolean = false,
+    val priceAlatElektronikError: UiText? = null,
+    val listAlatElektronik: List<AlatElektronik> = emptyList(),
+    val numberPlate: String = "",
+    val numberPlateError: UiText? = null,
+    val isNumberPlateError: Boolean = false,
+    val carBrand: String = "",
+    val carBrandError: UiText? = null,
+    val isCarBrandError: Boolean = false,
+    val carName: String = "",
+    val carNameError: UiText? = null,
+    val isCarNameError: Boolean = false,
+    val listNamePenghuni: List<String> = emptyList(),
+    val notes: String = "",
+    val roomPrice: Long = 0,
+    val totalBiaya: Long = 0,
+    val currentPage: Int = 1,
+    val isButtonAddAlatElektronikEnabled: Boolean = false,
+    val isButtonNextEnabled: Boolean = false,
+    val isButtonSubmitLoading: Boolean = false,
+    val listNamePage: List<String> = listOf("Kamar", "Penghuni", "Elektronik", "Parkir", "Konfirmasi")
+)
