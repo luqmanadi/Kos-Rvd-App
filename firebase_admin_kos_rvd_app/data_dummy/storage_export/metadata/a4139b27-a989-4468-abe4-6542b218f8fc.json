@@ -1,0 +1,19 @@
+{
+  "name": "imageProfile/image_profile_d52c0cd0-9cc8-47d1-9797-f32abb4c5d79_e45a5f2d-ca0e-45e2-a8ad-d38b87f40cae.jpg",
+  "bucket": "kos-rvd-app-12dac.firebasestorage.app",
+  "metageneration": 1,
+  "generation": 1773392454436,
+  "contentType": "image/jpeg",
+  "storageClass": "STANDARD",
+  "contentDisposition": "inline",
+  "downloadTokens": [
+    "f1ada928-2b2b-4b84-b80c-8ac2de64ad88"
+  ],
+  "etag": "vPt2z6hP4EDkcB9cxX7YZ6+Qc6E",
+  "customMetadata": {},
+  "timeCreated": "2026-03-13T09:00:54.436Z",
+  "updated": "2026-03-13T09:00:54.436Z",
+  "size": 90754,
+  "md5Hash": "R9E+H+z07A/boUvLPTmuUA==",
+  "crc32c": "391865796"
+}
