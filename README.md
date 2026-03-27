@@ -156,3 +156,8 @@ app/src/main/java/com/rvd/kosrvdapp/
 
 ## 📝 Disclaimer
 Proyek ini dikembangkan untuk tujuan **Tugas Akhir**. Meskipun fitur fungsional sudah lengkap, beberapa bagian kode masih dalam tahap pengembangan lebih lanjut untuk pembersihan (*refactoring*) dan optimalisasi performa.
+
+---
+
+## 📄 License
+Proyek ini didistribusikan di bawah lisensi **MIT**. Lihat file `LICENSE` untuk informasi lebih lanjut.
