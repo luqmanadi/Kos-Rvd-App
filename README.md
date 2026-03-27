@@ -149,7 +149,7 @@ app/src/main/java/com/rvd/kosrvdapp/
 ---
 
 ## 🗺️ Roadmap / Future Work
-* [ ] Integrasi Payment Gateway (Midtrans/Xendit) untuk pembayaran otomatis.
+* [ ] Integrasi Payment Gateway API (Midtrans/Xendit) via Cloud Functions untuk otomatisasi pembayaran (QRIS & Virtual Account).
 * [ ] Fitur Generate Laporan Bulanan (PDF).
 * [ ] Dark Mode Support.
 * [ ] Unit Testing untuk logic Billing & Rental.
