@@ -139,7 +139,7 @@ Sesuaikan IP PC Anda pada `app/src/main/res/xml/network_security_config.xml` aga
 ## 📁 Struktur Folder Project
 Aplikasi menggunakan struktur *single-module* dengan pembagian package sebagai berikut:
 ```Plaintext
-app/src/main/java/com/rvd/kosrvdapp/
+app/src/main/java/com/kosrvd/app/
 ├── core/           # Reusable components, Network, & Base classes
 ├── feature/        # Business logic & ViewModels (MVI Pattern) per fitur
 ├── presentation/   # Navigation, Main Activity, & AppShell
