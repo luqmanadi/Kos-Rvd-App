@@ -21,6 +21,7 @@ Aplikasi ini memiliki sistem hak akses yang membedakan tampilan dan fungsi antar
 * **Dashboard**: 
     * **Admin**: Statistik tagihan, verifikasi tertunda, kamar kosong, dan keluhan baru.
     * **Penghuni**: Akses cepat ke pengumuman dan direktori penghuni.
+* **Notification (Notifikasi)**: Menerima *push notification* secara *real-time* dari backend via FCM. Dilengkapi halaman daftar riwayat notifikasi dengan navigasi cerdas (klik notifikasi akan langsung diarahkan ke halaman detail yang relevan).
 * **Room**: (Khusus Admin) Manajemen unit kamar (CRUD).
 * **Resident**: Daftar penghuni aktif yang dapat diakses oleh Admin & Penghuni.
 
