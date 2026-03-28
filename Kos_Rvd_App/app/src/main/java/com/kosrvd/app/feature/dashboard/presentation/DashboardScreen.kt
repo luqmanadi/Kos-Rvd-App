@@ -161,7 +161,7 @@ fun ContentDashboard(
             item { Spacer(Modifier.height(20.dp)) }
             item(key = "admin_menu_dashboard"){
                 MenuDashboardAdminSection(
-                    navigateToRiwayatParkiran = { dashboardActions(DashboardActions.NavigateToRiwayatParkirMobil) },
+                    navigateToParkiranHarianMobil = { dashboardActions(DashboardActions.NavigateToRiwayatParkirMobil) },
                     navigateToPenyewaan = { dashboardActions(DashboardActions.NavigateToPenyewaan) },
                     navigateToKamar = { dashboardActions(DashboardActions.NavigateToKamar) },
                     navigateToPengumuman = { dashboardActions(DashboardActions.NavigateToAnnouncement) },
@@ -356,7 +356,7 @@ private fun MenuDashboardPenghuniSection(
 @Composable
 private fun MenuDashboardAdminSection(
     modifier: Modifier = Modifier,
-    navigateToRiwayatParkiran: () -> Unit,
+    navigateToParkiranHarianMobil: () -> Unit,
     navigateToPenyewaan: () -> Unit,
     navigateToKamar: () -> Unit,
     navigateToPengumuman: () -> Unit,
@@ -400,7 +400,7 @@ private fun MenuDashboardAdminSection(
             MenuDashboardSmallCard(
                 title = stringResource(R.string.history_parking_car),
                 icon = painterResource(R.drawable.ic_pemakaian_parkiran),
-                onClick = navigateToRiwayatParkiran
+                onClick = navigateToParkiranHarianMobil
             )
             MenuDashboardSmallCard(
                 title = stringResource(R.string.parking_zone),

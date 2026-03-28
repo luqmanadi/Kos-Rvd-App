@@ -544,7 +544,7 @@
     <string name="user_account">Akun Pengguna</string>
     <string name="parking_zone">Zona Parkiran</string>
     <string name="try_again">Coba Lagi</string>
-    <string name="history_parking_car">Riwayat Parkir Mobil</string>
+    <string name="history_parking_car">Parkir Harian Mobil</string>
     <string name="use_tool">Penggunaan Alat</string>
     <string name="nominal_admin_fees">Rp 50.000</string>
     <string name="processed">Diproses</string>
