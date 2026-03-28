@@ -45,7 +45,7 @@
 
     // Attribute Text Static
     <string name="welcome_onboarding">Selamat Datang di Kos RVD!</string>
-    <string name="description_welcome">Aplikasi manajemen kos untuk penghuni dan pengelola. Praktis, cepat, dan terorganir.</string>
+    <string name="description_welcome">Aplikasi manajemen kos untuk penghuni dan pengelola. Praktis, cepat, dan terorganisir.</string>
     <string name="next">Lanjut</string>
     <string name="enter">Masuk</string>
     <string name="description_enter">Masukkan email dan password untuk masuk.</string>
