@@ -43,6 +43,11 @@
         "source": "/api/reactivateUserAccount",
         "function": "reactivateUserAccount",
         "region": "asia-southeast2"
+      },
+      {
+        "source": "/api/deleteAccount",
+        "function": "deleteAccount",
+        "region": "asia-southeast2"
       }
     ]
   },

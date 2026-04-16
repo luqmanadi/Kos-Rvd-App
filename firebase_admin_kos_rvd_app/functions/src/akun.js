@@ -4,7 +4,7 @@ const {getFirestore, Timestamp} = require("firebase-admin/firestore");
 const {getAuth} = require("firebase-admin/auth");
 const admin = require("firebase-admin");
 const utils = require("./utils");
-const {logger} = require("firebase-functions");
+const {info, error} = require("firebase-functions/logger");
 const cors = require("cors")({origin: true});
 
 // --- HELPER: Validasi Token ---
@@ -23,10 +23,11 @@ const validateAuth = async (req) => {
 };
 
 // --- HELPER: Error Handler ---
-const handleError = (res, error) => {
-  logger.error("Error Function:", error);
-  const code = error instanceof HttpsError ? error.code : "internal";
-  const message = error.message || "Internal Server Error";
+const handleError = (res, messageError) => {
+  error("Error Function:", messageError);
+  const code =
+      messageError instanceof HttpsError ? messageError.code : "internal";
+  const message = messageError.message || "Internal Server Error";
 
   // Mapping code Firebase ke HTTP Status Code
   const statusMapping = {
@@ -48,7 +49,7 @@ exports.getDetailAkunPengguna = onRequest(async (request, response) =>{
   cors(request, response, async () => {
     // Pastikan method GET
     if (request.method !== "GET") {
-      return request.status(405).json({error:
+      return response.status(405).json({error:
             {code: "method-not-allowed", message: "Use GET"}});
     }
     try {
@@ -204,7 +205,7 @@ exports.deactivateUserAccount = onRequest(async (request, response) => {
             .getFilePathFromUrl(photoUrl); // Cek path require utils kamu!
         if (fileName) {
           admin.storage().bucket().file(fileName).delete()
-              .catch((e) => logger.warn("Gagal hapus foto profil:", e));
+              .catch((e) => error("Gagal hapus foto profil:", e));
         }
       }
 
@@ -255,7 +256,7 @@ exports.deactivateUserAccount = onRequest(async (request, response) => {
               listResident: updatedResidents,
             });
 
-            logger.info(`Penghuni ${idAkun} dihapus dari penyewaan, ` +
+            info(`Penghuni ${idAkun} dihapus dari penyewaan, ` +
                     `sisa ${updatedResidents.length} penghuni`);
           } else {
             // KASUS: Hanya 1 penghuni (penghuni terakhir)
@@ -265,7 +266,7 @@ exports.deactivateUserAccount = onRequest(async (request, response) => {
               rentalCompletionDate: timestampNow,
             });
 
-            logger.info(`Penyewaan ${targetRentalDoc.id} dinonaktifkan ` +
+            info(`Penyewaan ${targetRentalDoc.id} dinonaktifkan ` +
                   `karena penghuni terakhir dinonaktifkan`);
           }
         }
@@ -353,7 +354,7 @@ exports.onAkunUpdate = onDocumentUpdated("akun/{akunId}", async (event) => {
 
     // 2. Cek apakah role penghuni (admin tidak perlu sync ke penyewaan)
     if (dataAfter.role !== "penghuni") {
-      logger.info(`Nama akun ${idAkun} berubah, `+
+      info(`Nama akun ${idAkun} berubah, `+
           `tapi role bukan penghuni. Skip.`);
       return null;
     }
@@ -378,7 +379,7 @@ exports.onAkunUpdate = onDocumentUpdated("akun/{akunId}", async (event) => {
 
     // 4. Jika tidak ada penyewaan terikat, skip
     if (!targetRentalDoc) {
-      logger.info(`Nama penghuni ${idAkun} berubah, `+
+      info(`Nama penghuni ${idAkun} berubah, `+
           `tapi tidak ada penyewaan aktif.`);
       return null;
     }
@@ -401,12 +402,12 @@ exports.onAkunUpdate = onDocumentUpdated("akun/{akunId}", async (event) => {
       listResident: updatedResidents,
     });
 
-    logger.info(`Nama penghuni ${idAkun} diupdate di penyewaan ` +
+    info(`Nama penghuni ${idAkun} diupdate di penyewaan ` +
           `${targetRentalDoc.id}: "${oldName}" -> "${newName}"`);
 
     return null;
   } catch (e) {
-    logger.error(`Gagal update data akun dengan id `+
+    error(`Gagal update data akun dengan id `+
         `${event.params["akunId"]}`, e);
     return null;
   }
@@ -438,7 +439,7 @@ exports.deleteAccount = onRequest(async (request, response) => {
             .getFilePathFromUrl(ktpUrl); // Cek path require utils kamu!
         if (fileName) {
           admin.storage().bucket().file(fileName).delete()
-              .catch((e) => logger.warn("Gagal hapus foto KTP:", e));
+              .catch((e) => error("Gagal hapus foto KTP:", e));
         }
       }
 
