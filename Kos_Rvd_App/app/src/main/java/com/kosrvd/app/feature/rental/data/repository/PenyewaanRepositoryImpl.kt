@@ -131,4 +131,13 @@ class PenyewaanRepositoryImpl @Inject constructor(
                 .await()
         }
     }
+
+    override suspend fun deletePenyewaan(idPenyewaan: String): Result<Unit, DataError> {
+        return safeCall {
+            db.collection(Constant.PENYEWAAN_COLLECTION)
+                .document(idPenyewaan)
+                .delete()
+                .await()
+        }
+    }
 }

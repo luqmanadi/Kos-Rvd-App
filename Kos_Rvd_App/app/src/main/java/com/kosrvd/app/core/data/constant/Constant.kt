@@ -147,6 +147,7 @@ object Constant {
     const val SUCCESS_UPLOAD_PROOF_OF_PAYMENT_PARKIR_HARIAN_KEY = "SuccessUploadProofOfPaymentParkirH"
     const val CANCEL_PARKIR_HARIAN_KEY = "CancelParkirHarian"
     const val NON_ACTIVE_RENTAL_KEY = "NonActiveRental"
+    const val DELETE_RENTAL_KEY = "DeleteRental"
     const val UPDATE_PEMAKAIAN_PARKIR_MOBIL_BULANAN_KEY = "UpdatePemakaianParkirMobilBulanan"
     const val UPDATE_PEMAKAIAN_ALAT_ELEKTRONIK_KEY = "UpdatePemakaianAlatElektronik"
 

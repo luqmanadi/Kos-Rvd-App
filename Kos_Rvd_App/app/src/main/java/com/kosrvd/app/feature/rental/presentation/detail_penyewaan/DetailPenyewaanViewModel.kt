@@ -26,6 +26,7 @@ import javax.inject.Inject
 sealed interface DetailPenyewaEvents {
     data object NavigateBack: DetailPenyewaEvents
     data object NavigateBackToSendEndedRental: DetailPenyewaEvents
+    data object NavigateBackToSendDeleteRental: DetailPenyewaEvents
     data class NavigateToEditPemakaianParkirMobil(val idPenyewa: String, val pemakaianParkirMobilBulanan: InfoPakaiParkirMobilBulananSerialize?): DetailPenyewaEvents
     data class NavigateToEditPemakaianElektronik(val idPenyewa: String, val pemakaianAlatElektronikBulanan: List<AlatElektronikSerialize>): DetailPenyewaEvents
     data class ShowSnackBarError(val message: String): DetailPenyewaEvents
@@ -37,6 +38,9 @@ sealed interface DetailPenyewaActions {
     data object EndRental: DetailPenyewaActions
     data object ShowDialogEndRental: DetailPenyewaActions
     data object DismissDialogEndRental: DetailPenyewaActions
+    data object ShowDialogDeleteRental: DetailPenyewaActions
+    data object DismissDialogDeleteRental: DetailPenyewaActions
+    data object DeleteRental: DetailPenyewaActions
     data object NavigateToEditPemakaianParkirMobil: DetailPenyewaActions
     data object NavigateToEditPemakaianElektronik: DetailPenyewaActions
 }
@@ -67,7 +71,44 @@ class DetailPenyewaanViewModel @Inject constructor(
             DetailPenyewaActions.TryAgain -> loadDetailPenyewa()
             DetailPenyewaActions.NavigateToEditPemakaianElektronik -> navigateToEditPemakaianElektronik()
             DetailPenyewaActions.NavigateToEditPemakaianParkirMobil -> navigateToEditPemakaianParkirMobil()
+            DetailPenyewaActions.DeleteRental -> deleteRental()
+            DetailPenyewaActions.DismissDialogDeleteRental -> dismissDialogDeleteRental()
+            DetailPenyewaActions.ShowDialogDeleteRental -> showDialogDeleteRental()
         }
+    }
+
+    private fun deleteRental() {
+        viewModelScope.launch {
+            _state.update { it.copy(isButtonLoadingDeleteRental = true) }
+            val idPenyewa = _state.value.penyewaUi?.idPenyewa ?: ""
+            penyewaanRepository.deletePenyewaan(idPenyewa)
+                .onSuccess {
+                    _state.update {
+                        it.copy(
+                            isButtonLoadingDeleteRental = false,
+                            showDialogDeleteRental = false
+                        )
+                    }
+                    _events.send(DetailPenyewaEvents.NavigateBackToSendDeleteRental)
+                }
+                .onError { error ->
+                    _state.update {
+                        it.copy(
+                            isButtonLoadingDeleteRental = false,
+                            showDialogDeleteRental = false
+                        )
+                    }
+                    _events.send(DetailPenyewaEvents.ShowSnackBarError(error.message))
+                }
+        }
+    }
+
+    private fun dismissDialogDeleteRental() {
+        _state.update { it.copy(showDialogDeleteRental = false)}
+    }
+
+    private fun showDialogDeleteRental() {
+        _state.update { it.copy(showDialogDeleteRental = true)}
     }
 
     private fun navigateToEditPemakaianParkirMobil() {
@@ -167,7 +208,7 @@ class DetailPenyewaanViewModel @Inject constructor(
     }
 
     private fun showDialogEndRental() {
-        _state.value = _state.value.copy(showDialogEndRental = true)
+        _state.update { it.copy(showDialogEndRental = true)}
     }
 
     private fun navigateBack() {
@@ -177,6 +218,6 @@ class DetailPenyewaanViewModel @Inject constructor(
     }
 
     private fun dismissDialogEndRental() {
-        _state.value = _state.value.copy(showDialogEndRental = false)
+        _state.update { it.copy(showDialogEndRental = false)}
     }
 }

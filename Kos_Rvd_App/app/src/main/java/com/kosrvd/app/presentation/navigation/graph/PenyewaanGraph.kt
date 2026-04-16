@@ -73,6 +73,10 @@ fun NavGraphBuilder.penyewaanGraph(
                 CustomToastResultConfig(
                     key = Constant.NON_ACTIVE_RENTAL_KEY,
                     message = "BERHASIL MENONAKTIFKAN PENYEWA"
+                ),
+                CustomToastResultConfig(
+                    key = Constant.DELETE_RENTAL_KEY,
+                    message = "BERHASIL MENGHAPUS PENYEWA"
                 )
             )
 
@@ -99,6 +103,9 @@ fun NavGraphBuilder.penyewaanGraph(
                     }
                     DetailPenyewaEvents.NavigateBackToSendEndedRental -> {
                         navController.navigateBackWithSendKey(Constant.NON_ACTIVE_RENTAL_KEY)
+                    }
+                    DetailPenyewaEvents.NavigateBackToSendDeleteRental -> {
+                        navController.navigateBackWithSendKey(Constant.DELETE_RENTAL_KEY)
                     }
                     is DetailPenyewaEvents.ShowSnackBarError -> {
                         scope.launch {

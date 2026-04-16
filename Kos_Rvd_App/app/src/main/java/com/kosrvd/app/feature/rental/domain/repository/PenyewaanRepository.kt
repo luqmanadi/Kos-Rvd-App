@@ -18,4 +18,5 @@ interface PenyewaanRepository {
     suspend fun editPemakaianElektronikBulanan(idPenyewaan: String, listAlatElektronik: List<AlatElektronik>): Result<Unit, DataError>
     suspend fun editPemakaianParkirMobilBulanan(idPenyewaan: String, pakaiParkirMobilBulanan: InfoPakaiParkirMobilBulanan): Result<Unit, DataError>
     suspend fun endRentalPemakaianParkirMobilBulanan(idPenyewaan: String): Result<Unit, DataError>
+    suspend fun deletePenyewaan(idPenyewaan: String): Result<Unit, DataError>
 }

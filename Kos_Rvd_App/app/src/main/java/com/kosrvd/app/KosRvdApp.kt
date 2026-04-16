@@ -5,7 +5,9 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.media.AudioAttributes
 import android.os.Build
+import android.util.Log
 import androidx.core.net.toUri
+import com.google.android.gms.security.ProviderInstaller
 import com.google.firebase.FirebaseApp
 import com.google.firebase.appcheck.FirebaseAppCheck
 import com.google.firebase.appcheck.debug.DebugAppCheckProviderFactory
@@ -16,10 +18,8 @@ import dagger.hilt.android.HiltAndroidApp
 class KosRvdApp: Application() {
     override fun onCreate() {
         super.onCreate()
-        // Inisialisasi Firebase (mungkin sudah Anda lakukan)
+        // Inisialisasi Firebase
         FirebaseApp.initializeApp(this)
-
-        // --- TARUH KODE APP CHECK DI SINI ---
 
         val firebaseAppCheck = FirebaseAppCheck.getInstance()
 

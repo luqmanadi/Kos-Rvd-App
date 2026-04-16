@@ -271,7 +271,9 @@
     <string name="capacity">Kapasitas</string>
     <string name="end_the_lease">Akhiri Sewa</string>
     <string name="dialog_confirmation_end_the_lease">Konfirmasi Akhiri Sewa</string>
-    <string name="description_dialog_confirmation_end_the_lease">Apakah Anda yakin ingin mengakhiri penyewaan kos ini?</string>
+    <string name="dialog_confirmation_delete_rental">Konfirmasi Hapus Penyewa</string>
+    <string name="description_dialog_confirmation_end_the_lease">Apakah Anda yakin ingin mengakhiri penyewa kos ini?</string>
+    <string name="description_dialog_confirmation_delete_rental">Apakah Anda yakin ingin menghapus penyewa kos ini?</string>
     <string name="prospective_room_occupants">Calon Penghuni Kamar</string>
     <string name="old_room">Kamar Lama</string>
     <string name="choose_the_room_you_want_to_occupy">Pilih Kamar Yang Mau Ditempati</string>

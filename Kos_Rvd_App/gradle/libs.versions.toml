@@ -1,6 +1,6 @@
 [versions]
 activityCompose = "1.13.0"
-agp = "9.1.0"
+agp = "9.1.1"
 coilCompose = "3.4.0"
 coilNetworkOkhttp = "3.4.0"
 composeBom = "2026.03.01"

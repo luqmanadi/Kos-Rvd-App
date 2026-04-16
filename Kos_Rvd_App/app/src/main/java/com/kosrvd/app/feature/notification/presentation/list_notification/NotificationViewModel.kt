@@ -85,10 +85,10 @@ class NotificationViewModel @Inject constructor(
 
     private fun loadNotification() {
         viewModelScope.launch {
-            _state.value = _state.value.copy(
+            _state.update { it.copy(
                 isLoading = true,
-                loadError = null
-            )
+                loadError = null)
+            }
 
             val idAkun = sessionStorage.getAuthInfo().idAkun
 

@@ -21,6 +21,7 @@ import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.AirlineSeatFlat
 import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Circle
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.ElectricalServices
 import androidx.compose.material.icons.filled.EventAvailable
 import androidx.compose.material.icons.filled.Garage
@@ -28,6 +29,7 @@ import androidx.compose.material.icons.filled.Group
 import androidx.compose.material.icons.filled.Paid
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -68,7 +70,21 @@ fun DetailPenyewaanScreen(
         topBar = {
             TopBarLeftTitle(
                 title = stringResource(R.string.detail_rent),
-                onBackClick = { detailPenyewaActions(DetailPenyewaActions.NavigateBack) }
+                onBackClick = { detailPenyewaActions(DetailPenyewaActions.NavigateBack) },
+                actionsRow = {
+                    if (detailPenyewaanUiState.penyewaUi?.rentalStatus == Constant.NON_ACTIVE){
+                        IconButton(
+                            onClick = {
+                                detailPenyewaActions(DetailPenyewaActions.ShowDialogDeleteRental)
+                            }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.Delete,
+                                contentDescription = stringResource(R.string.delete)
+                            )
+                        }
+                    }
+                }
             )
         }
     ) { innerPadding ->
@@ -126,6 +142,21 @@ fun DetailPenyewaanScreen(
                 description = stringResource(R.string.description_dialog_confirmation_end_the_lease),
                 isLoadingButton = detailPenyewaanUiState.isButtonLoadingEndRental,
                 buttonCancelEnabled = !detailPenyewaanUiState.isButtonLoadingEndRental
+            )
+        }
+
+        if (detailPenyewaanUiState.showDialogDeleteRental){
+            GeneralDialogConfirmationDanger(
+                onConfirm = {
+                    detailPenyewaActions(DetailPenyewaActions.DeleteRental)
+                },
+                onDismiss = {
+                    detailPenyewaActions(DetailPenyewaActions.DismissDialogDeleteRental)
+                },
+                title = stringResource(R.string.dialog_confirmation_delete_rental),
+                description = stringResource(R.string.description_dialog_confirmation_delete_rental),
+                isLoadingButton = detailPenyewaanUiState.isButtonLoadingDeleteRental,
+                buttonCancelEnabled = !detailPenyewaanUiState.isButtonLoadingDeleteRental
             )
         }
     }

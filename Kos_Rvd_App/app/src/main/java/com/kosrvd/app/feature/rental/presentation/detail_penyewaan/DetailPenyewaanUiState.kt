@@ -8,5 +8,7 @@ data class DetailPenyewaanUiState(
     val penyewaUi: PenyewaUi? = null,
     val loadError: String? = null,
     val showDialogEndRental: Boolean = false,
-    val isButtonLoadingEndRental: Boolean = false
+    val isButtonLoadingEndRental: Boolean = false,
+    val showDialogDeleteRental: Boolean = false,
+    val isButtonLoadingDeleteRental: Boolean = false
 )
