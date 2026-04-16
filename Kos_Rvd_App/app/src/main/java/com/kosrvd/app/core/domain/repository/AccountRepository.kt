@@ -2,6 +2,7 @@ package com.kosrvd.app.core.domain.repository
 
 import com.kosrvd.app.core.domain.models.Account
 import com.kosrvd.app.core.domain.models.CreateUserRequest
+import com.kosrvd.app.core.domain.models.DeleteAccountRequest
 import com.kosrvd.app.core.domain.models.DetailAkunPengguna
 import com.kosrvd.app.core.domain.models.FcmToken
 import com.kosrvd.app.core.domain.models.NonActiveAccountRequest
@@ -51,4 +52,5 @@ interface AccountRepository {
     suspend fun nonActiveAccount(request: NonActiveAccountRequest): Result<Unit, DataError>
 
     suspend fun reActiveAccount(idAkun: String): Result<Unit, DataError>
+    suspend fun deleteAccount(request: DeleteAccountRequest): Result<Unit, DataError>
 }

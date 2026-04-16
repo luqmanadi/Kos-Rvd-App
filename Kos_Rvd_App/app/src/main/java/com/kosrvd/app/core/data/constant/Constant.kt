@@ -131,6 +131,7 @@ object Constant {
     const val ACCOUNT_CREATION_KEY = "AccountCreation"
     const val NON_ACTIVE_ACCOUNT_KEY = "NonActiveAccount"
     const val ACCOUNT_ACTIVATION_KEY = "AccountActivation"
+    const val ACCOUNT_DELETION_KEY = "AccountDeletion"
     const val ADD_PENYEWAAN_KEY = "AddPenyewaan"
     const val UPDATE_NOMOR_KAMAR_KEY = "UpdateNomorKamar"
     const val UPDATE_UKURAN_KAMAR_KEY = "UpdateUkuranKamar"

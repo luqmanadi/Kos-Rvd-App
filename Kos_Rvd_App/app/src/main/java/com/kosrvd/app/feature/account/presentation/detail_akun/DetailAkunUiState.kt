@@ -6,8 +6,10 @@ data class DetailAkunUiState(
     val isLoading: Boolean = true,
     val buttonNonAktifIsLoading: Boolean = false,
     val buttonAktifIsLoading: Boolean = false,
+    val buttonDeleteIsLoading: Boolean = false,
     val loadError: String? = null,
     val detailAkun: DetailAkunUi? = null,
     val showDialogNonAktifAkun: Boolean = false,
-    val showDialogActivateAccount: Boolean = false
+    val showDialogActivateAccount: Boolean = false,
+    val showDialogDeleteAccount: Boolean = false
 )

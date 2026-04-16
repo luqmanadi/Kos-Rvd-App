@@ -77,6 +77,10 @@ fun NavGraphBuilder.akunPenggunaGraph(
                 CustomToastResultConfig(
                     key = Constant.ACCOUNT_ACTIVATION_KEY,
                     message = "AKUN BERHASIL DIAKTIFKAN"
+                ),
+                CustomToastResultConfig(
+                    key = Constant.ACCOUNT_DELETION_KEY,
+                    message = "AKUN BERHASIL DIHAPUS"
                 )
             ){
                 colorShowBanner = if (customToastHostState.currentMessage == "PEMBUATAN AKUN BERHASIL" || customToastHostState.currentMessage == "AKUN BERHASIL DIAKTIFKAN") {
@@ -117,6 +121,9 @@ fun NavGraphBuilder.akunPenggunaGraph(
                     }
                     DetailAkunEvents.NavigateBackToSendNonActivateAccountSnackBar -> {
                         navController.navigateBackWithSendKey(Constant.NON_ACTIVE_ACCOUNT_KEY)
+                    }
+                    DetailAkunEvents.NavigateBackToSendDeleteAccountSnackBar -> {
+                        navController.navigateBackWithSendKey(Constant.ACCOUNT_DELETION_KEY)
                     }
                     is DetailAkunEvents.ShowBannerError -> {
                         scope.launch {

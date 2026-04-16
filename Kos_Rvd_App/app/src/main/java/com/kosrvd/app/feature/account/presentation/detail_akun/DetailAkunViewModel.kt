@@ -4,6 +4,7 @@ import android.net.Uri
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.kosrvd.app.core.domain.models.DeleteAccountRequest
 import com.kosrvd.app.core.domain.models.NonActiveAccountRequest
 import com.kosrvd.app.core.domain.repository.AccountRepository
 import com.kosrvd.app.core.domain.utils.onError
@@ -23,6 +24,7 @@ sealed interface DetailAkunEvents {
     data class NavigateToPreviewImage(val imageUrl: Uri): DetailAkunEvents
     data object NavigateBackToSendNonActivateAccountSnackBar: DetailAkunEvents
     data object NavigateBackToSendActivateAccountSnackBar: DetailAkunEvents
+    data object NavigateBackToSendDeleteAccountSnackBar: DetailAkunEvents
     data class ShowBannerError(val message: String): DetailAkunEvents
 }
 
@@ -35,6 +37,9 @@ sealed interface DetailAkunActions {
     data object CloseDialogNonAktifAkun: DetailAkunActions
     data object OpenDialogActivateAccount: DetailAkunActions
     data object CloseDialogActivateAccount: DetailAkunActions
+    data object OpenDialogDeleteAccount: DetailAkunActions
+    data object CloseDialogDeleteAccount: DetailAkunActions
+    data object DeleteAccount: DetailAkunActions
     data object ActivateAkun: DetailAkunActions
 }
 
@@ -59,7 +64,52 @@ class DetailAkunViewModel @Inject constructor(
             DetailAkunActions.ActivateAkun -> activateAkun()
             DetailAkunActions.CloseDialogActivateAccount -> closeDialogActivateAccount()
             DetailAkunActions.OpenDialogActivateAccount -> openDialogActivateAccount()
+            DetailAkunActions.CloseDialogDeleteAccount -> closeDialogDeleteAccount()
+            DetailAkunActions.DeleteAccount -> deleteAccount()
+            DetailAkunActions.OpenDialogDeleteAccount -> openDialogDeleteAccount()
         }
+    }
+
+    private fun deleteAccount() {
+        viewModelScope.launch {
+            _state.update { it.copy(buttonDeleteIsLoading = true) }
+
+            val idAkun = _state.value.detailAkun?.idAkun ?: ""
+            val role = _state.value.detailAkun?.role ?: ""
+            val ktpUrl = _state.value.detailAkun?.dataPenghuni?.photoKtp ?: ""
+            val request = DeleteAccountRequest(
+                idAkun = idAkun,
+                role = role,
+                ktpUrl = ktpUrl
+            )
+            accountRepository.deleteAccount(request)
+                .onSuccess {
+                    _state.update {
+                        it.copy(
+                            buttonDeleteIsLoading = false,
+                            showDialogDeleteAccount = false
+                        )
+                    }
+                    _events.send(DetailAkunEvents.NavigateBackToSendDeleteAccountSnackBar)
+                }
+                .onError { error->
+                    _state.update {
+                        it.copy(
+                            buttonDeleteIsLoading = false,
+                            showDialogDeleteAccount = false
+                        )
+                    }
+                    _events.send(DetailAkunEvents.ShowBannerError(error.message))
+                }
+        }
+    }
+
+    private fun closeDialogDeleteAccount() {
+        _state.update { it.copy(showDialogDeleteAccount = false) }
+    }
+
+    private fun openDialogDeleteAccount() {
+        _state.update { it.copy(showDialogDeleteAccount = true) }
     }
 
     private fun openDialogActivateAccount() {

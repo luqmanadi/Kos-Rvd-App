@@ -21,9 +21,12 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Badge
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Phone
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -38,6 +41,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import com.kosrvd.app.R
 import com.kosrvd.app.core.data.constant.Constant
 import com.kosrvd.app.core.domain.utils.CustomToastHostState
+import com.kosrvd.app.core.presentation.designsystem.atom.image.LoadImage
 import com.kosrvd.app.core.presentation.designsystem.component.appbar.TopBarLeftTitle
 import com.kosrvd.app.core.presentation.designsystem.component.button.ActionButton
 import com.kosrvd.app.core.presentation.designsystem.component.button.ActionDangerButton
@@ -46,12 +50,11 @@ import com.kosrvd.app.core.presentation.designsystem.component.dialog.GeneralDia
 import com.kosrvd.app.core.presentation.designsystem.component.dialog.GeneralDialogConfirmationDanger
 import com.kosrvd.app.core.presentation.designsystem.component.text.BackgroundInfoText
 import com.kosrvd.app.core.presentation.designsystem.component.text.CustomToastHost
-import com.kosrvd.app.core.presentation.utils.shimmerEffect
 import com.kosrvd.app.core.presentation.designsystem.organism.card.InfoSectionCard
-import com.kosrvd.app.core.presentation.designsystem.atom.image.LoadImage
 import com.kosrvd.app.core.presentation.utils.CardAction
-import com.kosrvd.app.feature.account.presentation.models.DetailAkunUi
+import com.kosrvd.app.core.presentation.utils.shimmerEffect
 import com.kosrvd.app.feature.account.presentation.component.InfoDasarAkunCard
+import com.kosrvd.app.feature.account.presentation.models.DetailAkunUi
 
 @Composable
 fun DetailAkunScreen(
@@ -64,7 +67,21 @@ fun DetailAkunScreen(
         topBar = {
             TopBarLeftTitle(
                 title = stringResource(R.string.detail_account),
-                onBackClick = { detailAkunActions(DetailAkunActions.NavigateBack) }
+                onBackClick = { detailAkunActions(DetailAkunActions.NavigateBack) },
+                actionsRow = {
+                    if (detailAkunUiState.detailAkun?.status == Constant.NON_ACTIVE){
+                        IconButton(
+                            onClick = {
+                                detailAkunActions(DetailAkunActions.OpenDialogDeleteAccount)
+                            }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.Delete,
+                                contentDescription = stringResource(R.string.delete)
+                            )
+                        }
+                    }
+                }
             )
         },
         modifier = Modifier.fillMaxSize()
@@ -137,6 +154,21 @@ fun DetailAkunScreen(
                 description = stringResource(R.string.description_dialog_confirmation_activate_account),
                 isLoadingButton = detailAkunUiState.buttonAktifIsLoading,
                 buttonCancelEnabled = !detailAkunUiState.buttonAktifIsLoading
+            )
+        }
+
+        if (detailAkunUiState.showDialogDeleteAccount){
+            GeneralDialogConfirmationDanger(
+                onConfirm = {
+                    detailAkunActions(DetailAkunActions.DeleteAccount)
+                },
+                onDismiss = {
+                    detailAkunActions(DetailAkunActions.CloseDialogDeleteAccount)
+                },
+                title = stringResource(R.string.dialog_confirmation_delete_account),
+                description = stringResource(R.string.description_dialog_confirmation_delete_account),
+                isLoadingButton = detailAkunUiState.buttonDeleteIsLoading,
+                buttonCancelEnabled = !detailAkunUiState.buttonDeleteIsLoading
             )
         }
     }

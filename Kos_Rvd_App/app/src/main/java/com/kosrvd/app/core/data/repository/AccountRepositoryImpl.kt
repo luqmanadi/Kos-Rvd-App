@@ -20,6 +20,7 @@ import com.kosrvd.app.core.data.repository.dto.DetailAkunPenggunaDto
 import com.kosrvd.app.core.data.repository.dto.SimpleResponseDto
 import com.kosrvd.app.core.domain.models.Account
 import com.kosrvd.app.core.domain.models.CreateUserRequest
+import com.kosrvd.app.core.domain.models.DeleteAccountRequest
 import com.kosrvd.app.core.domain.models.DetailAkunPengguna
 import com.kosrvd.app.core.domain.models.FcmToken
 import com.kosrvd.app.core.domain.models.NonActiveAccountRequest
@@ -30,6 +31,7 @@ import com.kosrvd.app.core.domain.utils.asCollectionFlow
 import com.kosrvd.app.core.domain.utils.asFlow
 import com.kosrvd.app.core.domain.utils.map
 import io.ktor.client.HttpClient
+import io.ktor.client.request.delete
 import io.ktor.client.request.get
 import io.ktor.client.request.header
 import io.ktor.client.request.parameter
@@ -284,6 +286,22 @@ class AccountRepositoryImpl @Inject constructor(
                 urlString = constructUrl("reactivateUserAccount")
             ) {
                 setBody(mapOf("idAkun" to idAkun))
+                header("Authorization", "Bearer ${getToken()}")
+            }
+        }.map {  }
+    }
+
+    override suspend fun deleteAccount(request: DeleteAccountRequest): Result<Unit, DataError> {
+        return safeCallApi<SimpleResponseDto> {
+            val params = hashMapOf(
+                "idAkun" to request.idAkun,
+                "role" to request.role,
+                "ktpUrl" to request.ktpUrl
+            )
+            httpClient.delete(
+                urlString = constructUrl("deleteAccount")
+            ){
+                setBody(params)
                 header("Authorization", "Bearer ${getToken()}")
             }
         }.map {  }
