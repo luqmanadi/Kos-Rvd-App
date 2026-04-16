@@ -34,6 +34,7 @@ exports.createAkunPengguna = akun.createAkunPengguna;
 exports.deactivateUserAccount = akun.deactivateUserAccount;
 exports.reactivateUserAccount = akun.reactivateUserAccount;
 exports.onAkunUpdate = akun.onAkunUpdate;
+exports.deleteAccount = akun.deleteAccount;
 
 // Kamar
 exports.onKamarUpdate = kamar.onKamarUpdate;

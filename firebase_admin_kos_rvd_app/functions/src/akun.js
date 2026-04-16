@@ -331,7 +331,7 @@ exports.reactivateUserAccount = onRequest(async (request, response) => {
 });
 
 // ==================================================================
-// 4. Trigger onUpdated collection akun
+// 5. Trigger onUpdated collection akun
 // ==================================================================
 
 exports.onAkunUpdate = onDocumentUpdated("akun/{akunId}", async (event) => {
@@ -410,4 +410,52 @@ exports.onAkunUpdate = onDocumentUpdated("akun/{akunId}", async (event) => {
         `${event.params["akunId"]}`, e);
     return null;
   }
+});
+
+
+// ==================================================================
+// 5. DELETE ACCOUNT (Method: DELETE)
+// ==================================================================
+exports.deleteAccount = onRequest(async (request, response) => {
+  cors(request, response, async () => {
+    if (request.method !== "DELETE") {
+      return response.status(405).send("Method Not Allowed");
+    }
+    try {
+      await validateAuth(request);
+      const {idAkun, role, ktpUrl} = request.body;
+      if (!idAkun || !role) {
+        throw new HttpsError("invalid-argument", "ID/role kosong.");
+      }
+      const db = getFirestore();
+      const auth = getAuth();
+
+      // ==========================================
+      // STEP 1: HAPUS FOTO KTP role Penghuni
+      // ==========================================
+      if (role === "penghuni" && ktpUrl) {
+        const fileName = utils
+            .getFilePathFromUrl(ktpUrl); // Cek path require utils kamu!
+        if (fileName) {
+          admin.storage().bucket().file(fileName).delete()
+              .catch((e) => logger.warn("Gagal hapus foto KTP:", e));
+        }
+      }
+
+      // ==========================================
+      // STEP 2: HAPUS Data Akun di Firestore collection Akun dan Auth Firebase
+      // ==========================================
+      const userDocRef = db.collection("akun").doc(idAkun);
+      const userDoc = await userDocRef.get();
+      if (!userDoc.exists) {
+        throw new HttpsError("not-found", "Akun tidak ditemukan.");
+      }
+      await auth.deleteUser(idAkun);
+      await userDocRef.delete();
+      response.status(200).json({success: true, message: "Akun Berhasil " +
+            "Dihapus"});
+    } catch (error) {
+      handleError(response, error);
+    }
+  });
 });
