@@ -99,10 +99,9 @@ exports.onPenyewaanUpdate = onDocumentUpdated("penyewaan/{penyewaanId}",
           }
 
           // 1c. Hapus data tagihan yang "Belum Lunas" berdasarkan idPenyewa
-          if (dataBefore.idPenyewa) {
-            const idPenyewa = dataBefore.idPenyewa;
+          if (idPenyewaan) {
             const tagihanBelumLunasSnapshot = await db.collection("tagihan")
-                .where("idPenyewa", "==", idPenyewa)
+                .where("idPenyewa", "==", idPenyewaan)
                 .where("paymentStatus", "==", utils.BELUM_LUNAS)
                 .get();
 
@@ -114,7 +113,7 @@ exports.onPenyewaanUpdate = onDocumentUpdated("penyewaan/{penyewaanId}",
               });
 
               info(`Menghapus ${countDeleted} tagihan Belum Lunas ` +
-                  `untuk penyewa: ${idPenyewa}`);
+                  `untuk penyewa: ${idPenyewaan}`);
             }
           }
 
