@@ -21,8 +21,12 @@ class BayarTagihanLangsungLunasUseCase @Inject constructor(
         periodStart: String,
         periodEnd: String,
         jumlahDibayar: Long,
-        nomorKamar: Int
+        nomorKamar: Int,
+        buktiPembayaranSebelumnya: String? = null
     ): Result<ResultTagihan, DataError> {
+        if (buktiPembayaranSebelumnya != null){
+            storageRepository.deleteImageReferenceUrlImage(buktiPembayaranSebelumnya).onError { return Result.Error(it) }
+        }
         val photoUrl = if (compressedResult != null) {
             when (val storageResult =
                 storageRepository.addImageBuktiPembayaranTagihan(compressedResult)) {

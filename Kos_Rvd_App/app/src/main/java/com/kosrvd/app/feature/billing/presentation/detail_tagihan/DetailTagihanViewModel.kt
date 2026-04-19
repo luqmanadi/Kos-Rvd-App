@@ -395,7 +395,8 @@ class DetailTagihanViewModel @Inject constructor(
                     periodStart = periodStart,
                     periodEnd = periodEnd,
                     jumlahDibayar = jumlahDibayar,
-                    nomorKamar = nomorKamar
+                    nomorKamar = nomorKamar,
+                    buktiPembayaranSebelumnya = buktiPembayaranSebelumnya
                 ).onSuccess { resultTagihan ->
                     _state.update {
                         it.copy(
