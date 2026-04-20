@@ -123,7 +123,7 @@ exports.generateTagihanOtomatis = onSchedule({
         roomRentalFee: roomRentalFee,
         carParkingRentalFeeMonthly: carParkingRentalFeeMonthly,
         highPowerElectronicEquipmentUsageCostsMonthly: alatElektronik,
-        adminFees: false,
+        maintenanceFee: false,
         billAmount: billAmount,
         sumDayPeriodeBill: sumDayPeriodeBill,
         prorataDetail: null,
