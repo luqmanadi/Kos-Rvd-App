@@ -19,7 +19,7 @@ data class DetailAkunPenghuni(
     val address: String,
     val phoneNumber: String,
     val photoKtp: String,
-    val numberRoom: Int?,
+    val numberRoom: String?,
 )
 
 fun DetailAkunPengguna.toDetailAkunUi(): DetailAkunUi{

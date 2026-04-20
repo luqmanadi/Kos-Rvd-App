@@ -9,7 +9,7 @@ data class BuatTagihanUiState(
     val isButtonErrorLoading: Boolean = false,
     val isButtonLoading: Boolean = false,
     val isShowContent: Boolean = false,
-    val adminFees: Boolean = false,
+    val maintenanceFee: Boolean = false,
     val useDiscount: Boolean = false,
     val priceDiscount: Long = 0,
     val percentageDiscount: String = "",

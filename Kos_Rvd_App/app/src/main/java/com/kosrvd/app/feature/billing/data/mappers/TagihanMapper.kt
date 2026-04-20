@@ -14,7 +14,7 @@ import com.kosrvd.app.feature.billing.data.repository.dto.TagihanDto
 
 fun TagihanDto.toTagihan(): Tagihan {
     return Tagihan(
-        adminFees = this.adminFees,
+        maintenanceFee = this.maintenanceFee,
         billAmount = this.billAmount,
         periodEnd = this.periodEnd,
         periodStart = this.periodStart,
@@ -79,7 +79,7 @@ fun BuatTagihan.toTagihan(idTagihan: String): Tagihan {
         roomRentalFee = this.roomRentalFee,
         carParkingRentalFeeMonthly = this.carParkingRentalFeeMonthly,
         highPowerElectronicEquipmentUsageCostsMonthly = this.highPowerElectronicEquipmentUsageCostsMonthly,
-        adminFees = this.adminFees,
+        maintenanceFee = this.maintenanceFee,
         billAmount = this.billAmount,
         paymentStatus = this.paymentStatus,
         proofOfPayment = this.proofOfPayment,

@@ -124,11 +124,12 @@ class EditKamarViewModel @Inject constructor(
     }
 
     private fun updateNumberRoom(numberRoom: String) {
-        val numberRoomError = PatternValidation.getNomorKamarError(numberRoom)
-        val isNumberRoomValid = PatternValidation.isNomorKamarValid(numberRoom)
+        val uppercasedRoom = numberRoom.uppercase()
+        val numberRoomError = PatternValidation.getNomorKamarError(uppercasedRoom)
+        val isNumberRoomValid = PatternValidation.isNomorKamarValid(uppercasedRoom)
         _state.update {
             it.copy(
-                numberRoom = numberRoom,
+                numberRoom = uppercasedRoom,
                 numberRoomError = numberRoomError,
                 isnumberRoomError = !isNumberRoomValid
             )
@@ -170,7 +171,7 @@ class EditKamarViewModel @Inject constructor(
                         )
                     }
 
-                    updateNomorKamarUseCase(idKamar, nomorKamarBaru = numberRoom.toInt())
+                    updateNomorKamarUseCase(idKamar, nomorKamarBaru = numberRoom)
                         .onSuccess {
                             _state.update {
                                 it.copy(
@@ -463,7 +464,7 @@ class EditKamarViewModel @Inject constructor(
                     _state.update {
                         it.copy(
                             typeEditKamar = typeEdit,
-                            nomorKamarConstant = data.nomorKamar?.toNumberRoomFormat() ?: 0.toNumberRoomFormat(),
+                            nomorKamarConstant = data.nomorKamar?.toNumberRoomFormat() ?: "".toNumberRoomFormat(),
                             numberRoom = data.nomorKamar.toString(),
                             idKamar = idKamar
                         )
@@ -473,7 +474,7 @@ class EditKamarViewModel @Inject constructor(
                     _state.update {
                         it.copy(
                             typeEditKamar = typeEdit,
-                            nomorKamarConstant = data.nomorKamar?.toNumberRoomFormat() ?: 0.toNumberRoomFormat(),
+                            nomorKamarConstant = data.nomorKamar?.toNumberRoomFormat() ?: "".toNumberRoomFormat(),
                             ukuranKamar = data.ukuranKamar ?: "",
                             idKamar = idKamar
                         )
@@ -485,7 +486,7 @@ class EditKamarViewModel @Inject constructor(
                         _state.update {
                             it.copy(
                                 idKamar = idKamar,
-                                nomorKamarConstant = data.nomorKamar?.toNumberRoomFormat() ?: 0.toNumberRoomFormat(),
+                                nomorKamarConstant = data.nomorKamar?.toNumberRoomFormat() ?: "".toNumberRoomFormat(),
                                 typeEditKamar = typeEdit,
                                 jumlahOrang = 2,
                                 oldJumlahOrang = 2,
@@ -522,7 +523,7 @@ class EditKamarViewModel @Inject constructor(
                                 idKamar = idKamar,
                                 isLoadingTarifKamar = false,
                                 enableEditCapacity = true,
-                                nomorKamarConstant = data.nomorKamar?.toNumberRoomFormat() ?: 0.toNumberRoomFormat(),
+                                nomorKamarConstant = data.nomorKamar?.toNumberRoomFormat() ?: "".toNumberRoomFormat(),
                                 typeEditKamar = typeEdit,
                                 jumlahOrang = data.tarifKamar.twoPersons.let { value -> if (value == null) 1 else 2 },
                                 oldJumlahOrang = data.tarifKamar.twoPersons.let { value -> if (value == null) 1 else 2 },
@@ -538,7 +539,7 @@ class EditKamarViewModel @Inject constructor(
                         it.copy(
                             idKamar = idKamar,
                             typeEditKamar = typeEdit,
-                            nomorKamarConstant = data.nomorKamar?.toNumberRoomFormat() ?: 0.toNumberRoomFormat(),
+                            nomorKamarConstant = data.nomorKamar?.toNumberRoomFormat() ?: "".toNumberRoomFormat(),
                             layananElektronikGratisKamar = data.layananElektronikKamar?.map { layanan ->
                                 AlatElektronik(
                                     toolName = layanan.toolName,
@@ -553,7 +554,7 @@ class EditKamarViewModel @Inject constructor(
                     _state.update {
                         it.copy(
                             idKamar = idKamar,
-                            nomorKamarConstant = data.nomorKamar?.toNumberRoomFormat() ?: 0.toNumberRoomFormat(),
+                            nomorKamarConstant = data.nomorKamar?.toNumberRoomFormat() ?: "".toNumberRoomFormat(),
                             typeEditKamar = typeEdit,
                             fasilitasKamar = data.fasilitasKamar ?: emptyList()
                         )

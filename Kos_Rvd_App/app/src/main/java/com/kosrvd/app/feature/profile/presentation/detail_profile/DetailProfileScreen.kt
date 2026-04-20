@@ -289,7 +289,7 @@ private fun DetailProfileContent(
                         )else CardAction.None,
                         content = {
                             Text(
-                                text = detailProfileUi.numberRoom?.toNumberRoomFormat() ?: "Tidak Ada Data Sewa",
+                                text = detailProfileUi.numberRoom?.toNumberRoomFormat() ?: "Saat ini sedang tidak menyewa Kos",
                                 style = MaterialTheme.typography.bodyMedium,
                                 fontWeight = FontWeight.Bold,
                                 color = MaterialTheme.colorScheme.onSurface

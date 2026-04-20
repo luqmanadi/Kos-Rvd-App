@@ -10,7 +10,7 @@ data class TagihanDto(
     @DocumentId
     val idTagihan: String = "",
     val idPenyewa: String = "",
-    val numberRoom: Int = 0,
+    val numberRoom: String = "",
     val residentAccountIdList: List<String> = emptyList(),
     val residentNameList: List<String> = emptyList(),
     val periodStart: Timestamp = Timestamp.now(),
@@ -19,7 +19,7 @@ data class TagihanDto(
     val roomRentalFee: Long = 0,
     val carParkingRentalFeeMonthly: Long? = null,
     val highPowerElectronicEquipmentUsageCostsMonthly: List<AlatElektronikDto> = emptyList(),
-    val adminFees: Boolean = false,
+    val maintenanceFee: Boolean = false,
     val billAmount: Long = 0,
     val sumDayPeriodeBill: Int = 0,
     val prorataDetail: ProrataDetailDto? = null,

@@ -6,7 +6,7 @@ import com.kosrvd.app.core.domain.models.AlatElektronik
 data class Tagihan(
     val idTagihan: String,
     val idPenyewa: String,
-    val numberRoom: Int,
+    val numberRoom: String,
     val residentAccountIdList: List<String>,
     val residentNameList: List<String>,
     val periodStart: Timestamp,
@@ -16,7 +16,7 @@ data class Tagihan(
     val roomRentalFee: Long,
     val carParkingRentalFeeMonthly: Long?,
     val highPowerElectronicEquipmentUsageCostsMonthly: List<AlatElektronik>,
-    val adminFees: Boolean,
+    val maintenanceFee: Boolean,
     val billAmount: Long,
     val sumDayPeriodeBill: Int,
     val prorataDetail: ProrataDetail?,

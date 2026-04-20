@@ -126,7 +126,8 @@ class BuatKamarViewModel @Inject constructor(
     }
 
     private fun updateNumberRoom(numberRoom: String) {
-        if (numberRoom.isEmpty()){
+        val uppercasedRoom = numberRoom.uppercase()
+        if (uppercasedRoom.isEmpty()){
             _state.update {
                 it.copy(
                     numberRoom = numberRoom,
@@ -137,11 +138,11 @@ class BuatKamarViewModel @Inject constructor(
             return
         }
 
-        val numberRoomError = PatternValidation.getNomorKamarError(numberRoom)
-        val isNumberRoomValid = PatternValidation.isNomorKamarValid(numberRoom)
+        val numberRoomError = PatternValidation.getNomorKamarError(uppercasedRoom)
+        val isNumberRoomValid = PatternValidation.isNomorKamarValid(uppercasedRoom)
         _state.update {
             it.copy(
-                numberRoom = numberRoom,
+                numberRoom = uppercasedRoom,
                 numberRoomError = numberRoomError,
                 isnumberRoomError = !isNumberRoomValid
             )
@@ -182,7 +183,7 @@ class BuatKamarViewModel @Inject constructor(
         viewModelScope.launch {
             _state.update { it.copy(isButtonLoading = true) }
 
-            val numberRoom = _state.value.numberRoom
+            val numberRoom = _state.value.numberRoom.uppercase()
             val ukuranKamar = _state.value.ukuranKamar
             val tarifSatuOrang = _state.value.tarifSatuOrang
             val tarifDuaOrang = _state.value.tarifDuaOrang ?: ""
@@ -255,7 +256,7 @@ class BuatKamarViewModel @Inject constructor(
                     )
                 }
                 val buatKamarFormat = BuatKamar(
-                    numberRoom = numberRoom.toInt(),
+                    numberRoom = numberRoom,
                     price = Harga(
                         onePerson = tarifSatuOrang.toLong(),
                         twoPersons = tarifDuaOrang.toLong()
@@ -316,7 +317,7 @@ class BuatKamarViewModel @Inject constructor(
                     )
                 }
                 val buatKamarFormat = BuatKamar(
-                    numberRoom = numberRoom.toInt(),
+                    numberRoom = numberRoom,
                     price = Harga(
                         onePerson = tarifSatuOrang.toLong(),
                         twoPersons = null

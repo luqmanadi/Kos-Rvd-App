@@ -357,7 +357,7 @@ private fun ResultScreePreview() {
         statusLaporan = "Menunggu Konfirmasi",
         namaPelapor = "Ndim ndim",
         judulLaporan = "Kamar Boror",
-        nomorKamar = 0,
+        nomorKamar = "",
     )
     val resultTagihan =  ResultTagihan(
         idTagihan = "hefheifheifhwohfoiewhfowieejfiwjriofjoriwjf",
@@ -365,14 +365,14 @@ private fun ResultScreePreview() {
         periodStart = "10 Jan 2026",
         periodEnd = "10 Mar 2026",
         jumlahDibayar = 766000,
-        nomorKamar = 4,
+        nomorKamar = "4",
         alasanPenolakan = "Burik gambar"
     )
 
     val resultCreatePenyewaan = ResultCreatePenyewaan(
         idPenyewaan = "ieieijfeijfief",
         status = "Belum Lunas",
-        nomorKamar = 4,
+        nomorKamar = "4",
         penghuni = "Haji dan Huji",
         totalTagihan = 7867777
     )

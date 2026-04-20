@@ -8,7 +8,7 @@ import com.kosrvd.app.feature.billing.domain.model.ProrataDetail
 import com.kosrvd.app.feature.billing.domain.model.Tagihan
 
 data class DetailTagihanUi(
-    val adminFees: Boolean,
+    val maintenanceFee: Boolean,
     val billAmount: Long,
     val periodStart: Timestamp,
     val periodEnd: Timestamp,
@@ -21,7 +21,7 @@ data class DetailTagihanUi(
     val highPowerElectronicEquipmentUsageCostsMonthly: List<AlatElektronik>,
     val idPenyewa: String,
     val idTagihan: String,
-    val numberRoom: Int,
+    val numberRoom: String,
     val sumDayPeriodeBill: Int,
     val prorataDetail: ProrataDetail?,
     val paymentStatus: String,
@@ -35,7 +35,7 @@ data class DetailTagihanUi(
 
 fun Tagihan.toDetailTagihanUi(): DetailTagihanUi{
     return DetailTagihanUi(
-        adminFees = this.adminFees,
+        maintenanceFee = this.maintenanceFee,
         billAmount = this.billAmount,
         periodStart = this.periodStart,
         periodEnd = this.periodEnd,

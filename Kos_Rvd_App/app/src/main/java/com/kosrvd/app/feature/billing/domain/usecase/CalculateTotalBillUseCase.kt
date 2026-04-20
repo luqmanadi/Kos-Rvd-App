@@ -13,7 +13,7 @@ class CalculateTotalBillUseCase @Inject constructor() {
         roomRentalFee: Long, // Harga Kamar Reguler
         parkingFee: Long?,   // Harga Parkir Reguler
         electronics: List<AlatElektronik>, // List Elektronik Reguler
-        adminFees: Boolean,
+        maintenanceFee: Boolean,
         periodStart: Long,
         periodEnd: Long,
         useDiscount: Boolean,
@@ -69,10 +69,10 @@ class CalculateTotalBillUseCase @Inject constructor() {
             billAfterDiscount = subtotal - discountAmount
         }
 
-        // 5. Tambahkan Biaya Admin (Jika Ada)
-        // Asumsi nilai Constant.ADMIN_FEES adalah Long, misal 50000L
-        val finalBill = if (adminFees) {
-            billAfterDiscount + Constant.ADMIN_FEES
+        // 5. Tambahkan Biaya Maintenance (Jika Ada)
+        // Asumsi nilai Constant.MAINTENANCE_FEE adalah Long, misal 50000L
+        val finalBill = if (maintenanceFee) {
+            billAfterDiscount + Constant.MAINTENANCE_FEE
         } else {
             billAfterDiscount
         }

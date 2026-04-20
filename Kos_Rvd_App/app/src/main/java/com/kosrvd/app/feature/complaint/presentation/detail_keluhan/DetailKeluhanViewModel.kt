@@ -108,7 +108,7 @@ class DetailKeluhanViewModel @Inject constructor(
             }
             val responseImage = _state.value.responseImage
             val idKeluhan = _state.value.detailKeluhanUi?.idKeluhan ?: ""
-            val nomorKamar = _state.value.detailKeluhanUi?.numberRoom ?: 0
+            val nomorKamar = _state.value.detailKeluhanUi?.numberRoom ?: ""
             val namaPelapor = _state.value.detailKeluhanUi?.reporterName ?: ""
             val judulLaporan = _state.value.detailKeluhanUi?.title ?: ""
 
@@ -142,7 +142,7 @@ class DetailKeluhanViewModel @Inject constructor(
             _state.update { it.copy(isButtonProsesLoading = true) }
 
             val idKeluhan = _state.value.detailKeluhanUi?.idKeluhan ?: ""
-            val nomorKamar = _state.value.detailKeluhanUi?.numberRoom ?: 0
+            val nomorKamar = _state.value.detailKeluhanUi?.numberRoom ?: ""
             val namaPelapor = _state.value.detailKeluhanUi?.reporterName ?: ""
             val judulLaporan = _state.value.detailKeluhanUi?.title ?: ""
 

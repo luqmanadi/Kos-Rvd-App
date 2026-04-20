@@ -5,7 +5,7 @@ import com.kosrvd.app.core.domain.models.Harga
 
 data class Kamar(
     val idKamar: String,
-    val numberRoom: Int,
+    val numberRoom: String,
     val price: Harga,
     val facility: List<String>,
     val size: String,

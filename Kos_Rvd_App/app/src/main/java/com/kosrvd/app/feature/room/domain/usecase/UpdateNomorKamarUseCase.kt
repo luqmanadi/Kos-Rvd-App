@@ -9,7 +9,7 @@ import javax.inject.Inject
 class UpdateNomorKamarUseCase @Inject constructor(
     private val kamarRepository: KamarRepository
 ) {
-    suspend operator fun invoke(idKamar: String, nomorKamarBaru: Int): Result<Unit, DataError> {
+    suspend operator fun invoke(idKamar: String, nomorKamarBaru: String): Result<Unit, DataError> {
         val isNomorKamarEmptyAvailable = kamarRepository.getKamarByNomorKamar(nomorKamarBaru)
             .getOrElse { return Result.Error(it) }
 

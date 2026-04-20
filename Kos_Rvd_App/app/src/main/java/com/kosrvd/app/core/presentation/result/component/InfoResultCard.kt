@@ -376,7 +376,7 @@ private fun InfoResulTagihanCardPreview() {
                 periodStart = "16 Feb 2026",
                 periodEnd = "15 Mar 2026",
                 jumlahDibayar = 766000,
-                nomorKamar = 4,
+                nomorKamar = "4",
             ),
             isCreateTagihan = false
         )
@@ -394,7 +394,7 @@ private fun InfoResultBuatKeluhanCardPreview() {
                 statusLaporan = "Menunggu Konfirmasi",
                 namaPelapor = "Ndim ndim",
                 judulLaporan = "Kamar Boror",
-                nomorKamar = 4,
+                nomorKamar = "4",
             ),
             description = stringResource(R.string.description_success_process_complain)
         )
@@ -412,7 +412,7 @@ private fun InfoResultCreatePenyewaanCardPreview() {
                 status = "Aktif",
                 penghuni = "Ndim ndim",
                 totalTagihan = 765000,
-                nomorKamar = 4,
+                nomorKamar = "4",
             )
         )
     }

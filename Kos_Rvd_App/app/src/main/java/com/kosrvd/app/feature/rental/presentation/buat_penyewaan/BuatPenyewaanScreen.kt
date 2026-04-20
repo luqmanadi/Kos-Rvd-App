@@ -880,7 +880,7 @@ private fun BuatPenyewaanScreenPreview() {
         // Mock data untuk Kamar
         val mockKamar = Kamar(
             idKamar = "1",
-            numberRoom = 7,
+            numberRoom = "7",
             price = Harga(onePerson = 1800000L, twoPersons = 2000000L),
             facility = listOf("Kamar Mandi Dalam", "Kasur Queen", "Lemari", "Meja Belajar"),
             size = "Sedang",

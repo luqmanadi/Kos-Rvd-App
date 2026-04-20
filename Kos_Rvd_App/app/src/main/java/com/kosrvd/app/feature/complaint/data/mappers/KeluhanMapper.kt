@@ -46,7 +46,7 @@ fun Keluhan.toResultLaporanKeluhan(): ResultLaporanKeluhan {
     return ResultLaporanKeluhan(
         idLaporan = this.idKeluhan,
         statusLaporan = this.complaintStatus,
-        nomorKamar = this.numberRoom ?: 0,
+        nomorKamar = this.numberRoom ?: "",
         namaPelapor = this.reporterName,
         judulLaporan = this.title,
     )

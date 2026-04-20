@@ -35,7 +35,7 @@ sealed interface BuatTagihanEvents{
 sealed interface BuatTagihanActions{
     data object BuatTagihan: BuatTagihanActions
     data class UpdateItemSelected(val item: Penyewaan?): BuatTagihanActions
-    data class UpdateAdminFees(val adminFees: Boolean): BuatTagihanActions
+    data class UpdateMaintenanceFee(val maintenanceFee: Boolean): BuatTagihanActions
     data object NavigateBack: BuatTagihanActions
     data object TryAgain: BuatTagihanActions
     data class UpdatePeriod(val periodStart: Long, val periodEnd: Long, val periodString: String): BuatTagihanActions
@@ -70,7 +70,7 @@ class BuatTagihanViewModel @Inject constructor(
             BuatTagihanActions.BuatTagihan -> buatTagihan()
             BuatTagihanActions.NavigateBack -> navigateBack()
             BuatTagihanActions.TryAgain -> loadPenyewaan()
-            is BuatTagihanActions.UpdateAdminFees -> updateAdminFees(actions.adminFees)
+            is BuatTagihanActions.UpdateMaintenanceFee -> updateMaintenanceFee(actions.maintenanceFee)
             is BuatTagihanActions.UpdateItemSelected -> updateItemSelected(actions.item)
             is BuatTagihanActions.UpdateDescriptionDiscount -> updateDescriptionDiscount(actions.descriptionDiscount)
             is BuatTagihanActions.UpdatePercentageDiscount -> updatePercentageDiscount(actions.percentageDiscount)
@@ -113,7 +113,7 @@ class BuatTagihanViewModel @Inject constructor(
             roomRentalFee = roomRentalFee,
             parkingFee = parkingFee,
             electronics = electronics,
-            adminFees = currentState.adminFees,
+            maintenanceFee = currentState.maintenanceFee,
             periodStart = currentState.selectedPeriodStart,
             periodEnd = currentState.selectedPeriodEnd,
             useDiscount = currentState.useDiscount,
@@ -202,10 +202,10 @@ class BuatTagihanViewModel @Inject constructor(
         calculateLivePreview()
     }
 
-    private fun updateAdminFees(adminFees: Boolean) {
+    private fun updateMaintenanceFee(maintenanceFee: Boolean) {
         _state.update {
             it.copy(
-                adminFees = adminFees
+                maintenanceFee = maintenanceFee
             )
         }
         calculateLivePreview()
@@ -234,7 +234,7 @@ class BuatTagihanViewModel @Inject constructor(
             _state.update { it.copy(isButtonLoading = true) }
 
             val itemSelected = _state.value.itemSelected
-            val adminFees = _state.value.adminFees
+            val maintenanceFee = _state.value.maintenanceFee
             val periodStart = _state.value.selectedPeriodStart
             val periodEnd = _state.value.selectedPeriodEnd
             val isUseDiscount = _state.value.useDiscount
@@ -304,7 +304,7 @@ class BuatTagihanViewModel @Inject constructor(
 
             buatTagihanUseCase(
                 item = itemSelected,
-                adminFees = adminFees,
+                maintenanceFee = maintenanceFee,
                 periodStart = periodStartConvert,
                 periodEnd = periodEndConvert,
                 diskon = diskon,

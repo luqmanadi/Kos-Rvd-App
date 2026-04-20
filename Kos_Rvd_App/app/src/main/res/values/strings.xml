@@ -104,8 +104,8 @@
     <string name="cost_breakdown">Rincian Biaya</string>
     <string name="room_rental">Sewa Kamar</string>
     <string name="car_parking_rental">Sewa Parkir Mobil</string>
-    <string name="admin_fees">Biaya Admin (penghuni baru)</string>
-    <string name="admin_fees_short">Biaya Admin</string>
+    <string name="maintenance_fee">Biaya Admin (penghuni baru)</string>
+    <string name="maintenance_fee_short">Biaya Maintenance</string>
     <string name="use_of_electronic_devices">Pemakaian Alat Elektronik</string>
     <string name="use_of_devices">Pemakaian Alat</string>
     <string name="payment_method">Metode Pembayaran</string>
@@ -240,7 +240,7 @@
     <string name="title_make_a_new_bill">Buat Tagihan Baru</string>
     <string name="complete_the_following_data_to_create_a_new_bill">Lengkapi data berikut untuk membuat tagihan baru.</string>
     <string name="choose_room">Pilih Kamar</string>
-    <string name="is_new_resident">Tambah Biaya Admin (Penghuni Baru) ?</string>
+    <string name="is_new_resident">Tambah Biaya Maintenance (Penghuni Baru) ?</string>
     <string name="iya">Iya</string>
     <string name="select_a_tenant_first_to_view_this_information">Pilih penyewa dan periode dulu untuk melihat informasi ini</string>
     <string name="title_success_make_a_new_bill">Pembuatan Tagihan Berhasil!</string>
@@ -576,7 +576,8 @@
     <string name="alasan_penolakan_tidak_boleh_kosong">Alasan penolakan tidak boleh kosong.</string>
     <string name="response_tidak_boleh_kosong">Tanggapan laporan keluhan tidak boleh kosong</string>
     <string name="nomor_kamar_tidak_boleh_kosong">Nomor kamar tidak boleh kosong</string>
-    <string name="nomor_kamar_harus_angka">Nomor kamar harus angka</string>
+    <string name="nomor_kamar_tidak_boleh_ada_spasi">Nomor kamar tidak boleh mengandung spasi</string>
+    <string name="nomor_kamar_hanya_angka_dan_huruf">Nomor kamar hanya boleh berisi huruf dan angka</string>
     <string name="tarif_tidak_boleh_kosong">Tarif tidak boleh kosong</string>
     <string name="tarif_harus_angka">Tarif harus angka</string>
     <string name="no_new_data">Tidak ada data terbaru</string>

@@ -21,7 +21,7 @@ class BayarTagihanUseCase @Inject constructor(
         periodStart: String,
         periodEnd: String,
         jumlahDibayar: Long,
-        nomorKamar: Int,
+        nomorKamar: String,
         buktiPembayaranSebelumnya: String? = null
     ): Result<ResultTagihan, DataError> {
         if (buktiPembayaranSebelumnya != null){

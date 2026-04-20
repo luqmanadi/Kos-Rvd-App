@@ -54,6 +54,7 @@ import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.kosrvd.app.R
@@ -264,7 +265,8 @@ private fun BuatKamarMainContent(
                     shakeTrigger = buatKamarUiState.shakeTriggerNomorKamarError,
                     keyboardOptions = KeyboardOptions.Default.copy(
                         imeAction = ImeAction.Done,
-                        keyboardType = KeyboardType.Number,
+                        keyboardType = KeyboardType.Text,
+                        capitalization = KeyboardCapitalization.Characters
                     ),
                     lineLimits = TextFieldLineLimits.SingleLine
                 )
@@ -573,6 +575,7 @@ fun FasilitasKamarSection(
             keyboardOptions = KeyboardOptions.Default.copy(
                 imeAction = ImeAction.Done,
                 keyboardType = KeyboardType.Text,
+                capitalization = KeyboardCapitalization.Words
             ),
             lineLimits = TextFieldLineLimits.SingleLine
         )
@@ -686,6 +689,7 @@ fun PemakaianAlatElektronikSection(
             keyboardOptions = KeyboardOptions.Default.copy(
                 imeAction = ImeAction.Done,
                 keyboardType = KeyboardType.Text,
+                capitalization = KeyboardCapitalization.Words
             ),
             lineLimits = TextFieldLineLimits.SingleLine
         )

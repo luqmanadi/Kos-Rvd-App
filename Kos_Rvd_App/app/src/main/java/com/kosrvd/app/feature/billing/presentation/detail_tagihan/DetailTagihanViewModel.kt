@@ -162,7 +162,7 @@ class DetailTagihanViewModel @Inject constructor(
             val periodStart = _state.value.detailTagihanUi?.periodStart?.toDayMonthShortAndYear() ?: ""
             val periodEnd = _state.value.detailTagihanUi?.periodEnd?.toDayMonthShortAndYear() ?: ""
             val jumlahDibayar = _state.value.detailTagihanUi?.billAmount ?: 0
-            val nomorKamar = _state.value.detailTagihanUi?.numberRoom ?: 0
+            val nomorKamar = _state.value.detailTagihanUi?.numberRoom ?: ""
 
             verifikasiTagihanUseCase(
                 idTagihan = idTagihan,
@@ -215,7 +215,7 @@ class DetailTagihanViewModel @Inject constructor(
             val periodStart = _state.value.detailTagihanUi?.periodStart?.toDayMonthShortAndYear() ?: ""
             val periodEnd = _state.value.detailTagihanUi?.periodEnd?.toDayMonthShortAndYear() ?: ""
             val jumlahDibayar = _state.value.detailTagihanUi?.billAmount ?: 0
-            val nomorKamar = _state.value.detailTagihanUi?.numberRoom ?: 0
+            val nomorKamar = _state.value.detailTagihanUi?.numberRoom ?: ""
 
             tolakTagihanUseCase(
                 idTagihan = idTagihan,
@@ -341,7 +341,7 @@ class DetailTagihanViewModel @Inject constructor(
             val periodStart = _state.value.detailTagihanUi?.periodStart?.toDayMonthShortAndYear() ?: ""
             val periodEnd = _state.value.detailTagihanUi?.periodEnd?.toDayMonthShortAndYear() ?: ""
             val jumlahDibayar = _state.value.detailTagihanUi?.billAmount ?: 0
-            val nomorKamar = _state.value.detailTagihanUi?.numberRoom ?: 0
+            val nomorKamar = _state.value.detailTagihanUi?.numberRoom ?: ""
             val proofOfPayment = _state.value.proofOfPayment
             val role = _state.value.role
 

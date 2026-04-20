@@ -17,7 +17,7 @@ class VerifikasiTagihanUseCase @Inject constructor(
         periodStart: String,
         periodEnd: String,
         jumlahDibayar: Long,
-        nomorKamar: Int
+        nomorKamar: String
     ): Result<ResultTagihan, DataError> {
         val updatePaymentBill = mapOf(
             Constant.PAYMENT_STATUS_FIELD to Constant.LUNAS,

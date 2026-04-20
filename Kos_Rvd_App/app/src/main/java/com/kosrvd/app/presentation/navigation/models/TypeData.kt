@@ -11,7 +11,7 @@ data class ResultTagihan(
     val periodStart: String = "",
     val periodEnd: String = "",
     val jumlahDibayar: Long = 0,
-    val nomorKamar: Int = 0,
+    val nomorKamar: String = "",
     val alasanPenolakan: String = ""
 )
 
@@ -19,7 +19,7 @@ data class ResultTagihan(
 data class ResultLaporanKeluhan(
     val idLaporan: String = "",
     val statusLaporan: String = "",
-    val nomorKamar: Int = 0,
+    val nomorKamar: String = "",
     val namaPelapor: String = "",
     val judulLaporan: String = "",
 )
@@ -28,7 +28,7 @@ data class ResultLaporanKeluhan(
 data class ResultCreatePenyewaan(
     val idPenyewaan: String = "",
     val status: String = "",
-    val nomorKamar: Int = 0,
+    val nomorKamar: String = "",
     val penghuni: String = "",
     val totalTagihan: Long = 0
 )
@@ -37,7 +37,7 @@ data class ResultCreatePenyewaan(
 data class EditPindahKamarType(
     val idPenyewaan: String = "",
     val idKamar: String = "",
-    val nomorKamar: Int = 0,
+    val nomorKamar: String = "",
     val namePenghuniPertama: String = "",
     val roomCapacity: Int,
     val hargaSewaKamarSaatIni: HargaSewaKamar = HargaSewaKamar(0, null)
@@ -47,7 +47,7 @@ data class EditPindahKamarType(
 data class TambahPenghuniType(
     val idPenyewaan: String = "",
     val idKamar: String = "",
-    val nomorKamar: Int = 0,
+    val nomorKamar: String = "",
     val namePenghuni: List<String> = emptyList(),
     val roomCapacity: Int = 0,
     val hargaSewaKamarSaatIni: HargaSewaKamar = HargaSewaKamar(0, null)
@@ -70,7 +70,7 @@ data class TemporaryData(
 
 @Serializable
 data class EditTypeKamar(
-    val nomorKamar: Int? = null,
+    val nomorKamar: String? = null,
     val ukuranKamar: String? = null,
     val tarifKamar: HargaSewaKamar = HargaSewaKamar(0, null),
     val layananElektronikKamar: List<AlatElektronikSerialize>? = null,

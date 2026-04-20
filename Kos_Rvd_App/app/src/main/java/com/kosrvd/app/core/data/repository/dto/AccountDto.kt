@@ -21,7 +21,7 @@ data class AccountDto(
 
 @Keep
 data class DetailPenghuniDto(
-    val numberRoom: Int? = null,
+    val numberRoom: String? = null,
     val address: String = "",
     val phoneNumber: String = "",
     val photoKtp: String = "",
@@ -37,7 +37,8 @@ data class TagihanTerakhirDto(
     val periodEnd: Timestamp = Timestamp.now(),
     val dueDate: Timestamp = Timestamp.now(),
     val total: Long = 0,
-    val paymentStatus: String = ""
+    val paymentStatus: String = "",
+    val numberRoom: String = ""
 )
 
 
@@ -60,5 +61,5 @@ data class DataPenghuniAkunPenggunaDto(
     val address: String = "",
     val phoneNumber: String = "",
     val photoKtp: String = "",
-    val numberRoom: Int? = null,
+    val numberRoom: String? = null,
 )

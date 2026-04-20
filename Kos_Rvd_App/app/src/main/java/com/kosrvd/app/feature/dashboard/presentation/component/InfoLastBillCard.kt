@@ -44,7 +44,6 @@ import com.kosrvd.app.feature.dashboard.presentation.models.LastBill
 @Composable
 fun InfoLastBillCard(
     modifier: Modifier = Modifier,
-    numberRoom: String,
     lastBill: LastBill? = null,
     navigateToDetailBill: () -> Unit,
 ) {
@@ -86,7 +85,7 @@ fun InfoLastBillCard(
                     )
                 }
                 Text(
-                    text = numberRoom,
+                    text = lastBill.numberRoom.toNumberRoomFormat(),
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.primary
                 )
@@ -193,17 +192,16 @@ private fun InfoLastBillCardPreview() {
     KosRvdAppTheme {
         val dueDate = Timestamp.now()
         val amount : Long = 550000
-        val numberRoom = 8
         val lastBill = LastBill(
             idTagihan = "ofjoejfeojfoejfoef",
             paymentStatus = "Menunggu Verifikasi",
             total = amount.toRupiahFormat(),
             dueDate = dueDate.toDayMonthAndYear(),
             periodEnd = dueDate.toDayMonthShortAndYear(),
-            periodStart = dueDate.toDayMonthShortAndYear()
+            periodStart = dueDate.toDayMonthShortAndYear(),
+            numberRoom = "3"
         )
         InfoLastBillCard(
-            numberRoom = numberRoom.toNumberRoomFormat(),
             lastBill = lastBill,
             navigateToDetailBill = {},
             modifier = Modifier.padding(10.dp)

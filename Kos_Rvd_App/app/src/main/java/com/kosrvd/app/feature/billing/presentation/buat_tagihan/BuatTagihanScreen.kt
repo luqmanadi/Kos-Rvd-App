@@ -198,7 +198,7 @@ private fun BuatTagihanContent(
                     textNoData = R.string.no_data_rental
                 )
 
-                // radio button choose admin fees
+                // radio button choose maintenance fee
                 Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
                     Text(
                         text = stringResource(R.string.is_new_resident),
@@ -216,9 +216,9 @@ private fun BuatTagihanContent(
                             CustomRadioButtonV1(
                                 modifier = Modifier.weight(1f),
                                 text = if (text) stringResource(R.string.iya) else stringResource(R.string.no),
-                                selected = text == buatTagihanUiState.adminFees,
+                                selected = text == buatTagihanUiState.maintenanceFee,
                                 onClick = {
-                                    buatTagihanActions(BuatTagihanActions.UpdateAdminFees(text))
+                                    buatTagihanActions(BuatTagihanActions.UpdateMaintenanceFee(text))
                                 }
                             )
                         }
@@ -353,7 +353,7 @@ private fun BuatTagihanContent(
                     if (buatTagihanUiState.isShowContent && buatTagihanUiState.itemSelected != null) {
                         RincianBiayaCard(
                             biayaSewaKamar = buatTagihanUiState.currentRentalCostBySumResident,
-                            biayaAdmin = buatTagihanUiState.adminFees,
+                            biayaMaintenance = buatTagihanUiState.maintenanceFee,
                             diskon = buatTagihanUiState.discount,
                             biayaSewaParkir = buatTagihanUiState.itemSelected.pemakaianParkirMobilBulanan?.zonaParkir?.monthlyFee,
                             pemakaianElektronik = buatTagihanUiState.itemSelected.pemakaianAlatElektronikBulanan,
@@ -433,7 +433,7 @@ private fun BuatTagihanScreenPreview() {
     KosRvdAppTheme {
         val buatTagihanUiState = BuatTagihanUiState(
             isButtonLoading = true,
-            adminFees = false,
+            maintenanceFee = false,
             itemSelected = null,
             loadError = null,
             listPenyewaan = emptyList(),

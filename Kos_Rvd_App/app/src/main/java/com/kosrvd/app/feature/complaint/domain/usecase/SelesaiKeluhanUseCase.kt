@@ -19,7 +19,7 @@ class SelesaiKeluhanUseCase @Inject constructor(
         idKeluhan: String,
         response: String,
         compressedResult: CompressedResult?,
-        nomorKamar : Int,
+        nomorKamar : String,
         namaPelapor : String,
         judulLaporan : String,
     ): Result<ResultLaporanKeluhan, DataError> {

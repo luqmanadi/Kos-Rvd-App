@@ -50,7 +50,8 @@ fun TagihanTerakhirDto.toTagihanTerakhir(): TagihanTerakhir {
         paymentStatus = this.paymentStatus,
         periodStart = this.periodStart,
         periodEnd = this.periodEnd,
-        dueDate = this.dueDate
+        dueDate = this.dueDate,
+        numberRoom = this.numberRoom
     )
 }
 

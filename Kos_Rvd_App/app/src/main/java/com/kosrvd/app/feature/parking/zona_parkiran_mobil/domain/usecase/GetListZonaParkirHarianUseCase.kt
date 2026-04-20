@@ -30,8 +30,6 @@ class GetListZonaParkirHarianUseCase @Inject constructor(
 
             startDate <= completionDateParkirHarianMobil && completionDate >= startDateParkirHarianMobil
         }.map { it.idZonaParkir }.toSet()
-        Log.d("List Zone UC", "Start Date: ${startDate.toDayMonthShortAndYear()}, Completion Date: ${completionDate.toDayMonthShortAndYear()}")
-        Log.d("List Zone UC", "Occupied Zone IDs: $occupiedZoneIds")
 
         val availableZones = allZones.filter { it.idZonaParkir !in occupiedZoneIds }
 

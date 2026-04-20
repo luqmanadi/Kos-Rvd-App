@@ -50,7 +50,7 @@ import com.kosrvd.app.feature.billing.domain.model.ProrataDetail
 fun RincianBiayaCard(
     modifier: Modifier = Modifier,
     biayaSewaKamar: Long,
-    biayaAdmin: Boolean,
+    biayaMaintenance: Boolean,
     diskon: Diskon?,
     biayaSewaParkir: Long?,
     pemakaianElektronik: List<AlatElektronik>,
@@ -96,12 +96,12 @@ fun RincianBiayaCard(
                     )
                 }
 
-                // Biaya Admin
-                if (biayaAdmin) {
+                // Biaya Maintenance
+                if (biayaMaintenance) {
                     Spacer(modifier = Modifier.height(12.dp))
                     RincianItem(
                         icon = Icons.Filled.AdminPanelSettings,
-                        title = stringResource(R.string.admin_fees_short),
+                        title = stringResource(R.string.maintenance_fee_short),
                         amount = stringResource(R.string.nominal_admin_fees)
                     )
                 }
@@ -429,7 +429,7 @@ private fun RincianBiayaCardPreview() {
         Box(modifier = Modifier.padding(16.dp)) {
             RincianBiayaCard(
                 biayaSewaKamar = 595000,
-                biayaAdmin = true,
+                biayaMaintenance = true,
                 diskon = Diskon(10, 79500, "Promo Kamar Baru"),
                 biayaSewaParkir = 100000,
                 pemakaianElektronik = listOf(

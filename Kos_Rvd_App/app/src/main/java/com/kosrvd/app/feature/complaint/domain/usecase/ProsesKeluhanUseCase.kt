@@ -14,7 +14,7 @@ class ProsesKeluhanUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(
         idKeluhan : String,
-        nomorKamar : Int,
+        nomorKamar : String,
         namaPelapor : String,
         judulLaporan : String,
     ): Result<ResultLaporanKeluhan, DataError> {

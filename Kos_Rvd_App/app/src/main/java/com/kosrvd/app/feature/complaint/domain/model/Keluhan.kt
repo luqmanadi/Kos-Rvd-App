@@ -8,7 +8,7 @@ data class Keluhan(
     val description: String,
     val idKeluhan: String,
     val idAkun: String,
-    val numberRoom: Int? = null,
+    val numberRoom: String? = null,
     val photoComplaint: String? = null,
     val photoResponse: String? = null,
     val processDate: Timestamp? = null,

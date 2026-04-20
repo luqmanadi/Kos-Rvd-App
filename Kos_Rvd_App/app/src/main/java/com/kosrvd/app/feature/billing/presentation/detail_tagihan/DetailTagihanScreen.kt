@@ -229,7 +229,7 @@ private fun TagihanMainContent(
 
                     RincianBiayaCard(
                         biayaSewaKamar = detailTagihanUi.roomRentalFee,
-                        biayaAdmin = detailTagihanUi.adminFees,
+                        biayaMaintenance = detailTagihanUi.maintenanceFee,
                         diskon = detailTagihanUi.diskon,
                         biayaSewaParkir = detailTagihanUi.carParkingRentalFeeMonthly,
                         pemakaianElektronik = detailTagihanUi.highPowerElectronicEquipmentUsageCostsMonthly,
@@ -458,7 +458,7 @@ private fun LoadingTagihanContent(
 private fun DetailTagihanScreenPreview() {
     val uploadProofOfPaymentRequester = remember { BringIntoViewRequester() }
     val detailTagihanUi = DetailTagihanUi(
-        adminFees = true,
+        maintenanceFee = true,
         billAmount = 100299,
         periodStart = Timestamp.now(),
         periodEnd = Timestamp.now(),
@@ -473,7 +473,7 @@ private fun DetailTagihanScreenPreview() {
         ),
         idPenyewa = "eifiejf02390293",
         idTagihan = "kfekfje23029303",
-        numberRoom = 1,
+        numberRoom = "1",
         paymentStatus = Constant.BELUM_LUNAS,
         proofOfPayment = null,
         rejectionStatement = null,

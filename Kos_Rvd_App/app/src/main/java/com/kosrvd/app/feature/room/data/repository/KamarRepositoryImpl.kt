@@ -75,7 +75,7 @@ class KamarRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getKamarByNomorKamar(nomorKamar: Int): Result<List<Kamar>, DataError> {
+    override suspend fun getKamarByNomorKamar(nomorKamar: String): Result<List<Kamar>, DataError> {
         return safeCall {
             db.collection(Constant.KAMAR_COLLECTION)
                 .whereEqualTo(Constant.NUMBER_ROOM_FIELD, nomorKamar)
@@ -89,7 +89,7 @@ class KamarRepositoryImpl @Inject constructor(
 
     override suspend fun updateNomorKamar(
         idKamar: String,
-        nomorKamarBaru: Int
+        nomorKamarBaru: String
     ): Result<Unit, DataError> {
         return safeCall {
             db.collection(Constant.KAMAR_COLLECTION)

@@ -5,7 +5,7 @@ import com.kosrvd.app.feature.rental.domain.model.Penyewaan
 data class ListPenyewaanUi(
     val idPenyewa: String,
     val listNamePenghuni: List<String>,
-    val numberRoom: Int,
+    val numberRoom: String,
     val rentalStatus: String
 )
 

@@ -31,7 +31,7 @@ fun InformasiLaporanKeluhanCard(
     modifier: Modifier = Modifier,
     idKeluhan: String,
     statusLaporan: String,
-    nomorKamar: Int,
+    nomorKamar: String,
     namaPelapor: String,
     judulLaporan: String,
     deskripsiLaporan: String
@@ -103,7 +103,7 @@ private fun InformasiLaporanKeluhanCardPreview() {
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 15.dp),
             idKeluhan = "wodkwodkowkdowkdowkd",
             statusLaporan = "Selesai",
-            nomorKamar = 10,
+            nomorKamar = "10",
             namaPelapor = "Adi Adi Adi",
             judulLaporan = "Bocor Parah ",
             deskripsiLaporan = "ejfiejfiejfijwofwrnv iwijwrf ipwjefiwjf"

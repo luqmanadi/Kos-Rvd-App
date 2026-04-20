@@ -9,7 +9,7 @@ data class BuatLaporanKeluhan(
     val completionDate: Timestamp? = null,
     val description: String,
     val idAkun: String,
-    val numberRoom: Int? = null,
+    val numberRoom: String? = null,
     val photoComplaint: String? = null,
     val photoResponse: String? = null,
     val processDate: Timestamp? = null,

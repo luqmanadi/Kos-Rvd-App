@@ -9,7 +9,7 @@ import com.kosrvd.app.core.data.repository.dto.HargaDto
 data class KamarDto(
     @DocumentId
     val idKamar: String = "",
-    val numberRoom: Int = 0,
+    val numberRoom: String = "",
     val price: HargaDto = HargaDto(0, null),
     val facility: List<String> = emptyList(),
     val size: String = "",

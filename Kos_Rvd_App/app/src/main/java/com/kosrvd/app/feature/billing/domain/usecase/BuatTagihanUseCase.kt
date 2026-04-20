@@ -20,7 +20,7 @@ class BuatTagihanUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(
         item: Penyewaan,
-        adminFees: Boolean,
+        maintenanceFee: Boolean,
         periodStart: Timestamp,
         periodEnd: Timestamp,
         diskon: Diskon? = null,
@@ -58,7 +58,7 @@ class BuatTagihanUseCase @Inject constructor(
             roomRentalFee = roomRentalFee,
             carParkingRentalFeeMonthly = item.pemakaianParkirMobilBulanan?.zonaParkir?.monthlyFee,
             highPowerElectronicEquipmentUsageCostsMonthly = highPowerElectronicEquipmentUsageCosts,
-            adminFees = adminFees,
+            maintenanceFee = maintenanceFee,
             billAmount = totalBill,
             paymentStatus = Constant.BELUM_LUNAS,
             proofOfPayment = null,

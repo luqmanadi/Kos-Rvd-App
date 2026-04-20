@@ -53,7 +53,7 @@ object PatternValidation {
     }
 
     fun isNomorKamarValid(numberRoom: String): Boolean {
-        return numberRoom.isNotBlank() && numberRoom.isDigitsOnly()
+        return numberRoom.isNotBlank() && numberRoom.all { it.isLetterOrDigit() } && !numberRoom.contains(" ")
     }
 
     fun isTarifValid(tarif: String): Boolean {
@@ -196,7 +196,8 @@ object PatternValidation {
     fun getNomorKamarError(numberRoom: String): UiText {
         return when {
             numberRoom.isBlank() -> UiText.StringResource(R.string.nomor_kamar_tidak_boleh_kosong)
-            !numberRoom.isDigitsOnly() -> UiText.StringResource(R.string.nomor_kamar_harus_angka)
+            numberRoom.contains(" ") -> UiText.StringResource(R.string.nomor_kamar_tidak_boleh_ada_spasi)
+            !numberRoom.all { it.isLetterOrDigit() } -> UiText.StringResource(R.string.nomor_kamar_hanya_angka_dan_huruf)
             else -> UiText.DynamicString("")
         }
     }

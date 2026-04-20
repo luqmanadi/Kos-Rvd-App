@@ -488,7 +488,7 @@ private fun DetailKeluhanScreenPreview() {
             description = "egokogkrogkorgk",
             idKeluhan = "eofjeo03094",
             idAkun = "jfieji20029320",
-            numberRoom = 1,
+            numberRoom = "1",
             photoComplaint = "323",
             photoResponse = null,
             processDate = "18 Nov 2020",

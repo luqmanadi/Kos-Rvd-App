@@ -7,5 +7,5 @@ import com.kosrvd.app.core.data.repository.dto.HargaDto
 data class InfoKamarSewaDto(
     val idKamar: String = "",
     val currentRoomRentalCost: HargaDto = HargaDto(0, null),
-    val numberRoom: Int = 0
+    val numberRoom: String = ""
 )

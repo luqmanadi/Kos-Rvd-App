@@ -6,7 +6,7 @@ import com.kosrvd.app.core.domain.models.Harga
 
 @Keep
 data class BuatKamar(
-    val numberRoom: Int,
+    val numberRoom: String,
     val price: Harga,
     val facility: List<String>,
     val size: String,

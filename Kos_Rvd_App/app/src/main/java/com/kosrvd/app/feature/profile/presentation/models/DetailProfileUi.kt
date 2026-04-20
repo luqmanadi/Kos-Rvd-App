@@ -10,7 +10,7 @@ data class DetailProfileUi(
     val address: String?,
     val role: String,
     val status: String,
-    val numberRoom: Int?,
+    val numberRoom: String?,
     val photoKtp: String?
 )
 

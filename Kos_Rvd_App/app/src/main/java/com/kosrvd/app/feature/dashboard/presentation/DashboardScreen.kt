@@ -52,17 +52,16 @@ import com.kosrvd.app.core.presentation.designsystem.theme.KosRvdAppTheme
 import com.kosrvd.app.core.presentation.utils.shimmerEffect
 import com.kosrvd.app.core.presentation.utils.toDayMonthAndYear
 import com.kosrvd.app.core.presentation.utils.toDayMonthShortAndYear
-import com.kosrvd.app.core.presentation.utils.toNumberRoomFormat
 import com.kosrvd.app.core.presentation.utils.toRupiahFormat
-import com.kosrvd.app.feature.dashboard.presentation.models.AdminDashboardUi
-import com.kosrvd.app.feature.dashboard.presentation.models.LastBill
-import com.kosrvd.app.feature.dashboard.presentation.models.PenghuniDashboardUi
 import com.kosrvd.app.feature.dashboard.presentation.component.InfoKosCard
 import com.kosrvd.app.feature.dashboard.presentation.component.InfoLastBillCard
 import com.kosrvd.app.feature.dashboard.presentation.component.InfoStatistikCard
 import com.kosrvd.app.feature.dashboard.presentation.component.InfoWifiCard
 import com.kosrvd.app.feature.dashboard.presentation.component.MenuDashboardLargeCard
 import com.kosrvd.app.feature.dashboard.presentation.component.MenuDashboardSmallCard
+import com.kosrvd.app.feature.dashboard.presentation.models.AdminDashboardUi
+import com.kosrvd.app.feature.dashboard.presentation.models.LastBill
+import com.kosrvd.app.feature.dashboard.presentation.models.PenghuniDashboardUi
 
 @Composable
 fun DashboardScreen(
@@ -175,13 +174,11 @@ fun ContentDashboard(
         if (dashboardUiState.penghuniDashboardUi != null){
             item(key = "penghuni_last_bill") {
                 InfoLastBillCard(
-                    numberRoom = dashboardUiState.penghuniDashboardUi.numberRoom,
                     lastBill = dashboardUiState.penghuniDashboardUi.lastBill,
                     navigateToDetailBill = {
                         dashboardActions(
                             DashboardActions.NavigateToDetailBill(
-                                idBill = dashboardUiState.penghuniDashboardUi.lastBill?.idTagihan
-                                    ?: ""
+                                idBill = dashboardUiState.penghuniDashboardUi.lastBill?.idTagihan ?: ""
                             )
                         )
                     }
@@ -371,7 +368,7 @@ private fun MenuDashboardAdminSection(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             MenuDashboardSmallCard(
-                title = stringResource(R.string.residents),
+                title = stringResource(R.string.list_residents),
                 icon = painterResource(R.drawable.ic_penghuni),
                 onClick = navigateToPenghuni
             )
@@ -423,26 +420,23 @@ private fun DashboardScreenPreview() {
     KosRvdAppTheme {
         val dueDate = Timestamp.now()
         val total: Long = 550000
-        val numberRoom = 8
         val lastBill = LastBill(
             idTagihan = "ofjoejfeojfoejfoef",
             paymentStatus = "Menunggu Verifikasi",
             total = total.toRupiahFormat(),
             dueDate = dueDate.toDayMonthAndYear(),
             periodEnd = dueDate.toDayMonthShortAndYear(),
-            periodStart = dueDate.toDayMonthShortAndYear()
+            periodStart = dueDate.toDayMonthShortAndYear(),
+            numberRoom = "3"
         )
         val adminDashboardUi = AdminDashboardUi(
-            name = "Admin",
             amountOfUnpaidBills = "1",
             billAmountNeedsVerification = "1",
             numberOfNewComplaints = "1",
             numberOfEmptyRooms = "1"
         )
         PenghuniDashboardUi(
-            name = "Ndiman",
-            lastBill = lastBill,
-            numberRoom = numberRoom.toNumberRoomFormat()
+            lastBill = lastBill
         )
         val dashboardUiState = DashboardUiState(
             isLoading = false,

@@ -36,6 +36,7 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.kosrvd.app.R
@@ -177,7 +178,8 @@ fun TambahZonaParkiranMobilScreen (
                     shakeTrigger = tambahZonaParkiranMobilUiState.shakeTriggerZoneNameError,
                     keyboardOptions = KeyboardOptions.Default.copy(
                         imeAction = ImeAction.Next,
-                        keyboardType = KeyboardType.Text
+                        keyboardType = KeyboardType.Text,
+                        capitalization = KeyboardCapitalization.Words
                     ),
                     lineLimits = TextFieldLineLimits.SingleLine,
                     focusRequester = namaZonaFocus,

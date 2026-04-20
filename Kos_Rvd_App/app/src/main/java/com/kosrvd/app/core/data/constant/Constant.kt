@@ -93,7 +93,7 @@ object Constant {
     // Name Value
     const val ACTIVE = "Aktif"
     const val NON_ACTIVE = "Tidak Aktif"
-    const val ADMIN_FEES: Long = 50000
+    const val MAINTENANCE_FEE: Long = 50000
     const val YES = "Iya"
     const val NO = "Tidak"
     const val KOSONG = "Kosong"

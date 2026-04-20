@@ -29,14 +29,14 @@ data class DataPenghuniAkunPengguna(
     val address: String,
     val phoneNumber: String,
     val photoKtp: String,
-    val numberRoom: Int?,
+    val numberRoom: String?,
 )
 
 data class DetailPenghuni(
     val address: String,
     val phoneNumber: String,
     val photoKtp: String,
-    val numberRoom: Int? = null,
+    val numberRoom: String? = null,
     val idPenyewa: String,
     val finalBill: TagihanTerakhir? = null,
 )
@@ -44,6 +44,7 @@ data class DetailPenghuni(
 data class TagihanTerakhir(
     val idTagihan: String,
     val total: Long,
+    val numberRoom: String,
     val paymentStatus: String,
     val periodStart: Timestamp,
     val periodEnd: Timestamp,

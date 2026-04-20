@@ -17,7 +17,7 @@ class TolakTagihanUseCase @Inject constructor(
         periodStart: String,
         periodEnd: String,
         jumlahDibayar: Long,
-        nomorKamar: Int,
+        nomorKamar: String,
         alasanPenolakan: String
     ): Result<ResultTagihan, DataError> {
         val updatePaymentBill = mapOf(

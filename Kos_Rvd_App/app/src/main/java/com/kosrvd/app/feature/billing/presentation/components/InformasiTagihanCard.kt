@@ -151,7 +151,7 @@ fun InfoDetailTagihanCard(
                     .weight(1f),
                 icon = Icons.Outlined.DoorFront,
                 title = stringResource(R.string.number_room),
-                description = detailTagihanUi.numberRoom.toString()
+                description = detailTagihanUi.numberRoom
             )
             VerticalDivider(
                 thickness = 1.dp,
@@ -231,7 +231,7 @@ fun InfoDetailBuatTagihanCard(
     idPenyewa: String,
     periodStart: Timestamp,
     periodEnd: Timestamp,
-    numberRoom: Int,
+    numberRoom: String,
     listResident: List<String>
 ) {
     Card(
@@ -269,7 +269,7 @@ fun InfoDetailBuatTagihanCard(
                 .padding(16.dp),
             icon = Icons.Outlined.DoorFront,
             title = stringResource(R.string.number_room),
-            description = numberRoom.toString()
+            description = numberRoom
         )
         HorizontalDivider(
             thickness = 1.dp,
@@ -344,7 +344,7 @@ private fun InfoDetailBuatTagihanCardPreview() {
             idPenyewa = "eofeofjeo20o02",
             periodStart = Timestamp.now(),
             periodEnd = Timestamp.now(),
-            numberRoom = 5,
+            numberRoom = "5",
             listResident = listOf(
                 "Arjuna"
             )
@@ -358,7 +358,7 @@ val diskon = Diskon(
     description = "Promo Imlek"
 )
 val fakeDetailTagihanUi = DetailTagihanUi(
-    adminFees = true,
+    maintenanceFee = true,
     billAmount = 100000,
     periodStart = Timestamp.now(),
     periodEnd = Timestamp.now(),
@@ -373,7 +373,7 @@ val fakeDetailTagihanUi = DetailTagihanUi(
     ),
     idPenyewa = "103013901iefhiefhe",
     idTagihan = "0190190ehfiehfiefhief",
-    numberRoom = 5,
+    numberRoom = "5",
     paymentStatus = Constant.MENUNGGU_VERIFIKASI,
     proofOfPayment = null,
     rejectionStatement = null,

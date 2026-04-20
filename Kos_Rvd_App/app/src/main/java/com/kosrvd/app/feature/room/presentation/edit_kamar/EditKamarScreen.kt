@@ -669,7 +669,8 @@ private fun EditNomorKamarContent(
         shakeTrigger = editKamarUiState.shakeTriggerNomorKamarError,
         keyboardOptions = KeyboardOptions.Default.copy(
             imeAction = ImeAction.Done,
-            keyboardType = KeyboardType.Number,
+            keyboardType = KeyboardType.Text,
+            capitalization = KeyboardCapitalization.Characters
         ),
         lineLimits = TextFieldLineLimits.SingleLine,
         focusRequester = nomorKamarFocus

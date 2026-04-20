@@ -10,7 +10,7 @@ data class KeluhanDto(
     val idKeluhan: String = "",
     val idAkun: String = "",
     val reporterName: String = "",
-    val numberRoom: Int? = null,
+    val numberRoom: String? = null,
     val title: String = "",
     val description: String = "",
     val photoComplaint: String? = null,

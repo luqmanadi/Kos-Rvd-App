@@ -7,5 +7,5 @@ import com.kosrvd.app.core.domain.models.Harga
 data class InfoKamarSewa(
     val idKamar: String,
     val currentRoomRentalCost: Harga,
-    val numberRoom: Int
+    val numberRoom: String
 )

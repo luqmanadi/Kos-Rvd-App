@@ -46,6 +46,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.capitalize
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.unit.dp
@@ -275,6 +276,7 @@ fun ContentBuatAkun(
                 keyboardOptions = KeyboardOptions.Default.copy(
                     imeAction = ImeAction.Next,
                     keyboardType = KeyboardType.Text,
+                    capitalization = KeyboardCapitalization.Words
                 ),
                 lineLimits = TextFieldLineLimits.SingleLine,
                 focusRequester = nameFocus
@@ -454,6 +456,7 @@ fun ContentBuatAkun(
                     keyboardOptions = KeyboardOptions.Default.copy(
                         imeAction = ImeAction.Done,
                         keyboardType = KeyboardType.Text,
+                        capitalization = KeyboardCapitalization.Words
                     ),
                     lineLimits = TextFieldLineLimits.SingleLine,
                     focusRequester = alamatFocus
