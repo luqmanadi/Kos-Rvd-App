@@ -2,6 +2,7 @@ package com.kosrvd.app.feature.billing.domain.usecase
 
 import com.google.firebase.Timestamp
 import com.kosrvd.app.core.data.constant.Constant
+import com.kosrvd.app.core.domain.usecase.CheckNetworkUseCase
 import com.kosrvd.app.core.domain.utils.DataError
 import com.kosrvd.app.core.domain.utils.Result
 import com.kosrvd.app.core.domain.utils.getOrNull
@@ -16,7 +17,8 @@ import com.kosrvd.app.feature.billing.domain.repository.TagihanRepository
 import javax.inject.Inject
 
 class BuatTagihanUseCase @Inject constructor(
-    private val tagihanRepository: TagihanRepository
+    private val tagihanRepository: TagihanRepository,
+    private val checkNetworkUseCase: CheckNetworkUseCase
 ) {
     suspend operator fun invoke(
         item: Penyewaan,
@@ -28,6 +30,9 @@ class BuatTagihanUseCase @Inject constructor(
         sumDayPeriodeBill: Int,
         prorataDetail: ProrataDetail? = null
     ): Result<Tagihan, DataError> {
+        if (!checkNetworkUseCase()){
+            return Result.Error(DataError.NETWORK_NO_INTERNET)
+        }
         val isAlreadyExist = tagihanRepository.checkTagihanByIdPenyewa(item.idPenyewa, periodEnd)
             .onError { return Result.Error(it) }
             .getOrNull() ?: false

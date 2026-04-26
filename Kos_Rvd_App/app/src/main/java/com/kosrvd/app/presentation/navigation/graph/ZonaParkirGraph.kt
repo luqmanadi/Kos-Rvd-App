@@ -147,7 +147,15 @@ fun NavGraphBuilder.zonaParkirGraph(
                     message = "BIAYA HARIAN BERHASIL DIEDIT"
                 )
             ){
-                colorShowBanner = Color(0xFF006877)
+                if (
+                    customToastHostState.currentMessage == "NAMA ZONA PARKIR BERHASIL DIEDIT" ||
+                    customToastHostState.currentMessage == "BIAYA BULANAN BERHASIL DIEDIT" ||
+                    customToastHostState.currentMessage == "BIAYA HARIAN BERHASIL DIEDIT"
+                ){
+                    colorShowBanner = Color(0xFF006877)
+                } else {
+                    colorShowBanner = Color(0xFFBA1A1A)
+                }
             }
 
             DetailZonaParkiranMobilScreen(

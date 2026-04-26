@@ -6,19 +6,20 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.kosrvd.app.core.data.constant.Constant
+import com.kosrvd.app.core.domain.models.AlatElektronik
+import com.kosrvd.app.core.domain.models.Harga
+import com.kosrvd.app.core.domain.usecase.CheckNetworkUseCase
 import com.kosrvd.app.core.domain.utils.onError
 import com.kosrvd.app.core.domain.utils.onSuccess
+import com.kosrvd.app.core.presentation.utils.PatternValidation
+import com.kosrvd.app.core.presentation.utils.toNumberRoomFormat
+import com.kosrvd.app.feature.rental.domain.repository.PenyewaanRepository
+import com.kosrvd.app.feature.room.domain.repository.KamarRepository
+import com.kosrvd.app.feature.room.domain.usecase.UpdateNomorKamarUseCase
+import com.kosrvd.app.feature.room.domain.utils.TypeEditKamar
 import com.kosrvd.app.presentation.navigation.NavigationScreen
 import com.kosrvd.app.presentation.navigation.models.CustomNavTypes
 import com.kosrvd.app.presentation.navigation.models.EditTypeKamar
-import com.kosrvd.app.core.presentation.utils.PatternValidation
-import com.kosrvd.app.core.domain.models.AlatElektronik
-import com.kosrvd.app.core.domain.models.Harga
-import com.kosrvd.app.feature.room.domain.repository.KamarRepository
-import com.kosrvd.app.feature.rental.domain.repository.PenyewaanRepository
-import com.kosrvd.app.feature.room.domain.usecase.UpdateNomorKamarUseCase
-import com.kosrvd.app.feature.room.domain.utils.TypeEditKamar
-import com.kosrvd.app.core.presentation.utils.toNumberRoomFormat
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -56,7 +57,8 @@ class EditKamarViewModel @Inject constructor(
     private val kamarRepository: KamarRepository,
     private val updateNomorKamarUseCase: UpdateNomorKamarUseCase,
     private val penyewaanRepository: PenyewaanRepository,
-    private val savedStateHandle: SavedStateHandle
+    private val savedStateHandle: SavedStateHandle,
+    private val checkNetworkUseCase: CheckNetworkUseCase
 ): ViewModel() {
     private val _state = MutableStateFlow(EditKamarUiState())
     val state = _state.asStateFlow()
@@ -148,6 +150,25 @@ class EditKamarViewModel @Inject constructor(
         viewModelScope.launch {
             _state.update { it.copy(isButtonLoading = true) }
             val idKamar = _state.value.idKamar
+            if (!checkNetworkUseCase()){
+                val typeEdit = when(_state.value.typeEditKamar){
+                    TypeEditKamar.EDIT_NOMOR_KAMAR -> "Nomor Kamar"
+                    TypeEditKamar.EDIT_FASILITAS_KAMAR -> "Fasilitas Kamar"
+                    TypeEditKamar.EDIT_TARIF_KAMAR -> "Tarif Kamar"
+                    TypeEditKamar.EDIT_UKURAN_KAMAR -> "Ukuran Kamar"
+                    TypeEditKamar.EDIT_LAYANAN_ALAT_ELEKTRONIK_GRATIS -> "Layanan Alat Elektronik Gratis"
+                    null -> "Type Edit Kosong"
+                }
+                _state.update {
+                    it.copy(
+                        isButtonLoading = false
+                    )
+                }
+                _events.send(
+                    EditKamarEvents.ShowSnackBarError("Gagal Perbarui $typeEdit dikarenakan Tidak ada koneksi internet. Mohon cek kembali jaringan Anda.")
+                )
+                return@launch
+            }
             when(val typeEditKamar = _state.value.typeEditKamar) {
                 TypeEditKamar.EDIT_NOMOR_KAMAR -> {
                     val numberRoom = _state.value.numberRoom

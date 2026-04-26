@@ -4,6 +4,8 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kosrvd.app.core.data.source.local.SessionStorage
+import com.kosrvd.app.core.domain.usecase.CheckNetworkUseCase
+import com.kosrvd.app.core.domain.utils.DataError
 import com.kosrvd.app.core.domain.utils.Result
 import com.kosrvd.app.core.domain.utils.onError
 import com.kosrvd.app.core.domain.utils.onSuccess
@@ -37,7 +39,8 @@ sealed interface PengumumanActions {
 @HiltViewModel
 class PengumumanViewModel @Inject constructor(
     private val pengumumanRepository: PengumumanRepository,
-    private val sessionStorage: SessionStorage
+    private val sessionStorage: SessionStorage,
+    private val checkNetworkUseCase: CheckNetworkUseCase
 ): ViewModel() {
     private val _state = MutableStateFlow(PengumumanUiState())
     val state = _state
@@ -89,6 +92,21 @@ class PengumumanViewModel @Inject constructor(
                 buttonLoading = true,
                 buttonCancelEnabled = false
             )}
+
+            if (!checkNetworkUseCase()){
+                _state.update {
+                    it.copy(
+                        buttonLoading = false,
+                        buttonCancelEnabled = true,
+                        isDeleteDialogVisible = false,
+                        idPengumumanForDelete = ""
+                    )
+                }
+                _events.send(
+                    PengumumanEvents.ShowSnackBar("Gagal Hapus Pengumuman dikarenakan Tidak ada koneksi internet. Mohon cek kembali jaringan Anda.", true)
+                )
+                return@launch
+            }
             val idPengumuman = _state.value.idPengumumanForDelete
 
             pengumumanRepository.deletePengumuman(idPengumuman)

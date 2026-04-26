@@ -7,13 +7,19 @@ import com.kosrvd.app.core.domain.utils.DataError
 import com.kosrvd.app.core.domain.utils.Result
 import com.kosrvd.app.core.domain.utils.onError
 import com.kosrvd.app.core.domain.models.CompressedResult
+import com.kosrvd.app.core.domain.usecase.CheckNetworkUseCase
 import javax.inject.Inject
 
 class SavePhotoProfileUseCase @Inject constructor(
     private val storageRepository: StorageRepository,
-    private val accountRepository: AccountRepository
+    private val accountRepository: AccountRepository,
+    private val checkNetworkUseCase: CheckNetworkUseCase
 ) {
     suspend operator fun invoke(idAkun: String, oldPhotoUri: String, compressedResult: CompressedResult?): Result<Unit, DataError> {
+        if (!checkNetworkUseCase()){
+            return Result.Error(DataError.NETWORK_NO_INTERNET)
+        }
+
         if (oldPhotoUri.isNotBlank()){
             Log.d("TAG Inital OldPhoto", "invoke: $oldPhotoUri")
             storageRepository.deleteImageReferenceUrlImage(oldPhotoUri).onError {

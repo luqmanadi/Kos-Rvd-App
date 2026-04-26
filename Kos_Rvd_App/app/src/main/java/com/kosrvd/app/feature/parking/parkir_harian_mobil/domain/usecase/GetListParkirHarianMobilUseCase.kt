@@ -2,6 +2,7 @@ package com.kosrvd.app.feature.parking.parkir_harian_mobil.domain.usecase
 
 import com.google.firebase.Timestamp
 import com.kosrvd.app.core.data.constant.Constant
+import com.kosrvd.app.core.domain.usecase.CheckNetworkUseCase
 import com.kosrvd.app.core.domain.utils.DataError
 import com.kosrvd.app.core.domain.utils.Result
 import com.kosrvd.app.core.domain.utils.map
@@ -11,9 +12,13 @@ import com.kosrvd.app.feature.parking.parkir_harian_mobil.presentation.models.Li
 import javax.inject.Inject
 
 class GetListParkirHarianMobilUseCase @Inject constructor(
-    private val parkirHarianMobilRepository: ParkirHarianMobilRepository
+    private val parkirHarianMobilRepository: ParkirHarianMobilRepository,
+    private val checkNetworkUseCase: CheckNetworkUseCase
 ) {
     suspend operator fun invoke(): Result<List<ListParkirHarianMobilUi>, DataError> {
+        if (!checkNetworkUseCase()){
+            return Result.Error(DataError.NETWORK_NO_INTERNET)
+        }
         val result = parkirHarianMobilRepository.getAllParkirHarianMobil()
 
         return result.map { listParkir ->

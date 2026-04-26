@@ -12,6 +12,7 @@ import com.kosrvd.app.presentation.navigation.models.ResultCreatePenyewaan
 import com.kosrvd.app.core.presentation.utils.PatternValidation
 import com.kosrvd.app.core.presentation.utils.calculateTotalBill
 import com.kosrvd.app.core.domain.models.AlatElektronik
+import com.kosrvd.app.core.domain.usecase.CheckNetworkUseCase
 import com.kosrvd.app.feature.rental.domain.model.BuatPenyewaan
 import com.kosrvd.app.feature.rental.domain.model.InfoKamarSewa
 import com.kosrvd.app.feature.rental.domain.model.InfoPakaiParkirMobilBulanan
@@ -69,7 +70,8 @@ sealed interface BuatPenyewaanActions {
 @HiltViewModel
 class BuatPenyewaanViewModel @Inject constructor(
     private val getDataInitalBuatPenyewaanUseCase: GetDataInitalBuatPenyewaanUseCase,
-    private val penyewaanRepository: PenyewaanRepository
+    private val penyewaanRepository: PenyewaanRepository,
+    private val checkNetworkUseCase: CheckNetworkUseCase
 ) : ViewModel() {
     private val _state = MutableStateFlow(BuatPenyewaanUiState())
     val state = _state
@@ -387,6 +389,16 @@ class BuatPenyewaanViewModel @Inject constructor(
 
             _state.update { it.copy(isButtonSubmitLoading = true) }
 
+            if (!checkNetworkUseCase()){
+                _state.update {
+                    it.copy(isButtonSubmitLoading = false)
+                }
+                _events.send(
+                    BuatPenyewaanEvents.ShowSnackBarError("Tidak ada koneksi internet. Mohon cek kembali jaringan Anda.")
+                )
+                return@launch
+            }
+
             // 1. Persiapan List Resident (InfoPenghuni)
             val listResident = mutableListOf<InfoPenghuni>()
             listResident.add(
@@ -492,6 +504,17 @@ class BuatPenyewaanViewModel @Inject constructor(
     private fun loadInitalDataPenyewaan() {
         viewModelScope.launch {
             _state.update { it.copy(isListKamarLoading = true, loadKamarError = null) }
+
+            if (!checkNetworkUseCase()){
+                _state.update {
+                    it.copy(
+                        isListKamarLoading = false,
+                        loadKamarError = "Tidak ada koneksi internet. Mohon cek kembali jaringan Anda.",
+                        listKamar = emptyList()
+                    )
+                }
+                return@launch
+            }
 
             getDataInitalBuatPenyewaanUseCase()
                 .onSuccess { result ->

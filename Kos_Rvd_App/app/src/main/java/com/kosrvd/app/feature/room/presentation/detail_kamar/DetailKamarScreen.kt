@@ -64,7 +64,7 @@ fun DetailKamarScreen(
     colorBgToast: Color,
     detailKamarUiState: DetailKamarUiState,
     detailKamarActions: (DetailKamarActions) -> Unit,
-    customToastHostState: CustomToastHostState
+    customToastHostState: CustomToastHostState,
 ) {
     Scaffold(
         topBar = {

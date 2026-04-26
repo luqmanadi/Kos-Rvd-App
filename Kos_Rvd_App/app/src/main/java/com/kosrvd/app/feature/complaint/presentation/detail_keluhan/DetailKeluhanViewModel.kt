@@ -4,6 +4,7 @@ import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kosrvd.app.core.data.source.local.SessionStorage
+import com.kosrvd.app.core.domain.usecase.CheckNetworkUseCase
 import com.kosrvd.app.core.domain.utils.onError
 import com.kosrvd.app.core.domain.utils.onSuccess
 import com.kosrvd.app.presentation.navigation.models.ResultLaporanKeluhan
@@ -13,6 +14,7 @@ import com.kosrvd.app.feature.complaint.domain.usecase.ProsesKeluhanUseCase
 import com.kosrvd.app.feature.complaint.domain.usecase.SelesaiKeluhanUseCase
 import com.kosrvd.app.core.presentation.utils.ImageCompressor
 import com.kosrvd.app.core.presentation.utils.TypeResult
+import com.kosrvd.app.feature.announcement.presentation.list_pengumuman.PengumumanEvents
 import com.kosrvd.app.feature.complaint.presentation.models.toDetailKeluhanUi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -52,7 +54,8 @@ class DetailKeluhanViewModel @Inject constructor(
     private val imageCompressor: ImageCompressor,
     private val sessionStorage: SessionStorage,
     private val prosesKeluhanUseCase: ProsesKeluhanUseCase,
-    private val selesaiKeluhanUseCase: SelesaiKeluhanUseCase
+    private val selesaiKeluhanUseCase: SelesaiKeluhanUseCase,
+    private val checkNetworkUseCase: CheckNetworkUseCase
 ): ViewModel() {
     private val _state = MutableStateFlow(DetailKeluhanUiState())
     val state = _state
@@ -181,6 +184,20 @@ class DetailKeluhanViewModel @Inject constructor(
     private fun hapusKeluhan() {
         viewModelScope.launch {
             _state.update { it.copy(isButtonDeleteLoading = true) }
+
+            if (!checkNetworkUseCase()){
+                _state.update {
+                    it.copy(
+                        isButtonDeleteLoading = false,
+                        isShowDialogDeleteVisible = false
+                    )
+                }
+                _events.send(
+                    DetailKeluhanEvents.ShowBannerError("Gagal Hapus Laporan Keluhan dikarenakan Tidak ada koneksi internet. Mohon cek kembali jaringan Anda.")
+                )
+                return@launch
+            }
+
             val idKeluhan = _state.value.detailKeluhanUi?.idKeluhan ?: ""
 
             keluhanRepository.delleteKeluhan(idKeluhan)

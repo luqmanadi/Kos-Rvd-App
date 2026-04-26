@@ -4,11 +4,12 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
+import com.kosrvd.app.core.domain.usecase.CheckNetworkUseCase
 import com.kosrvd.app.core.domain.utils.onError
 import com.kosrvd.app.core.domain.utils.onSuccess
-import com.kosrvd.app.presentation.navigation.NavigationScreen
 import com.kosrvd.app.feature.parking.zona_parkiran_mobil.domain.repository.ZonaParkiranMobilRepository
 import com.kosrvd.app.feature.parking.zona_parkiran_mobil.domain.utils.TypeEditZonaParkir
+import com.kosrvd.app.presentation.navigation.NavigationScreen
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -47,7 +48,8 @@ sealed interface DetailZonaParkiranMobilActions {
 @HiltViewModel
 class DetailZonaParkiranMobilViewModel @Inject constructor(
     private val zonaParkiranMobilRepository: ZonaParkiranMobilRepository,
-    private val savedStateHandle: SavedStateHandle
+    private val savedStateHandle: SavedStateHandle,
+    private val checkNetworkUseCase: CheckNetworkUseCase
 ): ViewModel() {
 
     private val _state = MutableStateFlow(DetailZonaParkiranMobilUiState())
@@ -138,6 +140,20 @@ class DetailZonaParkiranMobilViewModel @Inject constructor(
     private fun deleteZonaParkir() {
         viewModelScope.launch {
             _state.update { it.copy(buttonDeleteIsLoading = true) }
+            if (!checkNetworkUseCase()){
+                _state.update {
+                    it.copy(
+                        buttonDeleteIsLoading = false,
+                        showDialogDeleteZonaParkir = false
+                    )
+                }
+                _events.send(
+                    DetailZonaParkiranMobilEvents.ShowSnackBarError(
+                        "Gagal Hapus Zona Parkir dikarenakan Tidak ada koneksi internet. Mohon cek kembali jaringan Anda."
+                    )
+                )
+                return@launch
+            }
             val idZonaParkir = _state.value.detailZonaParkiranMobilUi?.idZonaParkir ?: ""
 
             zonaParkiranMobilRepository.deleteZonaParkiranMobil(idZonaParkir)

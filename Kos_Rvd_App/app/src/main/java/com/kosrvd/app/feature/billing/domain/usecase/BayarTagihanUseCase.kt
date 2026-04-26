@@ -8,12 +8,14 @@ import com.kosrvd.app.core.domain.utils.Result
 import com.kosrvd.app.core.domain.utils.onError
 import com.kosrvd.app.presentation.navigation.models.ResultTagihan
 import com.kosrvd.app.core.domain.models.CompressedResult
+import com.kosrvd.app.core.domain.usecase.CheckNetworkUseCase
 import com.kosrvd.app.feature.billing.domain.repository.TagihanRepository
 import javax.inject.Inject
 
 class BayarTagihanUseCase @Inject constructor(
     private val tagihanRepository: TagihanRepository,
-    private val storageRepository: StorageRepository
+    private val storageRepository: StorageRepository,
+    private val checkNetworkUseCase: CheckNetworkUseCase
 ) {
     suspend operator fun invoke(
         idTagihan: String,
@@ -24,6 +26,9 @@ class BayarTagihanUseCase @Inject constructor(
         nomorKamar: String,
         buktiPembayaranSebelumnya: String? = null
     ): Result<ResultTagihan, DataError> {
+        if (!checkNetworkUseCase()){
+            return Result.Error(DataError.NETWORK_NO_INTERNET)
+        }
         if (buktiPembayaranSebelumnya != null){
             storageRepository.deleteImageReferenceUrlImage(buktiPembayaranSebelumnya).onError { return Result.Error(it) }
         }

@@ -1,23 +1,27 @@
 package com.kosrvd.app.feature.parking.zona_parkiran_mobil.domain.usecase
 
-import android.util.Log
+import com.kosrvd.app.core.domain.usecase.CheckNetworkUseCase
 import com.kosrvd.app.core.domain.utils.DataError
 import com.kosrvd.app.core.domain.utils.Result
 import com.kosrvd.app.core.domain.utils.getOrElse
 import com.kosrvd.app.feature.parking.parkir_harian_mobil.domain.repository.ParkirHarianMobilRepository
-import com.kosrvd.app.core.presentation.utils.toDayMonthShortAndYear
 import com.kosrvd.app.feature.parking.zona_parkiran_mobil.domain.model.ZonaParkiran
 import com.kosrvd.app.feature.parking.zona_parkiran_mobil.domain.repository.ZonaParkiranMobilRepository
 import javax.inject.Inject
 
 class GetListZonaParkirHarianUseCase @Inject constructor(
     private val parkirHarianMobilRepository: ParkirHarianMobilRepository,
-    private val zonaParkiranMobilRepository: ZonaParkiranMobilRepository
+    private val zonaParkiranMobilRepository: ZonaParkiranMobilRepository,
+    private val checkNetworkUseCase: CheckNetworkUseCase
 ){
     suspend operator fun invoke(
         startDate: Long,
         completionDate: Long
     ): Result<List<ZonaParkiran>, DataError> {
+        if (!checkNetworkUseCase()){
+            return Result.Error(DataError.NETWORK_NO_INTERNET)
+        }
+
         val allZones = zonaParkiranMobilRepository.getAllZonaParkiranMobilStatusKosong()
             .getOrElse { return Result.Error(it) }
 

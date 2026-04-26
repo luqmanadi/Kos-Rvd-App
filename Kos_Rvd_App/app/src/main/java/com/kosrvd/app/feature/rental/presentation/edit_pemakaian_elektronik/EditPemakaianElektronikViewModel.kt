@@ -5,14 +5,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.kosrvd.app.core.data.constant.Constant
+import com.kosrvd.app.core.domain.models.AlatElektronik
+import com.kosrvd.app.core.domain.usecase.CheckNetworkUseCase
 import com.kosrvd.app.core.domain.utils.onError
 import com.kosrvd.app.core.domain.utils.onSuccess
+import com.kosrvd.app.core.presentation.utils.PatternValidation
+import com.kosrvd.app.feature.rental.domain.repository.PenyewaanRepository
 import com.kosrvd.app.presentation.navigation.NavigationScreen
 import com.kosrvd.app.presentation.navigation.models.AlatElektronikSerialize
 import com.kosrvd.app.presentation.navigation.models.CustomNavTypes
-import com.kosrvd.app.core.presentation.utils.PatternValidation
-import com.kosrvd.app.core.domain.models.AlatElektronik
-import com.kosrvd.app.feature.rental.domain.repository.PenyewaanRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -45,7 +46,8 @@ sealed interface EditPemakaianElektronikActions {
 @HiltViewModel
 class EditPemakaianElektronikViewModel @Inject constructor(
     private val penyewaanRepository: PenyewaanRepository,
-    private val savedStateHandle: SavedStateHandle
+    private val savedStateHandle: SavedStateHandle,
+    private val checkNetworkUseCase: CheckNetworkUseCase
 ) : ViewModel() {
     private val _state = MutableStateFlow(EditPemakaianElektronikUiState())
     val state = _state.asStateFlow()
@@ -83,6 +85,18 @@ class EditPemakaianElektronikViewModel @Inject constructor(
     private fun saveEditPemakaianElektronik() {
         viewModelScope.launch {
             _state.update { it.copy(isButtonLoading = true) }
+
+            if (!checkNetworkUseCase()){
+                _state.update {
+                    it.copy(
+                        isButtonLoading = false
+                    )
+                }
+                _events.send(
+                    EditPemakaianElektronikEvents.ShowSnackBarError("Gagal Edit Pemakaian Elektronik dikarenakan Tidak ada koneksi internet. Mohon cek kembali jaringan Anda.")
+                )
+                return@launch
+            }
             val idPenyewaan = _state.value.idPenyewaan
             val listAlatElektronik = _state.value.listAlatElektronik
 

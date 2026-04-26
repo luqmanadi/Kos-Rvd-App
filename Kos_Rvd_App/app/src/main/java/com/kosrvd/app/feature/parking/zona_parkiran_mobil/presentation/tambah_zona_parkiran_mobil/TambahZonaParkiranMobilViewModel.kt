@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.kosrvd.app.core.domain.utils.onError
 import com.kosrvd.app.core.domain.utils.onSuccess
 import com.kosrvd.app.core.presentation.utils.PatternValidation
-import com.kosrvd.app.feature.parking.zona_parkiran_mobil.domain.repository.ZonaParkiranMobilRepository
+import com.kosrvd.app.feature.parking.zona_parkiran_mobil.domain.usecase.TambahZonaParkiranMobilUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -31,7 +31,7 @@ sealed interface TambahZonaParkiranMobilActions {
 
 @HiltViewModel
 class TambahZonaParkiranMobilViewModel @Inject constructor(
-    private val zonaParkiranMobilRepository: ZonaParkiranMobilRepository
+    private val tambahZonaParkiranMobilUseCase: TambahZonaParkiranMobilUseCase
 ) : ViewModel() {
     private val _state = MutableStateFlow(TambahZonaParkiranMobilUiState())
     val state = _state.asStateFlow()
@@ -166,7 +166,7 @@ class TambahZonaParkiranMobilViewModel @Inject constructor(
                 )
             }
 
-            zonaParkiranMobilRepository.addZonaParkiranMobil(
+            tambahZonaParkiranMobilUseCase(
                 zoneName = namaZona,
                 monthlyFee = biayaBulanan.toLong(),
                 dailyCosts = biayaHarian.toLong()

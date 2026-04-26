@@ -9,11 +9,13 @@ import com.kosrvd.app.core.domain.utils.onError
 import com.kosrvd.app.presentation.navigation.models.ResultLaporanKeluhan
 import com.kosrvd.app.feature.complaint.domain.repository.KeluhanRepository
 import com.kosrvd.app.core.domain.models.CompressedResult
+import com.kosrvd.app.core.domain.usecase.CheckNetworkUseCase
 import javax.inject.Inject
 
 class SelesaiKeluhanUseCase @Inject constructor(
     private val keluhanRepository: KeluhanRepository,
-    private val firestoreStorage: StorageRepository
+    private val firestoreStorage: StorageRepository,
+    private val checkNetworkUseCase: CheckNetworkUseCase
 ) {
     suspend operator fun invoke(
         idKeluhan: String,
@@ -23,6 +25,9 @@ class SelesaiKeluhanUseCase @Inject constructor(
         namaPelapor : String,
         judulLaporan : String,
     ): Result<ResultLaporanKeluhan, DataError> {
+        if (!checkNetworkUseCase()){
+            return Result.Error(DataError.NETWORK_NO_INTERNET)
+        }
         val photoUrlString = if (compressedResult != null) {
             when(val result = firestoreStorage.addImageResponseLaporanKeluhan(compressedResult)){
                 is Result.Success -> {

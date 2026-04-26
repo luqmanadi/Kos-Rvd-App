@@ -145,7 +145,14 @@ fun NavGraphBuilder.penyewaanGraph(
                     message = "BERHASIL UPDATE PEMAKAIAN ALAT ELEKTRONIK"
                 )
             ){
-                colorShowBanner = Color(0xFF006877)
+                if (
+                    customToastHostState.currentMessage == "BERHASIL UPDATE PEMAKAIAN PARKIR MOBIL BULANAN" ||
+                    customToastHostState.currentMessage == "BERHASIL UPDATE PEMAKAIAN ALAT ELEKTRONIK"
+                    ){
+                    colorShowBanner = Color(0xFF006877)
+                } else {
+                    colorShowBanner = Color(0xFFBA1A1A)
+                }
             }
 
             DetailPenyewaanScreen(

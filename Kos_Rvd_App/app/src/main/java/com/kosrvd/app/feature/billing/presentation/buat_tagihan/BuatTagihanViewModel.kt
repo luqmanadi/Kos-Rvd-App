@@ -2,6 +2,7 @@ package com.kosrvd.app.feature.billing.presentation.buat_tagihan
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.kosrvd.app.core.domain.usecase.CheckNetworkUseCase
 import com.kosrvd.app.core.domain.utils.onError
 import com.kosrvd.app.core.domain.utils.onSuccess
 import com.kosrvd.app.presentation.navigation.models.ResultTagihan
@@ -51,7 +52,8 @@ sealed interface BuatTagihanActions{
 class BuatTagihanViewModel @Inject constructor(
     private val buatTagihanUseCase: BuatTagihanUseCase,
     private val penyewaanRepository: PenyewaanRepository,
-    private val calculateTotalBillUseCase: CalculateTotalBillUseCase
+    private val calculateTotalBillUseCase: CalculateTotalBillUseCase,
+    private val checkNetworkUseCase: CheckNetworkUseCase
 ): ViewModel() {
     private val _state = MutableStateFlow(BuatTagihanUiState())
     val state = _state
@@ -214,6 +216,18 @@ class BuatTagihanViewModel @Inject constructor(
     private fun loadPenyewaan() {
         viewModelScope.launch {
             _state.update { it.copy(isButtonErrorLoading = true) }
+
+            if (!checkNetworkUseCase()){
+                _state.update {
+                    it.copy(
+                        isButtonErrorLoading = false,
+                        loadError = "Gagal ambil data penyewa dikarenakan Tidak ada koneksi internet. Mohon cek kembali jaringan Anda.",
+                        listPenyewaan = emptyList()
+                    )
+                }
+                return@launch
+            }
+
             penyewaanRepository.getAllPenyewaanActive()
                 .onSuccess { result ->
                     _state.update { it.copy(listPenyewaan = result, loadError = null, isButtonErrorLoading = false) } }

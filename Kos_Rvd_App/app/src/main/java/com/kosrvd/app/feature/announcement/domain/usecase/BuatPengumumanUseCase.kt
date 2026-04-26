@@ -2,6 +2,7 @@ package com.kosrvd.app.feature.announcement.domain.usecase
 
 import com.google.firebase.Timestamp
 import com.kosrvd.app.core.data.source.local.SessionStorage
+import com.kosrvd.app.core.domain.usecase.CheckNetworkUseCase
 import com.kosrvd.app.core.domain.utils.DataError
 import com.kosrvd.app.core.domain.utils.Result
 import com.kosrvd.app.feature.announcement.domain.model.BuatPengumuman
@@ -10,9 +11,13 @@ import javax.inject.Inject
 
 class BuatPengumumanUseCase @Inject constructor(
     private val pengumumanRepository: PengumumanRepository,
-    private val sessionStorage: SessionStorage
+    private val sessionStorage: SessionStorage,
+    private val checkNetworkUseCase: CheckNetworkUseCase
 ) {
     suspend operator fun invoke(title: String, content: String): Result<Unit, DataError> {
+        if (!checkNetworkUseCase()){
+            return Result.Error(DataError.NETWORK_NO_INTERNET)
+        }
         val idAkun = sessionStorage.getAuthInfo().idAkun
         val pengumuman = BuatPengumuman(
             title = title,

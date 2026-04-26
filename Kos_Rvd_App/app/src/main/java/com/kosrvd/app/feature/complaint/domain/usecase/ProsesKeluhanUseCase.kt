@@ -2,6 +2,7 @@ package com.kosrvd.app.feature.complaint.domain.usecase
 
 import com.google.firebase.firestore.FieldValue
 import com.kosrvd.app.core.data.constant.Constant
+import com.kosrvd.app.core.domain.usecase.CheckNetworkUseCase
 import com.kosrvd.app.core.domain.utils.DataError
 import com.kosrvd.app.core.domain.utils.Result
 import com.kosrvd.app.core.domain.utils.onError
@@ -10,7 +11,8 @@ import com.kosrvd.app.feature.complaint.domain.repository.KeluhanRepository
 import javax.inject.Inject
 
 class ProsesKeluhanUseCase @Inject constructor(
-    private val keluhanRepository: KeluhanRepository
+    private val keluhanRepository: KeluhanRepository,
+    private val checkNetworkUseCase: CheckNetworkUseCase
 ) {
     suspend operator fun invoke(
         idKeluhan : String,
@@ -18,6 +20,9 @@ class ProsesKeluhanUseCase @Inject constructor(
         namaPelapor : String,
         judulLaporan : String,
     ): Result<ResultLaporanKeluhan, DataError> {
+        if (!checkNetworkUseCase()){
+            return Result.Error(DataError.NETWORK_NO_INTERNET)
+        }
         val updateProgresLaporanKeluhan = mapOf(
             Constant.PROCESS_DATE_FIELD to FieldValue.serverTimestamp(),
             Constant.COMPLAINT_STATUS_FIELD to Constant.SEDANG_DIPROSES

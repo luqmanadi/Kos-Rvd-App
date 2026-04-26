@@ -129,8 +129,8 @@ fun NavGraphBuilder.kamarGraph(
                     }
                     is DetailKamarEvents.ShowSnackBarError -> {
                         scope.launch {
-                            customToastHostState.showToast(events.message)
                             colorShowBanner = Color(0xFFBA1A1A)
+                            customToastHostState.showToast(events.message)
                         }
                     }
                 }
@@ -160,7 +160,17 @@ fun NavGraphBuilder.kamarGraph(
                     message = "FASILITAS BERHASIL DIEDIT"
                 )
             ){
-                colorShowBanner = Color(0xFF006877)
+                if (
+                    customToastHostState.currentMessage == "NOMOR KAMAR BERHASIL DIEDIT" ||
+                    customToastHostState.currentMessage == "UKURAN KAMAR BERHASIL DIEDIT" ||
+                    customToastHostState.currentMessage == "TARIF DAN KAPASITAS KAMAR BERHASIL DIEDIT" ||
+                    customToastHostState.currentMessage == "PEMAKAIAN ALAT GRATIS BERHASIL DIEDIT" ||
+                    customToastHostState.currentMessage == "FASILITAS BERHASIL DIEDIT"
+                    ) {
+                    colorShowBanner = Color(0xFF006877)
+                } else {
+                    colorShowBanner = Color(0xFFBA1A1A)
+                }
             }
 
             DetailKamarScreen(

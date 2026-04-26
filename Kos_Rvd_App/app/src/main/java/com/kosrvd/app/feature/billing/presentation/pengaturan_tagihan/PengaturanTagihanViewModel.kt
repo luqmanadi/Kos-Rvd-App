@@ -2,9 +2,10 @@ package com.kosrvd.app.feature.billing.presentation.pengaturan_tagihan
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.kosrvd.app.core.domain.repository.PengaturanRepository
+import com.kosrvd.app.core.domain.usecase.CheckNetworkUseCase
 import com.kosrvd.app.core.domain.utils.onError
 import com.kosrvd.app.core.domain.utils.onSuccess
-import com.kosrvd.app.core.domain.repository.PengaturanRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -30,7 +31,8 @@ sealed interface PengaturanTagihanActions {
 
 @HiltViewModel
 class PengaturanTagihanViewModel @Inject constructor(
-    private val pengaturanRepository: PengaturanRepository
+    private val pengaturanRepository: PengaturanRepository,
+    private val checkNetworkUseCase: CheckNetworkUseCase
 ): ViewModel() {
     private val _state = MutableStateFlow(PengaturanTagihanUiState())
     val state = _state
@@ -59,6 +61,19 @@ class PengaturanTagihanViewModel @Inject constructor(
 
             _state.update { it.copy(useGenerateOtomatis = newValue, isSwitchUseGenerateOtomatisEnabled = false) }
 
+            if (!checkNetworkUseCase()){
+                _state.update {
+                    it.copy(
+                        useGenerateOtomatis = oldValue, isSwitchUseGenerateOtomatisEnabled = true
+                    )
+                }
+                _events.send(PengaturanTagihanEvents.ShowSnackBar(
+                    "Gagal hapus perbarui pengaturan buat tagihan otomatis dikarenakan Tidak ada koneksi internet. Mohon cek kembali jaringan Anda.",
+                    isRedColor = true)
+                )
+                return@launch
+            }
+
             pengaturanRepository.updateGenerateTagihanOtomatis(newValue)
                 .onSuccess {
                     _state.update { it.copy(isSwitchUseGenerateOtomatisEnabled = true) }
@@ -76,6 +91,19 @@ class PengaturanTagihanViewModel @Inject constructor(
             val oldValue = !newValue
 
             _state.update { it.copy(useAutoReminder = newValue, isSwitchUseAutoReminderEnabled = false) }
+
+            if (!checkNetworkUseCase()){
+                _state.update {
+                    it.copy(
+                        useAutoReminder = oldValue, isSwitchUseAutoReminderEnabled = true
+                    )
+                }
+                _events.send(PengaturanTagihanEvents.ShowSnackBar(
+                    "Gagal hapus perbarui pengaturan pengingat pembayaran otomatis dikarenakan Tidak ada koneksi internet. Mohon cek kembali jaringan Anda.",
+                    isRedColor = true)
+                )
+                return@launch
+            }
 
             pengaturanRepository.updateAutoReminderPaymentBill(newValue)
                 .onSuccess {

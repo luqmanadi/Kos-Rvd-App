@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.kosrvd.app.core.domain.repository.AccountRepository
 import com.kosrvd.app.core.domain.repository.AuthRepository
+import com.kosrvd.app.core.domain.usecase.CheckNetworkUseCase
 import com.kosrvd.app.core.domain.utils.DataError
 import com.kosrvd.app.core.domain.utils.onError
 import com.kosrvd.app.core.domain.utils.onSuccess
@@ -15,6 +16,7 @@ import com.kosrvd.app.presentation.navigation.models.CustomNavTypes
 import com.kosrvd.app.presentation.navigation.models.TemporaryData
 import com.kosrvd.app.core.presentation.utils.PatternValidation
 import com.kosrvd.app.core.presentation.utils.UiText
+import com.kosrvd.app.feature.parking.parkir_harian_mobil.presentation.detail_parkir_harian_mobil.DetailParkirHarianMobilEvents
 import com.kosrvd.app.feature.profile.domain.utils.TypeEdit
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -54,7 +56,8 @@ sealed interface EditDataProfileActions {
 class EditDataProfileViewModel @Inject constructor(
     private val accountRepository: AccountRepository,
     private val authRepository: AuthRepository,
-    private val savedStateHandle: SavedStateHandle
+    private val savedStateHandle: SavedStateHandle,
+    private val checkNetworkUseCase: CheckNetworkUseCase
 ): ViewModel() {
     private val _state = MutableStateFlow(EditDataProfileUiState())
     val state = _state.asStateFlow()
@@ -223,6 +226,20 @@ class EditDataProfileViewModel @Inject constructor(
                 return@launch
             }
 
+            if (!checkNetworkUseCase()){
+                _state.update {
+                    it.copy(
+                        isButtonLoading = false
+                    )
+                }
+                _events.send(
+                    EditDataProfileEvents.ShowSnackBarError(
+                        "Gagal edit nomor telepon dikarenakan Tidak ada koneksi internet. Mohon cek kembali jaringan Anda."
+                    )
+                )
+                return@launch
+            }
+
             _state.update {
                 it.copy(
                     phoneNumberError = null,
@@ -370,6 +387,20 @@ class EditDataProfileViewModel @Inject constructor(
                 return@launch
             }
 
+            if (!checkNetworkUseCase()){
+                _state.update {
+                    it.copy(
+                        isButtonLoading = false
+                    )
+                }
+                _events.send(
+                    EditDataProfileEvents.ShowSnackBarError(
+                        "Gagal edit nama dikarenakan Tidak ada koneksi internet. Mohon cek kembali jaringan Anda."
+                    )
+                )
+                return@launch
+            }
+
             _state.update {
                 it.copy(
                     nameError = null,
@@ -495,6 +526,20 @@ class EditDataProfileViewModel @Inject constructor(
                         shakeTriggerResponseError = it.shakeTriggerResponseError + 1
                     )
                 }
+                return@launch
+            }
+
+            if (!checkNetworkUseCase()){
+                _state.update {
+                    it.copy(
+                        isButtonLoading = false
+                    )
+                }
+                _events.send(
+                    EditDataProfileEvents.ShowSnackBarError(
+                        "Gagal edit alamat dikarenakan Tidak ada koneksi internet. Mohon cek kembali jaringan Anda."
+                    )
+                )
                 return@launch
             }
 

@@ -18,7 +18,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SmallFloatingActionButton
 import androidx.compose.runtime.Composable
@@ -39,8 +38,8 @@ import com.kosrvd.app.core.presentation.designsystem.component.dialog.GeneralDia
 import com.kosrvd.app.core.presentation.designsystem.component.text.CustomToastHost
 import com.kosrvd.app.core.presentation.designsystem.theme.KosRvdAppTheme
 import com.kosrvd.app.core.presentation.utils.shimmerEffect
-import com.kosrvd.app.feature.announcement.presentation.models.PengumumanUi
 import com.kosrvd.app.feature.announcement.presentation.component.ItemPengumumanCard
+import com.kosrvd.app.feature.announcement.presentation.models.PengumumanUi
 
 @Composable
 fun PengumumanScreen(
@@ -198,7 +197,7 @@ private fun PengumumanScreenPreview() {
             ),
             pengumumanActions = {},
             customToastHostState = CustomToastHostState(),
-            colorShowBanner = MaterialTheme.colorScheme.primary
+            colorShowBanner = Color.Unspecified
         )
     }
 }

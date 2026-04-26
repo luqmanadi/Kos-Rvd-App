@@ -2,13 +2,14 @@ package com.kosrvd.app.feature.room.presentation.detail_kamar
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.kosrvd.app.core.domain.usecase.CheckNetworkUseCase
 import com.kosrvd.app.core.domain.utils.onError
 import com.kosrvd.app.core.domain.utils.onSuccess
+import com.kosrvd.app.feature.room.domain.repository.KamarRepository
+import com.kosrvd.app.feature.room.domain.utils.TypeEditKamar
 import com.kosrvd.app.presentation.navigation.models.AlatElektronikSerialize
 import com.kosrvd.app.presentation.navigation.models.EditTypeKamar
 import com.kosrvd.app.presentation.navigation.models.HargaSewaKamar
-import com.kosrvd.app.feature.room.domain.repository.KamarRepository
-import com.kosrvd.app.feature.room.domain.utils.TypeEditKamar
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -40,7 +41,8 @@ sealed interface DetailKamarActions {
 
 @HiltViewModel
 class DetailKamarViewModel @Inject constructor(
-    private val kamarRepository: KamarRepository
+    private val kamarRepository: KamarRepository,
+    private val checkNetworkUseCase: CheckNetworkUseCase
 ): ViewModel() {
     private val _state = MutableStateFlow(DetailKamarUiState())
     val state = _state.asStateFlow()
@@ -165,6 +167,19 @@ class DetailKamarViewModel @Inject constructor(
     private fun deleteKamar() {
         viewModelScope.launch {
             _state.update { it.copy(isButtonDeleteLoading = true) }
+
+            if (!checkNetworkUseCase()){
+                _state.update {
+                    it.copy(
+                        isButtonDeleteLoading = false,
+                        showDialogDeleteKamar = false,
+                    )
+                }
+                _events.send(
+                    DetailKamarEvents.ShowSnackBarError("Gagal hapus kamar ini dikarenakan Tidak ada koneksi internet. Mohon cek kembali jaringan Anda.")
+                )
+                return@launch
+            }
 
             val idKamar = _state.value.kamarUi?.idKamar ?: ""
             kamarRepository.deleteKamar(idKamar)

@@ -44,6 +44,18 @@ class ZonaParkiranMobilRepositoryImpl @Inject constructor(
         }.map { it.toZonaParkiranList() }
     }
 
+    override suspend fun getZonaParkirByZoneName(zoneName: String): Result<List<ZonaParkiran>, DataError> {
+        return safeCall {
+            db.collection(Constant.ZONA_PARKIRAN_COLLECTION)
+                .whereEqualTo(Constant.ZONE_NAME_FIELD, zoneName)
+                .get()
+                .await()
+                .toObjectListOrThrow<ZonaParkiranDto>(
+                    mappingErrorMessage = ErrorMessages.ZONA_PARKIRAN_MOBIL_MAPPING_ERROR
+                )
+        }.map { it.toZonaParkiranList() }
+    }
+
     override suspend fun getZonaParkiranMobilById(idZonaParkir: String): Result<ZonaParkiran, DataError> {
         return safeCall {
             db.collection(Constant.ZONA_PARKIRAN_COLLECTION)

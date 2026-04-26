@@ -18,6 +18,7 @@ enum class DataError : Error {
     //Zona Parkiran Errors
     ZONA_PARKIRAN_MOBIL_MAPPING_ERROR,
     ZONA_PARKIRAN_MOBIL_NOT_FOUND,
+    ZONA_PARKIRAN_TERPAKAI,
 
     // safecallApi Errors
     NETWORK_SERIALIZATION,
@@ -174,6 +175,7 @@ enum class DataError : Error {
             // Zona Parkiran Errors
             ZONA_PARKIRAN_MOBIL_MAPPING_ERROR -> ErrorMessages.ZONA_PARKIRAN_MOBIL_MAPPING_ERROR
             ZONA_PARKIRAN_MOBIL_NOT_FOUND -> ErrorMessages.ZONA_PARKIRAN_MOBIL_NOT_FOUND
+            ZONA_PARKIRAN_TERPAKAI -> ErrorMessages.ZONA_PARKIRAN_TERPAKAI
 
             // Kamar Errors
             NOMOR_KAMAR_TERPAKAI -> ErrorMessages.NOMOR_KAMAR_TERPAKAI

@@ -2,6 +2,7 @@ package com.kosrvd.app.feature.billing.domain.usecase
 
 import com.google.firebase.firestore.FieldValue
 import com.kosrvd.app.core.data.constant.Constant
+import com.kosrvd.app.core.domain.usecase.CheckNetworkUseCase
 import com.kosrvd.app.core.domain.utils.DataError
 import com.kosrvd.app.core.domain.utils.Result
 import com.kosrvd.app.core.domain.utils.onError
@@ -10,7 +11,8 @@ import com.kosrvd.app.feature.billing.domain.repository.TagihanRepository
 import javax.inject.Inject
 
 class TolakTagihanUseCase @Inject constructor(
-    private val tagihanRepository: TagihanRepository
+    private val tagihanRepository: TagihanRepository,
+    private val checkNetworkUseCase: CheckNetworkUseCase
 ) {
     suspend operator fun invoke(
         idTagihan: String,
@@ -20,6 +22,9 @@ class TolakTagihanUseCase @Inject constructor(
         nomorKamar: String,
         alasanPenolakan: String
     ): Result<ResultTagihan, DataError> {
+        if (!checkNetworkUseCase()){
+            return Result.Error(DataError.NETWORK_NO_INTERNET)
+        }
         val updatePaymentBill = mapOf(
             Constant.PAYMENT_STATUS_FIELD to Constant.BELUM_LUNAS,
             Constant.VERIFICATION_DATE_FIELD to FieldValue.serverTimestamp(),

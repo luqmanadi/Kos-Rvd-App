@@ -6,13 +6,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.kosrvd.app.core.data.constant.Constant
+import com.kosrvd.app.core.domain.usecase.CheckNetworkUseCase
 import com.kosrvd.app.core.domain.utils.onError
 import com.kosrvd.app.core.domain.utils.onSuccess
-import com.kosrvd.app.presentation.navigation.NavigationScreen
+import com.kosrvd.app.core.presentation.utils.ImageCompressor
 import com.kosrvd.app.feature.parking.parkir_harian_mobil.domain.repository.ParkirHarianMobilRepository
 import com.kosrvd.app.feature.parking.parkir_harian_mobil.domain.usecase.UploadProofOfPaymentParkirHarianMobilUseCase
-import com.kosrvd.app.core.presentation.utils.ImageCompressor
 import com.kosrvd.app.feature.parking.parkir_harian_mobil.presentation.models.toDetailParkirHarianMobilUi
+import com.kosrvd.app.presentation.navigation.NavigationScreen
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -52,7 +53,8 @@ class DetailParkirHarianMobilViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     private val parkirHarianMobilRepository: ParkirHarianMobilRepository,
     private val imageCompressor: ImageCompressor,
-    private val uploadProofOfPaymentParkirHarianMobilUseCase: UploadProofOfPaymentParkirHarianMobilUseCase
+    private val uploadProofOfPaymentParkirHarianMobilUseCase: UploadProofOfPaymentParkirHarianMobilUseCase,
+    private val checkNetworkUseCase: CheckNetworkUseCase
 ): ViewModel() {
     private val _state = MutableStateFlow(DetailParkirHarianMobilUiState())
     val state = _state
@@ -93,6 +95,20 @@ class DetailParkirHarianMobilViewModel @Inject constructor(
     private fun cancelParkirHarianMobil() {
         viewModelScope.launch {
             _state.update { it.copy(isButtonCancelledLoading = true) }
+            if (!checkNetworkUseCase()){
+                _state.update {
+                    it.copy(
+                        isButtonCancelledLoading = false,
+                        isCancelledDialogVisible = false,
+                    )
+                }
+                _events.send(
+                    DetailParkirHarianMobilEvents.ShowSnackBarError(
+                        "Gagal cancel parkir harian mobil dikarenakan Tidak ada koneksi internet. Mohon cek kembali jaringan Anda."
+                    )
+                )
+                return@launch
+            }
             val idParkirHarianMobil = _state.value.dataDetailParkirHarianMobil?.idParkirHarianMobil ?: ""
             val updateDataParkirHarianMobil = mapOf(Constant.CANCELLED_STATUS_FIELD to true)
 
@@ -122,6 +138,20 @@ class DetailParkirHarianMobilViewModel @Inject constructor(
     private fun deleteParkirHarianMobil() {
         viewModelScope.launch {
             _state.update { it.copy(isButtonHapusLoading = true) }
+            if (!checkNetworkUseCase()){
+                _state.update {
+                    it.copy(
+                        isButtonHapusLoading = false,
+                        isHapusDialogVisible = false,
+                    )
+                }
+                _events.send(
+                    DetailParkirHarianMobilEvents.ShowSnackBarError(
+                        "Gagal hapus parkir harian mobil dikarenakan Tidak ada koneksi internet. Mohon cek kembali jaringan Anda."
+                    )
+                )
+                return@launch
+            }
             val idParkirHarianMobil = _state.value.dataDetailParkirHarianMobil?.idParkirHarianMobil ?: ""
 
             parkirHarianMobilRepository.deleteParkirHarianMobil(idParkirHarianMobil)

@@ -4,10 +4,12 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
+import com.kosrvd.app.core.domain.usecase.CheckNetworkUseCase
 import com.kosrvd.app.core.domain.utils.onError
 import com.kosrvd.app.core.domain.utils.onSuccess
 import com.kosrvd.app.presentation.navigation.NavigationScreen
 import com.kosrvd.app.core.presentation.utils.PatternValidation
+import com.kosrvd.app.feature.complaint.presentation.detail_keluhan.DetailKeluhanEvents
 import com.kosrvd.app.feature.parking.zona_parkiran_mobil.domain.repository.ZonaParkiranMobilRepository
 import com.kosrvd.app.feature.parking.zona_parkiran_mobil.domain.utils.TypeEditZonaParkir
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -36,7 +38,8 @@ sealed interface EditZonaParkiranMobilActions {
 @HiltViewModel
 class EditZonaParkiranMobilViewModel @Inject constructor(
     private val zonaParkiranMobilRepository: ZonaParkiranMobilRepository,
-    private val savedStateHandle: SavedStateHandle
+    private val savedStateHandle: SavedStateHandle,
+    private val checkNetworkUseCase: CheckNetworkUseCase
 ): ViewModel() {
     private val _state = MutableStateFlow(EditZonaParkiranMobilUiState())
     val state = _state.asStateFlow()
@@ -104,6 +107,23 @@ class EditZonaParkiranMobilViewModel @Inject constructor(
     private fun editZonaParkiranMobil() {
         viewModelScope.launch {
             _state.update { it.copy(isButtonLoading = true) }
+            if (!checkNetworkUseCase()){
+                val typeEdit = when(_state.value.typeEditZonaParkir){
+                    TypeEditZonaParkir.EDIT_BIAYA_BULANAN -> "Biaya Bulanan"
+                    TypeEditZonaParkir.EDIT_NAMA_ZONA -> "Nama Zona"
+                    TypeEditZonaParkir.EDIT_BIAYA_HARIAN -> "Biaya Harian"
+                    null -> "Type Edit Kosong"
+                }
+                _state.update {
+                    it.copy(
+                        isButtonLoading = false
+                    )
+                }
+                _events.send(
+                    EditZonaParkiranMobilEvents.ShowSnackBarError("Gagal Perbarui $typeEdit dikarenakan Tidak ada koneksi internet. Mohon cek kembali jaringan Anda.")
+                )
+                return@launch
+            }
             val idZonaParkiran = _state.value.idZonaParkir
             when(_state.value.typeEditZonaParkir){
                 TypeEditZonaParkir.EDIT_BIAYA_BULANAN -> {

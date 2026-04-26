@@ -5,12 +5,12 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kosrvd.app.core.data.source.local.SessionStorage
+import com.kosrvd.app.core.domain.usecase.CheckNetworkUseCase
 import com.kosrvd.app.core.domain.utils.Role
 import com.kosrvd.app.core.domain.utils.onError
 import com.kosrvd.app.core.domain.utils.onSuccess
-import com.kosrvd.app.presentation.navigation.models.ResultTagihan
-import com.kosrvd.app.core.presentation.utils.PatternValidation
 import com.kosrvd.app.core.presentation.utils.ImageCompressor
+import com.kosrvd.app.core.presentation.utils.PatternValidation
 import com.kosrvd.app.core.presentation.utils.TypeResult
 import com.kosrvd.app.core.presentation.utils.toDayMonthShortAndYear
 import com.kosrvd.app.feature.billing.domain.repository.TagihanRepository
@@ -19,6 +19,7 @@ import com.kosrvd.app.feature.billing.domain.usecase.BayarTagihanUseCase
 import com.kosrvd.app.feature.billing.domain.usecase.TolakTagihanUseCase
 import com.kosrvd.app.feature.billing.domain.usecase.VerifikasiTagihanUseCase
 import com.kosrvd.app.feature.billing.presentation.models.toDetailTagihanUi
+import com.kosrvd.app.presentation.navigation.models.ResultTagihan
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -62,7 +63,8 @@ class DetailTagihanViewModel @Inject constructor(
     private val bayarTagihanLangsungLunasUseCase: BayarTagihanLangsungLunasUseCase,
     private val verifikasiTagihanUseCase: VerifikasiTagihanUseCase,
     private val tolakTagihanUseCase: TolakTagihanUseCase,
-    private val sessionStorage: SessionStorage
+    private val sessionStorage: SessionStorage,
+    private val checkNetworkUseCase: CheckNetworkUseCase
 ): ViewModel() {
 
     private val _state = MutableStateFlow(DetailTagihanUiState())
@@ -252,6 +254,20 @@ class DetailTagihanViewModel @Inject constructor(
     private fun hapusTagihan() {
         viewModelScope.launch {
             _state.update { it.copy(isButtonHapusLoading = true) }
+
+            if (!checkNetworkUseCase()){
+                _state.update {
+                    it.copy(
+                        isButtonHapusLoading = false,
+                        isHapusDialogVisible = false,
+                    )
+                }
+                _events.send(
+                    DetailTagihanEvents.ShowSnackBarError("Gagal hapus tagihan ini dikarenakan Tidak ada koneksi internet. Mohon cek kembali jaringan Anda.")
+                )
+                return@launch
+            }
+
             val idTagihan = _state.value.detailTagihanUi?.idTagihan ?: ""
 
             tagihanRepository.deteleTagihan(idTagihan)

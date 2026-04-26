@@ -13,4 +13,5 @@ interface ZonaParkiranMobilRepository {
     suspend fun updateMonthlyFee(idZonaParkir: String, monthlyFeeBaru: Long): Result<Unit, DataError>
     suspend fun updateDailyCosts(idZonaParkir: String, dailyCostsBaru: Long): Result<Unit, DataError>
     suspend fun getAllZonaParkiranMobilStatusKosong(): Result<List<ZonaParkiran>, DataError>
+    suspend fun getZonaParkirByZoneName(zoneName: String): Result<List<ZonaParkiran>, DataError>
 }

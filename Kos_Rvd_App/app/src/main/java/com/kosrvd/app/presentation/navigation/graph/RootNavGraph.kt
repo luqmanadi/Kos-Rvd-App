@@ -469,6 +469,9 @@ fun RootNavGraph(
             val resetPasswordUiState by resetPasswordViewModel.state.collectAsStateWithLifecycle()
             val customToastHostState = rememberCustomToastHostState()
             val scope = rememberCoroutineScope()
+            var colorShowBanner by remember {
+                mutableStateOf(Color.Unspecified)
+            }
 
             ObserveAsEvents(resetPasswordViewModel.events) { events ->
                 when(events){
@@ -483,7 +486,13 @@ fun RootNavGraph(
                     }
                     is ResetPasswordEvents.ShowSnackBar -> {
                         scope.launch {
-                            customToastHostState.showToast(events.message)
+                            if (events.isError){
+                                colorShowBanner = Color(0xFFBA1A1A)
+                                customToastHostState.showToast(events.message)
+                            } else {
+                                colorShowBanner = Color(0xFF006877)
+                                customToastHostState.showToast(events.message)
+                            }
                         }
                     }
                 }
@@ -496,12 +505,19 @@ fun RootNavGraph(
                     key = Constant.UPDATE_PASSWORD_KEY,
                     message = "PASSWORD BERHASIL DIPERBARUI"
                 )
-            )
+            ){
+                colorShowBanner = if (customToastHostState.currentMessage == "PASSWORD BERHASIL DIPERBARUI") {
+                    Color(0xFF006877)
+                } else {
+                    Color(0xFFBA1A1A)
+                }
+            }
 
             ResetPasswordScreen(
                 resetPasswordUiState = resetPasswordUiState,
                 resetPasswordActions = resetPasswordViewModel::onActions,
-                customToastHostState = customToastHostState
+                customToastHostState = customToastHostState,
+                colorShowBanner = colorShowBanner
             )
 
         }

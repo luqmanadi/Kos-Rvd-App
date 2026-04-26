@@ -17,7 +17,7 @@ import javax.inject.Inject
 sealed interface ResetPasswordEvents {
     data object NavigateBack: ResetPasswordEvents
     data class NavigateToEditDataProfileChangePassword(val idAkun: String): ResetPasswordEvents
-    data class ShowSnackBar(val message: String): ResetPasswordEvents
+    data class ShowSnackBar(val message: String, val isError: Boolean): ResetPasswordEvents
 
 }
 
@@ -51,7 +51,7 @@ class ResetPasswordViewModel @Inject constructor(
             if (idAkun != null){
                 _events.send(ResetPasswordEvents.NavigateToEditDataProfileChangePassword(idAkun))
             }else{
-                _events.send(ResetPasswordEvents.ShowSnackBar("Id akun tidak ditemukan, silahkan login kembali"))
+                _events.send(ResetPasswordEvents.ShowSnackBar("Id akun tidak ditemukan, silahkan login kembali", true))
             }
 
         }
@@ -72,15 +72,15 @@ class ResetPasswordViewModel @Inject constructor(
                 authRepository.forgotPassword(email)
                     .onSuccess {
                         _state.update { it.copy(isShowLoading = false) }
-                        _events.send(ResetPasswordEvents.ShowSnackBar("Email Reset Password berhasil dikirim"))
+                        _events.send(ResetPasswordEvents.ShowSnackBar("Email Reset Password berhasil dikirim", false))
                     }
                     .onError { result ->
                         _state.update { it.copy(isShowLoading = false) }
-                        _events.send(ResetPasswordEvents.ShowSnackBar(result.message))
+                        _events.send(ResetPasswordEvents.ShowSnackBar(result.message, true))
                     }
             } else {
                 _state.update { it.copy(isShowLoading = false) }
-                _events.send(ResetPasswordEvents.ShowSnackBar("Email tidak ditemukan, silahkan login kembali"))
+                _events.send(ResetPasswordEvents.ShowSnackBar("Email tidak ditemukan, silahkan login kembali", true))
             }
 
         }

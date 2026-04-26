@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
+import com.kosrvd.app.core.domain.usecase.CheckNetworkUseCase
 import com.kosrvd.app.core.domain.utils.onError
 import com.kosrvd.app.core.domain.utils.onSuccess
 import com.kosrvd.app.presentation.navigation.NavigationScreen
@@ -11,6 +12,7 @@ import com.kosrvd.app.presentation.navigation.models.AlatElektronikSerialize
 import com.kosrvd.app.presentation.navigation.models.InfoPakaiParkirMobilBulananSerialize
 import com.kosrvd.app.presentation.navigation.models.toInfoPakaiParkirMobilBulananSerialize
 import com.kosrvd.app.feature.rental.domain.repository.PenyewaanRepository
+import com.kosrvd.app.feature.rental.presentation.buat_penyewaan.BuatPenyewaanEvents
 import com.kosrvd.app.feature.rental.presentation.models.toPenyewaUi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -48,7 +50,8 @@ sealed interface DetailPenyewaActions {
 @HiltViewModel
 class DetailPenyewaanViewModel @Inject constructor(
     private val penyewaanRepository: PenyewaanRepository,
-    private val savedStateHandle: SavedStateHandle
+    private val savedStateHandle: SavedStateHandle,
+    private val checkNetworkUseCase: CheckNetworkUseCase
 ): ViewModel() {
     private val _state = MutableStateFlow(DetailPenyewaanUiState())
     val state = _state
@@ -80,6 +83,20 @@ class DetailPenyewaanViewModel @Inject constructor(
     private fun deleteRental() {
         viewModelScope.launch {
             _state.update { it.copy(isButtonLoadingDeleteRental = true) }
+
+            if (!checkNetworkUseCase()){
+                _state.update {
+                    it.copy(
+                        isButtonLoadingDeleteRental = false,
+                        showDialogDeleteRental = false
+                    )
+                }
+                _events.send(
+                    DetailPenyewaEvents.ShowSnackBarError("Gagal hapus penyewa dikarenakan Tidak ada koneksi internet. Mohon cek kembali jaringan Anda.")
+                )
+                return@launch
+            }
+
             val idPenyewa = _state.value.penyewaUi?.idPenyewa ?: ""
             penyewaanRepository.deletePenyewaan(idPenyewa)
                 .onSuccess {
@@ -146,6 +163,21 @@ class DetailPenyewaanViewModel @Inject constructor(
     private fun endRental() {
         viewModelScope.launch {
             _state.update { it.copy(isButtonLoadingEndRental = true) }
+
+
+            if (!checkNetworkUseCase()){
+                _state.update {
+                    it.copy(
+                        isButtonLoadingEndRental = false,
+                        showDialogEndRental = false
+                    )
+                }
+                _events.send(
+                    DetailPenyewaEvents.ShowSnackBarError("Gagal akhiri sewa ini dikarenakan Tidak ada koneksi internet. Mohon cek kembali jaringan Anda.")
+                )
+                return@launch
+            }
+
             val idPenyewa = _state.value.penyewaUi?.idPenyewa ?: ""
 
             penyewaanRepository.endPenyewaan(idPenyewa)

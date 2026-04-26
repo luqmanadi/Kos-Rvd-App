@@ -59,7 +59,6 @@ fun NavGraphBuilder.pengumumanGraph(
                                 customToastHostState.showToast(events.message)
                             } else {
                                 colorShowBanner = Color(0xFF006877)
-                                Log.d("TAG", "pengumumanGraph: ${events.message}")
                                 customToastHostState.showToast(events.message)
                             }
                         }
@@ -75,7 +74,11 @@ fun NavGraphBuilder.pengumumanGraph(
                     message = "Pengumuman berhasil dibuat."
                 )
             ){
-                colorShowBanner = Color(0xFF006877)
+                colorShowBanner = if (customToastHostState.currentMessage == "Pengumuman berhasil dibuat.") {
+                    Color(0xFF006877)
+                } else {
+                    Color(0xFFBA1A1A)
+                }
             }
 
             PengumumanScreen(

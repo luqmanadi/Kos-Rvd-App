@@ -13,19 +13,24 @@ import com.kosrvd.app.feature.complaint.domain.model.Keluhan
 import com.kosrvd.app.feature.complaint.domain.repository.KeluhanRepository
 import com.kosrvd.app.feature.complaint.domain.model.BuatLaporanKeluhan
 import com.kosrvd.app.core.domain.models.CompressedResult
+import com.kosrvd.app.core.domain.usecase.CheckNetworkUseCase
 import javax.inject.Inject
 
 class BuatLaporanKeluhanUseCase @Inject constructor(
     private val accountRepository: AccountRepository,
     private val keluhanRepository: KeluhanRepository,
     private val sessionStorage: SessionStorage,
-    private val firestoreStorage: StorageRepository
+    private val firestoreStorage: StorageRepository,
+    private val checkNetworkUseCase: CheckNetworkUseCase
 ) {
     suspend operator fun invoke(
         title: String,
         description: String,
         compressedResult: CompressedResult? = null
     ): Result<Keluhan, DataError> {
+        if (!checkNetworkUseCase()){
+            return Result.Error(DataError.NETWORK_NO_INTERNET)
+        }
         val authInfo = sessionStorage.getAuthInfo()
 
         val dataPenghuni = accountRepository.getAccountById(authInfo.idAkun)

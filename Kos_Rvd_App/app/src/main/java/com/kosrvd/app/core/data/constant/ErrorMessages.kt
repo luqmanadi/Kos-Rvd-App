@@ -91,5 +91,6 @@ object ErrorMessages {
     // Zona Parkiran Mobil Errors
     const val ZONA_PARKIRAN_MOBIL_MAPPING_ERROR = "Gagal memproses data zona parkir mobil"
     const val ZONA_PARKIRAN_MOBIL_NOT_FOUND = "Data zona parkir mobil tidak ditemukan"
+    const val ZONA_PARKIRAN_TERPAKAI = "Nama Zona Parkir sudah terpakai"
 
 }
